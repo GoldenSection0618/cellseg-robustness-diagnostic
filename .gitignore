@@ -4,3 +4,10 @@ data/
 # Python caches
 __pycache__/
 *.py[cod]
+
+# ide specific files
+.idea/
+*.iml
+.vscode/
+*.code-workspace
+
