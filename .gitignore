@@ -1,2 +1,6 @@
 # Local datasets and downloaded archives
 data/
+
+# Python caches
+__pycache__/
+*.py[cod]

@@ -9,18 +9,18 @@ proof-of-work benchmark.
 - [x] Environment setup documented.
 - [x] Dataset source and local layout documented.
 - [x] Root-level `technical_memo.md` added.
-- [ ] Shared source modules under `src/`.
-- [ ] Reproducible run scripts under `scripts/`.
-- [ ] Generated tabular outputs under categorized `results/` subdirectories.
-- [ ] Generated figure outputs under `figures/`.
+- [x] Shared source modules under `src/`.
+- [x] Reproducible run scripts under `scripts/`.
+- [x] Generated tabular outputs under categorized `results/` subdirectories.
+- [x] Generated figure outputs under `figures/`.
 
 ## Data Pipeline
 
-- [ ] DSB2018 stage 1 train images can be enumerated.
-- [ ] Per-instance PNG masks can be counted and loaded.
-- [ ] Stage 1 solution RLE file can be read.
-- [ ] Dataset audit CSV is generated.
-- [ ] Dataset audit figures are generated.
+- [x] DSB2018 stage 1 train images can be enumerated.
+- [x] Per-instance PNG masks can be counted and loaded.
+- [x] Stage 1 solution RLE file can be read.
+- [x] Dataset audit CSV is generated.
+- [x] Dataset audit figures are generated.
 
 ## Evaluation Pipeline
 

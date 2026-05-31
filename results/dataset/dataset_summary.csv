@@ -1,0 +1,4 @@
+split,image_count,total_png_masks,total_solution_rles,min_height,max_height,min_width,max_width,min_channels,max_channels,mean_png_masks_per_image,mean_solution_rles_per_image
+stage1_test,65,0,4152,256,524,161,696,3,4,0.0,63.877
+stage1_train,670,29461,0,256,1040,256,1388,4,4,43.972,0.0
+stage2_test_final,3019,0,0,205,1040,231,1388,1,4,0.0,0.0
