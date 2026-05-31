@@ -39,10 +39,16 @@ proof-of-work benchmark.
 - [x] Baseline metrics written to `results/baselines/`.
 - [x] Baseline qualitative overlays written to `figures/`.
 
+## Model Baseline Smoke Tests
+
+- [x] Cellpose-SAM runs on the same small fixed subset.
+- [x] Cellpose-SAM metrics written to `results/baselines/`.
+- [x] Cellpose-SAM qualitative overlays written to `figures/`.
+
 ## Later Protocols
 
 - [ ] Cellpose default protocol.
-- [ ] Cellpose-SAM protocol.
+- [ ] Cellpose-SAM full protocol.
 - [ ] SAM2 automatic mask generator protocol.
 - [ ] YOLO-seg supervised adaptation protocol.
 - [ ] Gemini output-validity protocol.

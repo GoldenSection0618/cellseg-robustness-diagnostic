@@ -59,6 +59,30 @@ This result is a smoke test of the experiment path, not a tuned classical baseli
 The large count errors are expected for an untuned threshold/watershed pipeline on
 heterogeneous DSB2018 images.
 
+## Cellpose-SAM Smoke Test
+
+The next minimum baseline uses Cellpose 4.1.1 with the `cpsam` pretrained model on
+the same deterministic 20-image clean subset.
+
+Generated outputs:
+
+- `results/baselines/cellpose_cpsam_clean_subset_metrics.csv`
+- `figures/cellpose_cpsam_subset_overlay_examples.png`
+- `figures/cellpose_cpsam_subset_metric_means.png`
+- `figures/cellpose_cpsam_subset_count_scatter.png`
+
+Current subset-level summary:
+
+- images: 20
+- mean object F1: 0.8892
+- mean matched IoU: 0.8513
+- mean absolute count error: 7.15
+- mean latency: 1118.71 ms/image
+
+This is still a smoke test on a small subset. It establishes that the model-backed
+baseline path can produce the same metric and figure contract as the classical
+baseline.
+
 ## Output Contract
 
 Experiment and analysis scripts should write:
