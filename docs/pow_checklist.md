@@ -11,7 +11,7 @@ proof-of-work benchmark.
 - [x] Root-level `technical_memo.md` added.
 - [ ] Shared source modules under `src/`.
 - [ ] Reproducible run scripts under `scripts/`.
-- [ ] Generated CSV outputs under `csv/`.
+- [ ] Generated tabular outputs under categorized `results/` subdirectories.
 - [ ] Generated figure outputs under `figures/`.
 
 ## Data Pipeline
@@ -36,7 +36,7 @@ proof-of-work benchmark.
 
 - [ ] Otsu + watershed predictor implemented.
 - [ ] Baseline runs on a small fixed subset.
-- [ ] Baseline metrics written to `csv/`.
+- [ ] Baseline metrics written to `results/baselines/`.
 - [ ] Baseline qualitative overlays written to `figures/`.
 
 ## Later Protocols

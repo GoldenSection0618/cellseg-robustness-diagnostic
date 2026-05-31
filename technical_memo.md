@@ -6,7 +6,7 @@ Build a compact proof-of-work benchmark for microscopy nucleus instance segmenta
 robustness. The first implementation target is an end-to-end skeleton that can:
 
 1. read the local DSB2018 data;
-2. produce tabular analysis outputs in `csv/`;
+2. produce tabular analysis outputs in categorized `results/` subdirectories;
 3. produce visual analysis outputs in `figures/`;
 4. support later predictors through a common evaluation pipeline.
 
@@ -29,7 +29,7 @@ evaluation because it does not include local ground-truth masks.
 The first milestone is intentionally small:
 
 - audit dataset structure and image/mask counts;
-- write audit tables to `csv/`;
+- write audit tables to `results/dataset/`;
 - write dataset diagnostic plots to `figures/`;
 - keep all generated outputs reproducible from code.
 
@@ -40,15 +40,24 @@ that uses the same output contract.
 
 Experiment and analysis scripts should write:
 
-- CSV tables to `csv/`;
+- CSV tables to categorized `results/` subdirectories;
 - PNG figures to `figures/`;
 - no generated result files into `docs/` or source directories.
+
+Important tabular outputs should be grouped by protocol or analysis category:
+
+- `results/dataset/`
+- `results/baselines/`
+- `results/robustness/`
+- `results/supervised/`
+- `results/vlm/`
 
 Each generated CSV should have enough columns to identify the input split, image id,
 method or analysis name, and any relevant parameters.
 
 Each generated figure should be produced by a script and saved directly under
-`figures/`.
+`figures/` with a clear, descriptive filename. Figures are intentionally not
+subdivided into nested folders.
 
 ## Current Scope Boundary
 

@@ -8,8 +8,8 @@ Goal: prove that the local DSB2018 data can be read consistently.
 
 Outputs:
 
-- `csv/dataset_inventory.csv`
-- `csv/dataset_summary.csv`
+- `results/dataset/dataset_inventory.csv`
+- `results/dataset/dataset_summary.csv`
 - `figures/dataset_split_counts.png`
 - `figures/dataset_train_instance_count_hist.png`
 - `figures/dataset_image_size_scatter.png`
@@ -20,7 +20,7 @@ Goal: run an Otsu + watershed baseline on a small fixed subset.
 
 Outputs:
 
-- metrics CSV under `csv/`;
+- metrics CSV under `results/baselines/`;
 - qualitative overlays under `figures/`;
 - notes added to `technical_memo.md`.
 
