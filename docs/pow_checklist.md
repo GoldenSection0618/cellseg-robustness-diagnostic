@@ -24,20 +24,20 @@ proof-of-work benchmark.
 
 ## Evaluation Pipeline
 
-- [ ] Internal instance-mask representation defined.
-- [ ] Ground-truth mask loading implemented.
-- [ ] Prediction mask loading or generation implemented.
-- [ ] Instance IoU matching implemented.
-- [ ] Object-level F1 implemented.
-- [ ] Count error implemented.
-- [ ] Dice or mean IoU implemented.
+- [x] Internal instance-mask representation defined.
+- [x] Ground-truth mask loading implemented.
+- [x] Prediction mask loading or generation implemented.
+- [x] Instance IoU matching implemented.
+- [x] Object-level F1 implemented.
+- [x] Count error implemented.
+- [x] Dice or mean IoU implemented.
 
 ## First Baseline
 
-- [ ] Otsu + watershed predictor implemented.
-- [ ] Baseline runs on a small fixed subset.
-- [ ] Baseline metrics written to `results/baselines/`.
-- [ ] Baseline qualitative overlays written to `figures/`.
+- [x] Otsu + watershed predictor implemented.
+- [x] Baseline runs on a small fixed subset.
+- [x] Baseline metrics written to `results/baselines/`.
+- [x] Baseline qualitative overlays written to `figures/`.
 
 ## Later Protocols
 

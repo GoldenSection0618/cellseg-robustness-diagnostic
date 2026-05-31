@@ -36,6 +36,29 @@ The first milestone is intentionally small:
 After this milestone, the next step is to add a classical Otsu + watershed baseline
 that uses the same output contract.
 
+## Baseline Smoke Test
+
+The first minimum baseline is an Otsu + watershed run on a deterministic 20-image
+subset from `stage1_train/`.
+
+Generated outputs:
+
+- `results/baselines/otsu_watershed_clean_subset_metrics.csv`
+- `figures/otsu_watershed_subset_overlay_examples.png`
+- `figures/otsu_watershed_subset_metric_means.png`
+- `figures/otsu_watershed_subset_count_scatter.png`
+
+Current subset-level summary:
+
+- images: 20
+- mean object F1: 0.4685
+- mean matched IoU: 0.7307
+- mean absolute count error: 63.75
+
+This result is a smoke test of the experiment path, not a tuned classical baseline.
+The large count errors are expected for an untuned threshold/watershed pipeline on
+heterogeneous DSB2018 images.
+
 ## Output Contract
 
 Experiment and analysis scripts should write:
