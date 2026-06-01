@@ -78,6 +78,15 @@ Current completed comparison:
 - `figures/baseline_clean_subset_count_error_comparison.png`
 - `figures/baseline_clean_subset_latency_comparison.png`
 
+## Phase 7: Failure Taxonomy
+
+Goal: name the first set of visible failure modes so later qualitative examples can
+be annotated consistently.
+
+Current output:
+
+- `docs/failure_taxonomy.md`
+
 ## Deferred Robustness Work
 
 Robustness perturbations are a later analysis track. A small Otsu-only smoke test has

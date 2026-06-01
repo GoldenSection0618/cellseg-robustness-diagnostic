@@ -189,6 +189,15 @@ This comparison is a smoke-test analysis product. It shows that baseline outputs
 be aggregated and visualized under the project output contract before expanding to
 more perturbations or larger evaluation sets.
 
+## Failure-Case Taxonomy
+
+The first qualitative failure taxonomy is documented in
+`docs/failure_taxonomy.md`. It currently covers missed objects, spurious objects,
+over-segmentation, under-segmentation, boundary mismatch, and background structure
+capture. The taxonomy is based on existing baseline metrics and overlay figures, and
+it is intended to guide later failure-example annotation rather than serve as a final
+paper taxonomy.
+
 ## Otsu Robustness Smoke Test
 
 The first perturbation smoke test runs Otsu + watershed on a deterministic 5-image

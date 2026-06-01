@@ -8,6 +8,7 @@ proof-of-work benchmark.
 - [x] Local data ignored by git.
 - [x] Environment setup documented.
 - [x] Dataset source and local layout documented.
+- [x] Failure-case taxonomy documented.
 - [x] Root-level `technical_memo.md` added.
 - [x] Shared source modules under `src/`.
 - [x] Reproducible run scripts under `scripts/`.

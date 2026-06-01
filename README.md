@@ -238,7 +238,7 @@ Planned outputs include:
 * `figures/*.png` for robustness and failure-case visualization;
 * per-method qualitative examples;
 * a short technical memo;
-* a failure-case taxonomy;
+* a failure-case taxonomy in `docs/failure_taxonomy.md`;
 * reproducibility notes for model versions, prompts, and evaluation settings.
 
 ## Expected Diagnostic Questions
