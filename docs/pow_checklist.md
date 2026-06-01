@@ -41,28 +41,12 @@ proof-of-work benchmark.
 
 ## Second Baseline
 
-- [x] Cellpose default availability audited in the current `cell` environment.
-- [ ] Cellpose default predictor implemented.
-- [ ] Cellpose default runs on the same small fixed subset.
-- [ ] Cellpose default metrics written to `results/baselines/`.
-- [ ] Cellpose default qualitative overlays written to `figures/`.
-
-## Third Baseline
-
-- [x] Cellpose restoration availability audited in the current `cell` environment.
-- [ ] Cellpose restoration workflow selected for a runnable environment.
-- [ ] Cellpose restoration runs on the same small fixed subset.
-- [ ] Cellpose restoration metrics written to `results/baselines/`.
-- [ ] Cellpose restoration qualitative overlays written to `figures/`.
-
-## Fourth Baseline
-
 - [x] Cellpose-SAM predictor implemented.
 - [x] Cellpose-SAM runs on the same small fixed subset.
 - [x] Cellpose-SAM metrics written to `results/baselines/`.
 - [x] Cellpose-SAM qualitative overlays written to `figures/`.
 
-## Fifth Baseline
+## Third Baseline
 
 - [x] SAM2 checkpoint documented.
 - [x] SAM2 automatic mask generator predictor implemented.
@@ -76,6 +60,13 @@ proof-of-work benchmark.
 - [x] Clean subset comparison summary written to `results/baselines/`.
 - [x] Clean subset comparison figures written to `figures/`.
 
+## Optional Cross-Version Cellpose Baselines
+
+- [x] Legacy Cellpose default availability audited in the current `cell` environment.
+- [x] Cellpose restoration availability audited in the current `cell` environment.
+- [ ] Decide whether to add a separate Cellpose3 environment for legacy `cyto3`.
+- [ ] Decide whether to add a separate Cellpose3 restoration baseline.
+
 ## Deferred Robustness Record
 
 - [x] Controlled perturbation utilities implemented.
@@ -83,9 +74,10 @@ proof-of-work benchmark.
 - [x] Robustness smoke metrics written to `results/robustness/`.
 - [x] Robustness smoke figures written to `figures/`.
 
-## Later Protocols After Clean Baselines
+## Later Protocols After PoW Clean Baselines
 
-- [ ] Cellpose default protocol.
+- [ ] Optional Cellpose3 default cross-version protocol.
+- [ ] Optional Cellpose3 restoration cross-version protocol.
 - [ ] Cellpose-SAM full protocol.
 - [ ] SAM2 automatic mask generator protocol.
 - [ ] YOLO-seg supervised adaptation protocol.

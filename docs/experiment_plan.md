@@ -41,40 +41,6 @@ Outputs:
 
 ## Phase 4: Second Baseline
 
-Goal: run the Cellpose default pretrained model on the same deterministic 20-image
-subset.
-
-Current environment status:
-
-- `results/baselines/cellpose_method_availability.csv` records that Cellpose default
-  candidate names resolve to `cpsam` under `cellpose==4.1.1`, so this baseline needs
-  a separate environment or model-asset decision before running.
-
-Expected outputs:
-
-- metrics under `results/baselines/`;
-- qualitative figures under `figures/`;
-- summary notes in `technical_memo.md`.
-
-## Phase 5: Third Baseline
-
-Goal: run the Cellpose restoration-enhanced workflow on the same deterministic
-20-image subset.
-
-Current environment status:
-
-- `results/baselines/cellpose_method_availability.csv` records that the current
-  restoration API fails during initialization with `NameError: name 'CPnet' is not
-  defined`, so this baseline also needs an environment decision before running.
-
-Expected outputs:
-
-- metrics under `results/baselines/`;
-- qualitative figures under `figures/`;
-- summary notes in `technical_memo.md`.
-
-## Phase 6: Fourth Baseline
-
 Goal: run Cellpose-SAM / `cpsam` on the same deterministic 20-image subset.
 
 Completed outputs:
@@ -84,7 +50,7 @@ Completed outputs:
 - `figures/cellpose_cpsam_subset_metric_means.png`
 - `figures/cellpose_cpsam_subset_count_scatter.png`
 
-## Phase 7: Fifth Baseline
+## Phase 5: Third Baseline
 
 Goal: run SAM2 automatic mask generation on the same deterministic 20-image subset.
 
@@ -99,7 +65,7 @@ Completed outputs:
 - `figures/sam2_amg_subset_metric_means.png`
 - `figures/sam2_amg_subset_count_scatter.png`
 
-## Phase 8: Clean Baseline Comparison
+## Phase 6: Clean Baseline Comparison
 
 Goal: compare completed clean subset baselines without adding perturbations or
 full-scale runs.
@@ -118,11 +84,25 @@ Robustness perturbations are a later analysis track. A small Otsu-only smoke tes
 already been recorded, but the current main line should continue with clean baseline
 completion first.
 
+## Optional Cross-Version Cellpose Work
+
+Legacy Cellpose3 `cyto3` and one-click restoration are not required for the current
+PoW mainline. They may be added later as optional cross-version baselines using a
+separate environment or exact legacy model assets.
+
+Current environment status:
+
+- `results/baselines/cellpose_method_availability.csv` records that Cellpose default
+  candidate names resolve to `cpsam` under `cellpose==4.1.1`.
+- The same audit records that the current restoration API fails during initialization
+  with `NameError: name 'CPnet' is not defined`.
+
 ## Later Protocols
 
 These protocols should stay separate from the clean zero-shot baseline track:
 
-- Cellpose default protocol;
+- optional Cellpose3 default cross-version protocol;
+- optional Cellpose3 restoration cross-version protocol;
 - Cellpose-SAM full protocol;
 - YOLO-seg small-label supervised adaptation;
 - Gemini segmentation output-validity checks.

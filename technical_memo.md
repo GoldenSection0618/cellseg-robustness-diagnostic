@@ -85,8 +85,8 @@ baseline.
 
 ## Clean Baseline Continuation
 
-README Protocol A orders the clean zero-shot baselines as Otsu + watershed, Cellpose
-default, Cellpose restoration, Cellpose-SAM, and SAM2 automatic mask generation.
+README Protocol A is narrowed for the current PoW to three clean zero-shot baselines:
+Otsu + watershed, Cellpose-SAM / `cpsam`, and SAM2 automatic mask generation.
 
 Three clean subset baselines have already been recorded:
 
@@ -94,12 +94,11 @@ Three clean subset baselines have already been recorded:
 - Cellpose-SAM / `cpsam`;
 - SAM2 automatic mask generation.
 
-Because Cellpose-SAM and SAM2 were run before the two earlier Cellpose baselines, the
-remaining clean baseline gap is the Cellpose default / restoration branch. In the
-current `cellpose==4.1.1` environment, `CellposeModel` exposes only `cpsam` as a
-registered segmentation model, so a separate Cellpose default run needs an explicit
-environment or model-asset decision before it can be recorded without duplicating
-Cellpose-SAM.
+Legacy Cellpose3 `cyto3` and Cellpose3 one-click restoration are future optional
+cross-version baselines, not required PoW mainline work. In the current
+`cellpose==4.1.1` environment, `CellposeModel` exposes only `cpsam` as a registered
+segmentation model, so treating `cyto3` as a required baseline would either duplicate
+Cellpose-SAM or force a separate environment track.
 
 Each clean baseline should follow the same output contract:
 
@@ -109,8 +108,9 @@ Each clean baseline should follow the same output contract:
 
 ## Cellpose Method Availability Audit
 
-The Cellpose default and restoration baselines were audited against the current
-`cell` environment before adding more baseline scripts.
+Legacy Cellpose default and restoration candidates were audited against the current
+`cell` environment before deciding whether to add them as optional cross-version
+baselines.
 
 Generated outputs:
 
@@ -127,10 +127,9 @@ Current environment finding:
 - `cellpose.denoise.CellposeDenoiseModel` lists one-click restoration model names, but
   initialization currently fails with `NameError: name 'CPnet' is not defined`.
 
-The next action for the Cellpose branch is therefore an environment/model decision:
-use a separate Cellpose 3 environment or add the exact legacy model assets needed for
-Cellpose default and restoration. Until that is resolved, these two baselines should
-not be recorded as completed results.
+This audit supports keeping the PoW Cellpose-family mainline narrowed to `cpsam`.
+Legacy Cellpose3 default and restoration should only be added later if a separate
+cross-version environment or exact legacy model assets are deliberately introduced.
 
 ## SAM2 AMG Smoke Test
 

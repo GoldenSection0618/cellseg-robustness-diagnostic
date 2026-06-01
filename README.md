@@ -13,7 +13,7 @@ This repository is currently in the planning and protocol-design stage. The goal
 
 | Protocol | Question | Planned methods | Reported as |
 | --- | --- | --- | --- |
-| A. Zero-shot / out-of-the-box robustness | Which methods produce usable instance masks without target-domain labels or manual prompts? | Otsu + watershed; Cellpose 3 default; Cellpose 3 + one-click restoration; Cellpose-SAM; SAM2 automatic mask generator | Main diagnostic comparison |
+| A. Zero-shot / out-of-the-box robustness | Which methods produce usable instance masks without target-domain labels or manual prompts? | Otsu + watershed; Cellpose-SAM / `cpsam`; SAM2 automatic mask generator | Main PoW diagnostic comparison |
 | B. Supervised adaptation | How much performance can small-label task-specific training buy? | YOLO-seg fine-tuned; optional Cellpose fine-tuned | Separate supervised protocol |
 | C. Exploratory VLM segmentation | Can a mask-output VLM produce parseable, valid, useful outputs under a fixed prompt? | Gemini 2.5 Flash segmentation | Separate exploratory protocol |
 
@@ -74,15 +74,18 @@ This is the main protocol.
 
 All methods receive the same image input. No target-domain training labels, human prompts, or ground-truth-derived prompts are used.
 
-Planned methods:
+PoW methods:
 
 | Method                             | Role                                  | Main Assumption                                  |
 | ---------------------------------- | ------------------------------------- | ------------------------------------------------ |
 | Otsu + watershed                   | Classical baseline                    | No training, fixed image-processing pipeline     |
-| Cellpose 3 default                 | Specialist DL baseline                | Pretrained cellular segmentation model           |
-| Cellpose 3 + one-click restoration | Restoration-enhanced specialist model | Image restoration followed by segmentation       |
 | Cellpose-SAM                       | Bio-adapted foundation model          | Current Cellpose 4.x / Cellpose-SAM workflow     |
 | SAM2 automatic mask generator      | General segmentation foundation model | Automatic grid-point prompting, no manual prompt |
+
+Legacy Cellpose 3 `cyto3` and Cellpose 3 one-click restoration are treated as optional
+future cross-version baselines, not as required methods for the current PoW. The
+current `cell` environment uses `cellpose==4.1.1`, where the runnable Cellpose-family
+segmentation baseline is `cpsam`.
 
 This protocol is intended to answer:
 
@@ -242,9 +245,9 @@ Planned outputs include:
 
 The analysis is expected to focus on questions such as:
 
-* whether Cellpose 3 restoration mainly improves performance under noise, blur, and undersampling;
 * whether Cellpose-SAM shows smaller robustness drops under the perturbations associated with its documented robustness claims;
 * whether SAM2 automatic mask generation fails mainly through missed objects, false positives, over-segmentation, or under-segmentation in dense microscopy images;
+* whether optional cross-version Cellpose3 baselines are worth adding after the PoW path is stable;
 * how much supervised fine-tuning improves performance relative to the zero-shot methods, given the recorded training budget;
 * whether VLM segmentation failures are dominated by output validity, JSON parsing, empty outputs, count errors, or mask overlap quality;
 * which perturbations produce the clearest qualitative failure modes for each method family.
@@ -259,7 +262,7 @@ This project is informed by several lines of work.
 * [Cellpose3: one-click image restoration for improved cellular segmentation](https://www.nature.com/articles/s41592-025-02595-5)
 * [Cellpose image restoration documentation](https://cellpose.readthedocs.io/en/latest/restore.html)
 
-Cellpose provides generalist cellular segmentation models. Cellpose3 introduced one-click restoration workflows for denoising, deblurring, and upsampling before segmentation. This motivates the comparison between default Cellpose 3 and Cellpose 3 with restoration.
+Cellpose provides generalist cellular segmentation models. Cellpose3 introduced one-click restoration workflows for denoising, deblurring, and upsampling before segmentation. In this PoW repository, legacy Cellpose3 `cyto3` and one-click restoration are future optional cross-version baselines; the current Cellpose-family mainline uses Cellpose-SAM / `cpsam` from `cellpose==4.1.1`.
 
 ### Cellpose-SAM
 
