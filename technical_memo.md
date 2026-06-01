@@ -83,6 +83,30 @@ This is still a smoke test on a small subset. It establishes that the model-back
 baseline path can produce the same metric and figure contract as the classical
 baseline.
 
+## Clean Subset Baseline Comparison
+
+The first comparison analysis combines the Otsu + watershed and Cellpose-SAM clean
+subset outputs without running any additional model inference.
+
+Generated outputs:
+
+- `results/baselines/clean_subset_baseline_metrics_long.csv`
+- `results/baselines/clean_subset_baseline_summary.csv`
+- `figures/baseline_clean_subset_metric_comparison.png`
+- `figures/baseline_clean_subset_count_error_comparison.png`
+- `figures/baseline_clean_subset_latency_comparison.png`
+
+Current comparison summary:
+
+| Method | Images | Mean object F1 | Mean matched IoU | Mean absolute count error | Median latency ms |
+| --- | ---: | ---: | ---: | ---: | ---: |
+| Cellpose-SAM | 20 | 0.8892 | 0.8513 | 7.15 | 687.13 |
+| Otsu + watershed | 20 | 0.4685 | 0.7307 | 63.75 | 15.72 |
+
+This comparison is a smoke-test analysis product. It shows that baseline outputs can
+be aggregated and visualized under the project output contract before expanding to
+more perturbations or larger evaluation sets.
+
 ## Output Contract
 
 Experiment and analysis scripts should write:
