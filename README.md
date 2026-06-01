@@ -315,20 +315,27 @@ Classical thresholding and watershed baselines are included to provide an interp
 
 ## Current Status
 
-This repository is currently at the initial design stage.
+This repository now has a small proof-of-work experiment skeleton rather than only a
+protocol design. The current implementation uses the DSB2018 local dataset and a
+deterministic 20-image clean subset for the first baseline comparisons.
 
-Planned next steps:
+Implemented PoW artifacts:
 
-1. select one or two open microscopy datasets with ground-truth instance masks;
-2. define the exact evaluation contract;
-3. implement classical and Cellpose baselines;
-4. add perturbation generation scripts;
-5. add SAM2 automatic mask generation;
-6. add evaluation and visualization scripts;
-7. optionally add YOLO fine-tuning and VLM segmentation protocols;
-8. document APG or CellSAM-style prompt generation as future work rather than a main-protocol requirement;
-9. optionally add a small SAM2 AMG parameter-sensitivity smoke test after the PoW baseline path is stable;
-10. write a short technical memo summarizing results and failure cases.
+1. dataset audit tables in `results/dataset/` and dataset figures in `figures/`;
+2. shared instance-mask metrics and visualization helpers under `src/`;
+3. clean-subset baselines for Otsu + watershed, Cellpose-SAM / `cpsam`, and SAM2 AMG;
+4. clean-subset comparison tables in `results/baselines/` and comparison figures in `figures/`;
+5. a small Otsu-only perturbation smoke test in `results/robustness/`;
+6. root-level `technical_memo.md` with current summaries and limitations;
+7. PoW support docs under `docs/`, including data, environment, output contract, experiment plan, checklist, and failure taxonomy.
+
+Near-term next steps:
+
+1. keep the current PoW mainline focused on the three completed clean baselines;
+2. add only targeted robustness smoke tests before any full perturbation sweep;
+3. optionally add a small SAM2 AMG parameter-sensitivity smoke test after the baseline path is stable;
+4. keep legacy Cellpose3 `cyto3` and one-click restoration as optional cross-version work;
+5. keep YOLO fine-tuning and VLM segmentation as separate protocols, not part of the zero-shot ranking.
 
 ## Reproducibility Principles
 
