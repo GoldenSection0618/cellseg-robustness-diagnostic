@@ -63,14 +63,14 @@ proof-of-work benchmark.
 ## Fifth Baseline
 
 - [x] SAM2 checkpoint documented.
-- [ ] SAM2 automatic mask generator predictor implemented.
-- [ ] SAM2 automatic mask generator runs on the same small fixed subset.
-- [ ] SAM2 metrics written to `results/baselines/`.
-- [ ] SAM2 qualitative overlays written to `figures/`.
+- [x] SAM2 automatic mask generator predictor implemented.
+- [x] SAM2 automatic mask generator runs on the same small fixed subset.
+- [x] SAM2 metrics written to `results/baselines/`.
+- [x] SAM2 qualitative overlays written to `figures/`.
 
 ## Clean Baseline Comparison
 
-- [x] Otsu + watershed and Cellpose-SAM subset metrics combined.
+- [x] Otsu + watershed, Cellpose-SAM, and SAM2 subset metrics combined.
 - [x] Clean subset comparison summary written to `results/baselines/`.
 - [x] Clean subset comparison figures written to `figures/`.
 

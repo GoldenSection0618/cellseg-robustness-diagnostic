@@ -22,6 +22,7 @@ from cellseg_robustness.paths import FIGURES_DIR, RESULT_SUBDIRS, ensure_output_
 BASELINE_FILES = {
     "otsu_watershed": "otsu_watershed_clean_subset_metrics.csv",
     "cellpose_cpsam": "cellpose_cpsam_clean_subset_metrics.csv",
+    "sam2_amg": "sam2_amg_clean_subset_metrics.csv",
 }
 
 METRIC_COLUMNS = [
@@ -83,11 +84,7 @@ def save_metric_comparison(summary: pd.DataFrame) -> None:
 
 def save_count_error_comparison(summary: pd.DataFrame) -> None:
     fig, ax = plt.subplots(figsize=(7, 4))
-    ax.bar(
-        summary["method"],
-        summary["mean_absolute_count_error"],
-        color=["#f97316", "#0891b2"],
-    )
+    ax.bar(summary["method"], summary["mean_absolute_count_error"], color="#f97316")
     ax.set_title("Clean Subset Mean Absolute Count Error")
     ax.set_xlabel("Method")
     ax.set_ylabel("Mean absolute count error")
@@ -98,7 +95,7 @@ def save_count_error_comparison(summary: pd.DataFrame) -> None:
 
 def save_latency_comparison(summary: pd.DataFrame) -> None:
     fig, ax = plt.subplots(figsize=(7, 4))
-    ax.bar(summary["method"], summary["median_latency_ms"], color=["#6366f1", "#14b8a6"])
+    ax.bar(summary["method"], summary["median_latency_ms"], color="#6366f1")
     ax.set_title("Clean Subset Median Latency")
     ax.set_xlabel("Method")
     ax.set_ylabel("Median latency (ms/image)")

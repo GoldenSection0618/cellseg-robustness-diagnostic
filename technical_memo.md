@@ -88,15 +88,18 @@ baseline.
 README Protocol A orders the clean zero-shot baselines as Otsu + watershed, Cellpose
 default, Cellpose restoration, Cellpose-SAM, and SAM2 automatic mask generation.
 
-Two clean subset baselines have already been recorded:
+Three clean subset baselines have already been recorded:
 
 - Otsu + watershed;
-- Cellpose-SAM / `cpsam`.
+- Cellpose-SAM / `cpsam`;
+- SAM2 automatic mask generation.
 
-Because Cellpose-SAM was run before the two earlier Cellpose baselines, the next clean
-baseline should fill the missing Cellpose default baseline on the same deterministic
-20-image subset. After that, continue with the Cellpose restoration workflow, then
-SAM2 automatic mask generation using `data/checkpoints/sam2.1_hiera_large.pt`.
+Because Cellpose-SAM and SAM2 were run before the two earlier Cellpose baselines, the
+remaining clean baseline gap is the Cellpose default / restoration branch. In the
+current `cellpose==4.1.1` environment, `CellposeModel` exposes only `cpsam` as a
+registered segmentation model, so a separate Cellpose default run needs an explicit
+environment or model-asset decision before it can be recorded without duplicating
+Cellpose-SAM.
 
 Each clean baseline should follow the same output contract:
 
@@ -104,10 +107,36 @@ Each clean baseline should follow the same output contract:
 - qualitative figures in `figures/`;
 - summary notes in this memo after the run.
 
+## SAM2 AMG Smoke Test
+
+The SAM2 automatic mask generator baseline uses `sam2==1.1.0`,
+`configs/sam2.1/sam2.1_hiera_l.yaml`, and the local checkpoint
+`data/checkpoints/sam2.1_hiera_large.pt` on the same deterministic 20-image clean
+subset.
+
+Generated outputs:
+
+- `results/baselines/sam2_amg_clean_subset_metrics.csv`
+- `figures/sam2_amg_subset_overlay_examples.png`
+- `figures/sam2_amg_subset_metric_means.png`
+- `figures/sam2_amg_subset_count_scatter.png`
+
+Current subset-level summary:
+
+- images: 20
+- mean object F1: 0.3604
+- mean matched IoU: 0.5424
+- mean absolute count error: 31.55
+- mean latency: 1661.01 ms/image
+
+SAM2 emitted a warning that the optional compiled `_C` extension could not be imported,
+so SAM2 skipped its post-processing step. The run still completed and produced masks,
+but this environment detail should be retained when interpreting the SAM2 AMG result.
+
 ## Clean Subset Baseline Comparison
 
-The first comparison analysis combines the Otsu + watershed and Cellpose-SAM clean
-subset outputs without running any additional model inference.
+The comparison analysis combines completed clean subset outputs without running any
+additional model inference.
 
 Generated outputs:
 
@@ -123,6 +152,7 @@ Current comparison summary:
 | --- | ---: | ---: | ---: | ---: | ---: |
 | Cellpose-SAM | 20 | 0.8892 | 0.8513 | 7.15 | 687.13 |
 | Otsu + watershed | 20 | 0.4685 | 0.7307 | 63.75 | 15.72 |
+| SAM2 AMG | 20 | 0.3604 | 0.5424 | 31.55 | 1600.74 |
 
 This comparison is a smoke-test analysis product. It shows that baseline outputs can
 be aggregated and visualized under the project output contract before expanding to

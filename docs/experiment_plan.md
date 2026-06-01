@@ -80,16 +80,17 @@ Local model asset:
 
 - `data/checkpoints/sam2.1_hiera_large.pt`
 
-Expected outputs:
+Completed outputs:
 
-- metrics under `results/baselines/`;
-- qualitative figures under `figures/`;
-- summary notes in `technical_memo.md`.
+- `results/baselines/sam2_amg_clean_subset_metrics.csv`
+- `figures/sam2_amg_subset_overlay_examples.png`
+- `figures/sam2_amg_subset_metric_means.png`
+- `figures/sam2_amg_subset_count_scatter.png`
 
 ## Phase 8: Clean Baseline Comparison
 
-Goal: compare completed clean subset baselines without adding perturbations or full
-scale runs.
+Goal: compare completed clean subset baselines without adding perturbations or
+full-scale runs.
 
 Current completed comparison:
 
