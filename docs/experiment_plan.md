@@ -37,6 +37,23 @@ Required metrics:
 - count error;
 - false positives and missed objects.
 
+## Phase 3a: Perturbation Smoke Test
+
+Goal: verify that controlled image perturbations can be applied and evaluated on the
+existing small subset before running any full robustness sweep.
+
+Initial perturbations:
+
+- clean;
+- Gaussian noise;
+- Gaussian blur;
+- downsample then upsample;
+- contrast inversion.
+
+Initial method:
+
+- Otsu + watershed only.
+
 ## Phase 4: Zero-Shot Model Protocols
 
 Goal: run pretrained or out-of-the-box methods under the same data and output

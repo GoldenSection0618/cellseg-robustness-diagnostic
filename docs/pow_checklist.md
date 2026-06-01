@@ -45,6 +45,13 @@ proof-of-work benchmark.
 - [x] Cellpose-SAM metrics written to `results/baselines/`.
 - [x] Cellpose-SAM qualitative overlays written to `figures/`.
 
+## Robustness Smoke Test
+
+- [ ] Controlled perturbation utilities implemented.
+- [ ] Minimal perturbation smoke test runs on a small fixed subset.
+- [ ] Robustness smoke metrics written to `results/robustness/`.
+- [ ] Robustness smoke figures written to `figures/`.
+
 ## Later Protocols
 
 - [ ] Cellpose default protocol.
