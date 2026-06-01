@@ -107,6 +107,39 @@ This comparison is a smoke-test analysis product. It shows that baseline outputs
 be aggregated and visualized under the project output contract before expanding to
 more perturbations or larger evaluation sets.
 
+## Otsu Robustness Smoke Test
+
+The first perturbation smoke test runs Otsu + watershed on a deterministic 5-image
+subset with five image conditions:
+
+- clean;
+- Gaussian noise, sigma 0.08;
+- Gaussian blur, sigma 1.5;
+- downsample then upsample, scale 0.5;
+- contrast inversion.
+
+Generated outputs:
+
+- `results/robustness/otsu_watershed_perturbation_smoke_metrics.csv`
+- `results/robustness/otsu_watershed_perturbation_smoke_summary.csv`
+- `figures/robustness_otsu_smoke_mean_scores.png`
+- `figures/robustness_otsu_smoke_relative_f1_drop.png`
+- `figures/robustness_otsu_smoke_overlay_examples.png`
+
+Current smoke-test summary:
+
+| Perturbation | Images | Mean object F1 | Mean matched IoU | Relative F1 drop |
+| --- | ---: | ---: | ---: | ---: |
+| clean | 5 | 0.6311 | 0.7575 | 0.0000 |
+| gaussian_noise | 5 | 0.4156 | 0.7033 | 0.3415 |
+| gaussian_blur | 5 | 0.6257 | 0.7808 | 0.0086 |
+| downsample_upsample | 5 | 0.6201 | 0.7735 | 0.0174 |
+| contrast_inversion | 5 | 0.6282 | 0.7631 | 0.0046 |
+
+This is not a full robustness sweep. It proves that perturbations, metric aggregation,
+relative-drop reporting, and robustness figures work on the existing experiment
+skeleton.
+
 ## Output Contract
 
 Experiment and analysis scripts should write:

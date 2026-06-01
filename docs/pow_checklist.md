@@ -47,10 +47,10 @@ proof-of-work benchmark.
 
 ## Robustness Smoke Test
 
-- [ ] Controlled perturbation utilities implemented.
-- [ ] Minimal perturbation smoke test runs on a small fixed subset.
-- [ ] Robustness smoke metrics written to `results/robustness/`.
-- [ ] Robustness smoke figures written to `figures/`.
+- [x] Controlled perturbation utilities implemented.
+- [x] Minimal perturbation smoke test runs on a small fixed subset.
+- [x] Robustness smoke metrics written to `results/robustness/`.
+- [x] Robustness smoke figures written to `figures/`.
 
 ## Later Protocols
 
