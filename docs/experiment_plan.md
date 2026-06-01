@@ -104,5 +104,6 @@ These protocols should stay separate from the clean zero-shot baseline track:
 - optional Cellpose3 default cross-version protocol;
 - optional Cellpose3 restoration cross-version protocol;
 - Cellpose-SAM full protocol;
+- optional SAM2 AMG parameter-sensitivity smoke test;
 - YOLO-seg small-label supervised adaptation;
 - Gemini segmentation output-validity checks.

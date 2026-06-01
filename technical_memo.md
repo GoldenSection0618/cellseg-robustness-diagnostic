@@ -157,6 +157,13 @@ SAM2 emitted a warning that the optional compiled `_C` extension could not be im
 so SAM2 skipped its post-processing step. The run still completed and produced masks,
 but this environment detail should be retained when interpreting the SAM2 AMG result.
 
+Future work for SAM2 should treat the weak AMG result as an automatic-mask-generation
+failure mode rather than a text-prompt issue. A small follow-up smoke test could vary
+`points_per_side`, `pred_iou_thresh`, `stability_score_thresh`, and
+`min_mask_region_area`, and then repeat the check after fixing the optional SAM2 `_C`
+extension post-processing path. This is not required for the current PoW baseline
+completion.
+
 ## Clean Subset Baseline Comparison
 
 The comparison analysis combines completed clean subset outputs without running any

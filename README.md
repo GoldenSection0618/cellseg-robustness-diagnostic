@@ -247,6 +247,7 @@ The analysis is expected to focus on questions such as:
 
 * whether Cellpose-SAM shows smaller robustness drops under the perturbations associated with its documented robustness claims;
 * whether SAM2 automatic mask generation fails mainly through missed objects, false positives, over-segmentation, or under-segmentation in dense microscopy images;
+* whether SAM2 AMG quality improves under a small future parameter-sensitivity check, for example grid density, IoU threshold, stability threshold, minimum mask area, and optional post-processing support;
 * whether optional cross-version Cellpose3 baselines are worth adding after the PoW path is stable;
 * how much supervised fine-tuning improves performance relative to the zero-shot methods, given the recorded training budget;
 * whether VLM segmentation failures are dominated by output validity, JSON parsing, empty outputs, count errors, or mask overlap quality;
@@ -326,7 +327,8 @@ Planned next steps:
 6. add evaluation and visualization scripts;
 7. optionally add YOLO fine-tuning and VLM segmentation protocols;
 8. document APG or CellSAM-style prompt generation as future work rather than a main-protocol requirement;
-9. write a short technical memo summarizing results and failure cases.
+9. optionally add a small SAM2 AMG parameter-sensitivity smoke test after the PoW baseline path is stable;
+10. write a short technical memo summarizing results and failure cases.
 
 ## Reproducibility Principles
 
