@@ -1,0 +1,7 @@
+method,api,requested_model,loaded_model,runnable_as_distinct_method,status,reason
+cellpose_default_cyto3,cellpose.models.CellposeModel,cyto3,cpsam,False,alias_to_cpsam,requested model resolves to cpsam in cellpose 4.1.1
+cellpose_default_nuclei,cellpose.models.CellposeModel,nuclei,cpsam,False,alias_to_cpsam,requested model resolves to cpsam in cellpose 4.1.1
+cellpose_default_transformer_cp3,cellpose.models.CellposeModel,transformer_cp3,cpsam,False,alias_to_cpsam,requested model resolves to cpsam in cellpose 4.1.1
+cellpose_cpsam,cellpose.models.CellposeModel,cpsam,cpsam,True,available,available
+cellpose_oneclick_cyto3,cellpose.denoise.CellposeDenoiseModel,oneclick_cyto3,,False,error,NameError: name 'CPnet' is not defined
+cellpose_oneclick_nuclei,cellpose.denoise.CellposeDenoiseModel,oneclick_nuclei,,False,error,NameError: name 'CPnet' is not defined

@@ -44,6 +44,12 @@ Outputs:
 Goal: run the Cellpose default pretrained model on the same deterministic 20-image
 subset.
 
+Current environment status:
+
+- `results/baselines/cellpose_method_availability.csv` records that Cellpose default
+  candidate names resolve to `cpsam` under `cellpose==4.1.1`, so this baseline needs
+  a separate environment or model-asset decision before running.
+
 Expected outputs:
 
 - metrics under `results/baselines/`;
@@ -54,6 +60,12 @@ Expected outputs:
 
 Goal: run the Cellpose restoration-enhanced workflow on the same deterministic
 20-image subset.
+
+Current environment status:
+
+- `results/baselines/cellpose_method_availability.csv` records that the current
+  restoration API fails during initialization with `NameError: name 'CPnet' is not
+  defined`, so this baseline also needs an environment decision before running.
 
 Expected outputs:
 

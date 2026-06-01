@@ -41,6 +41,7 @@ proof-of-work benchmark.
 
 ## Second Baseline
 
+- [x] Cellpose default availability audited in the current `cell` environment.
 - [ ] Cellpose default predictor implemented.
 - [ ] Cellpose default runs on the same small fixed subset.
 - [ ] Cellpose default metrics written to `results/baselines/`.
@@ -48,7 +49,8 @@ proof-of-work benchmark.
 
 ## Third Baseline
 
-- [ ] Cellpose restoration workflow selected and documented.
+- [x] Cellpose restoration availability audited in the current `cell` environment.
+- [ ] Cellpose restoration workflow selected for a runnable environment.
 - [ ] Cellpose restoration runs on the same small fixed subset.
 - [ ] Cellpose restoration metrics written to `results/baselines/`.
 - [ ] Cellpose restoration qualitative overlays written to `figures/`.

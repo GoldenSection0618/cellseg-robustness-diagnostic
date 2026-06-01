@@ -107,6 +107,31 @@ Each clean baseline should follow the same output contract:
 - qualitative figures in `figures/`;
 - summary notes in this memo after the run.
 
+## Cellpose Method Availability Audit
+
+The Cellpose default and restoration baselines were audited against the current
+`cell` environment before adding more baseline scripts.
+
+Generated outputs:
+
+- `results/baselines/cellpose_method_availability.csv`
+- `figures/cellpose_method_availability.png`
+
+Current environment finding:
+
+- `cellpose==4.1.1` exposes `cpsam` as the only registered
+  `cellpose.models.CellposeModel` model.
+- Candidate default names `cyto3`, `nuclei`, and `transformer_cp3` all resolve to
+  `cpsam`, so running them in this environment would duplicate the Cellpose-SAM
+  baseline rather than produce a distinct Cellpose default result.
+- `cellpose.denoise.CellposeDenoiseModel` lists one-click restoration model names, but
+  initialization currently fails with `NameError: name 'CPnet' is not defined`.
+
+The next action for the Cellpose branch is therefore an environment/model decision:
+use a separate Cellpose 3 environment or add the exact legacy model assets needed for
+Cellpose default and restoration. Until that is resolved, these two baselines should
+not be recorded as completed results.
+
 ## SAM2 AMG Smoke Test
 
 The SAM2 automatic mask generator baseline uses `sam2==1.1.0`,
