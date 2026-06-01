@@ -66,8 +66,8 @@ conda run -n cell python -c "from pathlib import Path; import imageio.v3 as iio;
 
 ## Notes
 
-- SAM2 model checkpoints are not installed by these commands. Download the selected
-  checkpoint later when implementing the SAM2 protocol.
+- SAM2 model checkpoints are local binary assets, not environment packages. The
+  current SAM2 baseline expects `data/checkpoints/sam2.1_hiera_large.pt`.
 - Gemini requires an API key at runtime, for example `GOOGLE_API_KEY`.
 - For an 8 GB GPU, prefer small/base SAM2 variants, single-image inference,
   conservative YOLO batch sizes, and resizing or tiling for large images.

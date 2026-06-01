@@ -1,6 +1,7 @@
 # Experiment Plan
 
-The benchmark is built in small increments so every stage leaves verifiable outputs.
+The benchmark is built in small increments. Each small stage should leave verifiable
+outputs and be committed before starting the next stage.
 
 ## Phase 1: Data Audit
 
@@ -14,20 +15,10 @@ Outputs:
 - `figures/dataset_train_instance_count_hist.png`
 - `figures/dataset_image_size_scatter.png`
 
-## Phase 2: Classical Baseline
+## Phase 2: Evaluation Pipeline
 
-Goal: run an Otsu + watershed baseline on a small fixed subset.
-
-Outputs:
-
-- metrics CSV under `results/baselines/`;
-- qualitative overlays under `figures/`;
-- notes added to `technical_memo.md`.
-
-## Phase 3: Metric Hardening
-
-Goal: stabilize instance matching and segmentation metrics before adding larger
-models.
+Goal: stabilize the shared instance-mask evaluation contract before comparing
+methods.
 
 Required metrics:
 
@@ -37,39 +28,88 @@ Required metrics:
 - count error;
 - false positives and missed objects.
 
-## Phase 3a: Perturbation Smoke Test
+## Phase 3: First Baseline
 
-Goal: verify that controlled image perturbations can be applied and evaluated on the
-existing small subset before running any full robustness sweep.
+Goal: run an Otsu + watershed baseline on a deterministic 20-image subset.
 
-Initial perturbations:
+Outputs:
 
-- clean;
-- Gaussian noise;
-- Gaussian blur;
-- downsample then upsample;
-- contrast inversion.
+- `results/baselines/otsu_watershed_clean_subset_metrics.csv`
+- `figures/otsu_watershed_subset_overlay_examples.png`
+- `figures/otsu_watershed_subset_metric_means.png`
+- `figures/otsu_watershed_subset_count_scatter.png`
 
-Initial method:
+## Phase 4: Second Baseline
 
-- Otsu + watershed only.
+Goal: run the Cellpose default pretrained model on the same deterministic 20-image
+subset.
 
-## Phase 4: Zero-Shot Model Protocols
+Expected outputs:
 
-Goal: run pretrained or out-of-the-box methods under the same data and output
-contract.
+- metrics under `results/baselines/`;
+- qualitative figures under `figures/`;
+- summary notes in `technical_memo.md`.
 
-Initial methods:
+## Phase 5: Third Baseline
 
-- Cellpose 4.1.1 default;
-- Cellpose-SAM workflow;
-- SAM2 automatic mask generation.
+Goal: run the Cellpose restoration-enhanced workflow on the same deterministic
+20-image subset.
 
-## Phase 5: Separate Follow-Up Protocols
+Expected outputs:
 
-Goal: keep supervised and VLM experiments separate from the main zero-shot ranking.
+- metrics under `results/baselines/`;
+- qualitative figures under `figures/`;
+- summary notes in `technical_memo.md`.
 
-Follow-up protocols:
+## Phase 6: Fourth Baseline
 
+Goal: run Cellpose-SAM / `cpsam` on the same deterministic 20-image subset.
+
+Completed outputs:
+
+- `results/baselines/cellpose_cpsam_clean_subset_metrics.csv`
+- `figures/cellpose_cpsam_subset_overlay_examples.png`
+- `figures/cellpose_cpsam_subset_metric_means.png`
+- `figures/cellpose_cpsam_subset_count_scatter.png`
+
+## Phase 7: Fifth Baseline
+
+Goal: run SAM2 automatic mask generation on the same deterministic 20-image subset.
+
+Local model asset:
+
+- `data/checkpoints/sam2.1_hiera_large.pt`
+
+Expected outputs:
+
+- metrics under `results/baselines/`;
+- qualitative figures under `figures/`;
+- summary notes in `technical_memo.md`.
+
+## Phase 8: Clean Baseline Comparison
+
+Goal: compare completed clean subset baselines without adding perturbations or full
+scale runs.
+
+Current completed comparison:
+
+- `results/baselines/clean_subset_baseline_metrics_long.csv`
+- `results/baselines/clean_subset_baseline_summary.csv`
+- `figures/baseline_clean_subset_metric_comparison.png`
+- `figures/baseline_clean_subset_count_error_comparison.png`
+- `figures/baseline_clean_subset_latency_comparison.png`
+
+## Deferred Robustness Work
+
+Robustness perturbations are a later analysis track. A small Otsu-only smoke test has
+already been recorded, but the current main line should continue with clean baseline
+completion first.
+
+## Later Protocols
+
+These protocols should stay separate from the clean zero-shot baseline track:
+
+- Cellpose default protocol;
+- Cellpose-SAM full protocol;
 - YOLO-seg small-label supervised adaptation;
 - Gemini segmentation output-validity checks.

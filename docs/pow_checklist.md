@@ -35,24 +35,53 @@ proof-of-work benchmark.
 ## First Baseline
 
 - [x] Otsu + watershed predictor implemented.
-- [x] Baseline runs on a small fixed subset.
-- [x] Baseline metrics written to `results/baselines/`.
-- [x] Baseline qualitative overlays written to `figures/`.
+- [x] Otsu + watershed runs on a small fixed subset.
+- [x] Otsu + watershed metrics written to `results/baselines/`.
+- [x] Otsu + watershed qualitative overlays written to `figures/`.
 
-## Model Baseline Smoke Tests
+## Second Baseline
 
+- [ ] Cellpose default predictor implemented.
+- [ ] Cellpose default runs on the same small fixed subset.
+- [ ] Cellpose default metrics written to `results/baselines/`.
+- [ ] Cellpose default qualitative overlays written to `figures/`.
+
+## Third Baseline
+
+- [ ] Cellpose restoration workflow selected and documented.
+- [ ] Cellpose restoration runs on the same small fixed subset.
+- [ ] Cellpose restoration metrics written to `results/baselines/`.
+- [ ] Cellpose restoration qualitative overlays written to `figures/`.
+
+## Fourth Baseline
+
+- [x] Cellpose-SAM predictor implemented.
 - [x] Cellpose-SAM runs on the same small fixed subset.
 - [x] Cellpose-SAM metrics written to `results/baselines/`.
 - [x] Cellpose-SAM qualitative overlays written to `figures/`.
 
-## Robustness Smoke Test
+## Fifth Baseline
+
+- [x] SAM2 checkpoint documented.
+- [ ] SAM2 automatic mask generator predictor implemented.
+- [ ] SAM2 automatic mask generator runs on the same small fixed subset.
+- [ ] SAM2 metrics written to `results/baselines/`.
+- [ ] SAM2 qualitative overlays written to `figures/`.
+
+## Clean Baseline Comparison
+
+- [x] Otsu + watershed and Cellpose-SAM subset metrics combined.
+- [x] Clean subset comparison summary written to `results/baselines/`.
+- [x] Clean subset comparison figures written to `figures/`.
+
+## Deferred Robustness Record
 
 - [x] Controlled perturbation utilities implemented.
 - [x] Minimal perturbation smoke test runs on a small fixed subset.
 - [x] Robustness smoke metrics written to `results/robustness/`.
 - [x] Robustness smoke figures written to `figures/`.
 
-## Later Protocols
+## Later Protocols After Clean Baselines
 
 - [ ] Cellpose default protocol.
 - [ ] Cellpose-SAM full protocol.

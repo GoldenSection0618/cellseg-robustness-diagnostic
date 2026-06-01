@@ -83,6 +83,27 @@ This is still a smoke test on a small subset. It establishes that the model-back
 baseline path can produce the same metric and figure contract as the classical
 baseline.
 
+## Clean Baseline Continuation
+
+README Protocol A orders the clean zero-shot baselines as Otsu + watershed, Cellpose
+default, Cellpose restoration, Cellpose-SAM, and SAM2 automatic mask generation.
+
+Two clean subset baselines have already been recorded:
+
+- Otsu + watershed;
+- Cellpose-SAM / `cpsam`.
+
+Because Cellpose-SAM was run before the two earlier Cellpose baselines, the next clean
+baseline should fill the missing Cellpose default baseline on the same deterministic
+20-image subset. After that, continue with the Cellpose restoration workflow, then
+SAM2 automatic mask generation using `data/checkpoints/sam2.1_hiera_large.pt`.
+
+Each clean baseline should follow the same output contract:
+
+- metrics in `results/baselines/`;
+- qualitative figures in `figures/`;
+- summary notes in this memo after the run.
+
 ## Clean Subset Baseline Comparison
 
 The first comparison analysis combines the Otsu + watershed and Cellpose-SAM clean
