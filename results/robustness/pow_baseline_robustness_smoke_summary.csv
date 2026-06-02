@@ -1,0 +1,16 @@
+method,perturbation,images,mean_object_f1,mean_matched_iou,mean_matched_dice,mean_precision,mean_recall,mean_absolute_count_error,median_latency_ms,mean_latency_ms,clean_mean_object_f1,absolute_object_f1_drop,relative_object_f1_drop,method_label
+otsu_watershed,clean,5,0.6311,0.7575,0.854,0.5746,0.7705,33.0,17.836,29.969,0.6311,0.0,0.0,Otsu + watershed
+otsu_watershed,gaussian_noise,5,0.4156,0.7033,0.8204,0.3655,0.5212,46.8,13.43,31.5112,0.6311,0.2155,0.3415,Otsu + watershed
+otsu_watershed,gaussian_blur,5,0.6257,0.7808,0.8699,0.5925,0.7329,32.6,13.535,29.7566,0.6311,0.0054,0.0086,Otsu + watershed
+otsu_watershed,downsample_upsample,5,0.6201,0.7735,0.8649,0.5736,0.7371,30.4,12.88,30.555,0.6311,0.011,0.0174,Otsu + watershed
+otsu_watershed,contrast_inversion,5,0.6282,0.7631,0.8574,0.5992,0.7195,30.2,12.356,29.7534,0.6311,0.0029,0.0046,Otsu + watershed
+cellpose_cpsam,clean,5,0.9461,0.8703,0.9274,0.9739,0.9264,2.4,765.414,1086.4394,0.9461,0.0,0.0,Cellpose-SAM
+cellpose_cpsam,gaussian_noise,5,0.9092,0.8235,0.8987,0.9503,0.8765,3.0,705.243,908.8378,0.9461,0.0369,0.039,Cellpose-SAM
+cellpose_cpsam,gaussian_blur,5,0.9448,0.872,0.9289,0.9844,0.9134,2.2,760.758,932.701,0.9461,0.0013,0.0014,Cellpose-SAM
+cellpose_cpsam,downsample_upsample,5,0.9448,0.8731,0.9293,0.9844,0.9134,2.2,643.549,889.7682,0.9461,0.0013,0.0014,Cellpose-SAM
+cellpose_cpsam,contrast_inversion,5,0.955,0.8672,0.9247,0.9962,0.9245,2.0,723.598,910.6076,0.9461,-0.0089,-0.0094,Cellpose-SAM
+sam2_amg,clean,5,0.3675,0.3678,0.3827,0.3683,0.369,17.0,2446.565,2348.5576,0.3675,0.0,0.0,SAM2 AMG
+sam2_amg,gaussian_noise,5,0.0,0.0,0.0,0.0,0.0,40.4,2387.829,2379.053,0.3675,0.3675,1.0,SAM2 AMG
+sam2_amg,gaussian_blur,5,0.0,0.0,0.0,0.0,0.0,40.4,2245.486,2276.2362,0.3675,0.3675,1.0,SAM2 AMG
+sam2_amg,downsample_upsample,5,0.0,0.0,0.0,0.0,0.0,40.4,2339.166,2286.1596,0.3675,0.3675,1.0,SAM2 AMG
+sam2_amg,contrast_inversion,5,0.0,0.0,0.0,0.0,0.0,38.0,2288.398,2272.0568,0.3675,0.3675,1.0,SAM2 AMG

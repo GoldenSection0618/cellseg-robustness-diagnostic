@@ -91,11 +91,24 @@ Current output:
 
 - `docs/failure_taxonomy.md`
 
+## Phase 8: PoW Robustness Smoke Test
+
+Goal: test the three completed PoW baselines on the same tiny perturbation set before
+considering any full robustness sweep.
+
+Current outputs:
+
+- `results/robustness/pow_baseline_robustness_smoke_metrics.csv`
+- `results/robustness/pow_baseline_robustness_smoke_summary.csv`
+- `figures/robustness_pow_smoke_mean_f1.png`
+- `figures/robustness_pow_smoke_relative_f1_drop.png`
+- `figures/robustness_pow_smoke_method_condition_heatmap.png`
+- `figures/robustness_pow_smoke_overlay_examples.png`
+
 ## Deferred Robustness Work
 
-Robustness perturbations are a later analysis track. A small Otsu-only smoke test has
-already been recorded, but the current main line should continue with clean baseline
-completion first.
+The next robustness step should remain targeted. Do not start a full perturbation
+sweep until the smoke-test findings are reviewed.
 
 ## Optional Cross-Version Cellpose Work
 

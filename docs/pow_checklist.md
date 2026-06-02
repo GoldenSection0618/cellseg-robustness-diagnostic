@@ -72,7 +72,8 @@ proof-of-work benchmark.
 ## Deferred Robustness Record
 
 - [x] Controlled perturbation utilities implemented.
-- [x] Minimal perturbation smoke test runs on a small fixed subset.
+- [x] Otsu-only perturbation smoke test runs on a small fixed subset.
+- [x] PoW three-baseline robustness smoke test runs on the same small fixed subset.
 - [x] Robustness smoke metrics written to `results/robustness/`.
 - [x] Robustness smoke figures written to `figures/`.
 

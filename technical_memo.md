@@ -241,6 +241,38 @@ This is not a full robustness sweep. It proves that perturbations, metric aggreg
 relative-drop reporting, and robustness figures work on the existing experiment
 skeleton.
 
+## PoW Baseline Robustness Smoke Test
+
+The first cross-method robustness smoke test runs all three completed PoW baselines
+on the same deterministic 5-image subset and five image conditions:
+
+- Otsu + watershed;
+- Cellpose-SAM / `cpsam`;
+- SAM2 AMG.
+
+Generated outputs:
+
+- `results/robustness/pow_baseline_robustness_smoke_metrics.csv`
+- `results/robustness/pow_baseline_robustness_smoke_summary.csv`
+- `figures/robustness_pow_smoke_mean_f1.png`
+- `figures/robustness_pow_smoke_relative_f1_drop.png`
+- `figures/robustness_pow_smoke_method_condition_heatmap.png`
+- `figures/robustness_pow_smoke_overlay_examples.png`
+
+Current smoke-test summary:
+
+| Method | Clean F1 | Gaussian noise F1 | Blur F1 | Downsample F1 | Inversion F1 |
+| --- | ---: | ---: | ---: | ---: | ---: |
+| Otsu + watershed | 0.6311 | 0.4156 | 0.6257 | 0.6201 | 0.6282 |
+| Cellpose-SAM | 0.9461 | 0.9092 | 0.9448 | 0.9448 | 0.9550 |
+| SAM2 AMG | 0.3675 | 0.0000 | 0.0000 | 0.0000 | 0.0000 |
+
+This is still a smoke test rather than a full robustness experiment. It gives a useful
+directional signal: Cellpose-SAM is stable under this small perturbation set, Otsu is
+mainly affected by Gaussian noise, and SAM2 AMG collapses under all tested
+perturbations in this protocol. The SAM2 result should be interpreted with the known
+optional `_C` post-processing warning.
+
 ## Output Contract
 
 Experiment and analysis scripts should write:

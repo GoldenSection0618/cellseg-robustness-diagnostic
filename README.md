@@ -325,14 +325,14 @@ Implemented PoW artifacts:
 2. shared instance-mask metrics and visualization helpers under `src/`;
 3. clean-subset baselines for Otsu + watershed, Cellpose-SAM / `cpsam`, and SAM2 AMG;
 4. clean-subset comparison and failure-case tables in `results/baselines/`, with comparison figures in `figures/`;
-5. a small Otsu-only perturbation smoke test in `results/robustness/`;
+5. small Otsu-only and three-baseline perturbation smoke tests in `results/robustness/`;
 6. root-level `technical_memo.md` with current summaries and limitations;
 7. PoW support docs under `docs/`, including data, environment, output contract, experiment plan, checklist, and failure taxonomy.
 
 Near-term next steps:
 
 1. keep the current PoW mainline focused on the three completed clean baselines;
-2. add only targeted robustness smoke tests before any full perturbation sweep;
+2. review targeted robustness smoke findings before any full perturbation sweep;
 3. optionally add a small SAM2 AMG parameter-sensitivity smoke test after the baseline path is stable;
 4. keep legacy Cellpose3 `cyto3` and one-click restoration as optional cross-version work;
 5. keep YOLO fine-tuning and VLM segmentation as separate protocols, not part of the zero-shot ranking.
