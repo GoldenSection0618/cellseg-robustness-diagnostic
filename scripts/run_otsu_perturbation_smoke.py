@@ -1,5 +1,5 @@
 #!/usr/bin/env python
-"""Run a minimal Otsu robustness smoke test on a tiny fixed subset."""
+"""Run the earlier Otsu-only robustness smoke test on a tiny fixed subset."""
 
 from __future__ import annotations
 

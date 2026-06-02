@@ -1,5 +1,5 @@
 #!/usr/bin/env python
-"""Audit which planned Cellpose-family methods are runnable in the current env."""
+"""Audit optional cross-version Cellpose-family methods in the current env."""
 
 from __future__ import annotations
 

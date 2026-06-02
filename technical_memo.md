@@ -3,7 +3,7 @@
 ## Current Objective
 
 Build a compact proof-of-work benchmark for microscopy nucleus instance segmentation
-robustness. The first implementation target is an end-to-end skeleton that can:
+robustness. The current implementation is an end-to-end skeleton that can:
 
 1. read the local DSB2018 data;
 2. produce tabular analysis outputs in categorized `results/` subdirectories;
@@ -33,8 +33,8 @@ The first milestone is intentionally small:
 - write dataset diagnostic plots to `figures/`;
 - keep all generated outputs reproducible from code.
 
-After this milestone, the next step is to add a classical Otsu + watershed baseline
-that uses the same output contract.
+This milestone established the output contract used by later baseline and robustness
+scripts.
 
 ## Baseline Smoke Test
 
@@ -61,8 +61,8 @@ heterogeneous DSB2018 images.
 
 ## Cellpose-SAM Smoke Test
 
-The next minimum baseline uses Cellpose 4.1.1 with the `cpsam` pretrained model on
-the same deterministic 20-image clean subset.
+The Cellpose-family PoW baseline uses Cellpose 4.1.1 with the `cpsam` pretrained
+model on the same deterministic 20-image clean subset.
 
 Generated outputs:
 

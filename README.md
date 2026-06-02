@@ -232,10 +232,10 @@ Use the label "cell" for each individual cell.
 
 ## Expected Outputs
 
-Planned outputs include:
+Current PoW outputs include:
 
-* `results/*.csv` for metric summaries;
-* `figures/*.png` for robustness and failure-case visualization;
+* categorized `results/<category>/*.csv` tables for metric summaries and audits;
+* flat `figures/*.png` outputs for robustness, comparison, and failure-case visualization;
 * per-method qualitative examples;
 * a short technical memo;
 * a failure-case taxonomy in `docs/failure_taxonomy.md`;
