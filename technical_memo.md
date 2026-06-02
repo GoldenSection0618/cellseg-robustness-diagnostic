@@ -173,9 +173,13 @@ Generated outputs:
 
 - `results/baselines/clean_subset_baseline_metrics_long.csv`
 - `results/baselines/clean_subset_baseline_summary.csv`
+- `results/baselines/clean_subset_baseline_failure_cases.csv`
 - `figures/baseline_clean_subset_metric_comparison.png`
 - `figures/baseline_clean_subset_count_error_comparison.png`
 - `figures/baseline_clean_subset_latency_comparison.png`
+- `figures/baseline_clean_subset_score_distributions.png`
+- `figures/baseline_clean_subset_precision_recall.png`
+- `figures/baseline_clean_subset_image_method_f1_heatmap.png`
 
 Current comparison summary:
 
@@ -188,6 +192,12 @@ Current comparison summary:
 This comparison is a smoke-test analysis product. It shows that baseline outputs can
 be aggregated and visualized under the project output contract before expanding to
 more perturbations or larger evaluation sets.
+
+The richer comparison artifacts are more useful than mean-only plots for the current
+PoW: the failure-case table records each method's worst clean-subset images, the
+distribution plot shows per-image variance, the precision-recall plot separates
+missed-object and false-positive behavior, and the heatmap highlights image-specific
+method failures.
 
 ## Failure-Case Taxonomy
 

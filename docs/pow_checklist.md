@@ -59,6 +59,7 @@ proof-of-work benchmark.
 
 - [x] Otsu + watershed, Cellpose-SAM, and SAM2 subset metrics combined.
 - [x] Clean subset comparison summary written to `results/baselines/`.
+- [x] Clean subset failure cases written to `results/baselines/`.
 - [x] Clean subset comparison figures written to `figures/`.
 
 ## Optional Cross-Version Cellpose Baselines

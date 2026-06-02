@@ -74,9 +74,13 @@ Current completed comparison:
 
 - `results/baselines/clean_subset_baseline_metrics_long.csv`
 - `results/baselines/clean_subset_baseline_summary.csv`
+- `results/baselines/clean_subset_baseline_failure_cases.csv`
 - `figures/baseline_clean_subset_metric_comparison.png`
 - `figures/baseline_clean_subset_count_error_comparison.png`
 - `figures/baseline_clean_subset_latency_comparison.png`
+- `figures/baseline_clean_subset_score_distributions.png`
+- `figures/baseline_clean_subset_precision_recall.png`
+- `figures/baseline_clean_subset_image_method_f1_heatmap.png`
 
 ## Phase 7: Failure Taxonomy
 

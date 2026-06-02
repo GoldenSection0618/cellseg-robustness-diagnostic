@@ -7,6 +7,7 @@ experiments can annotate failures consistently.
 ## Evidence Used
 
 - `results/baselines/clean_subset_baseline_summary.csv`
+- `results/baselines/clean_subset_baseline_failure_cases.csv`
 - `results/robustness/otsu_watershed_perturbation_smoke_summary.csv`
 - `figures/otsu_watershed_subset_overlay_examples.png`
 - `figures/cellpose_cpsam_subset_overlay_examples.png`
