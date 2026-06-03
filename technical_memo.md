@@ -273,6 +273,15 @@ mainly affected by Gaussian noise, and SAM2 AMG collapses under all tested
 perturbations in this protocol. The SAM2 result should be interpreted with the known
 optional `_C` post-processing warning.
 
+The next robustness step is worth expanding only to the existing 20-image clean
+subset, not to the full dataset. The 5-image smoke subset is representative enough
+for a pipeline check, but not for a robustness conclusion: among the five worst
+clean-subset images per method, it covers one Cellpose-SAM image, no Otsu +
+watershed images, and one SAM2 AMG image. The observed standard error is also high
+for Otsu clean F1 (0.1088) and SAM2 AMG clean F1 (0.2251). A 20-image extension
+keeps the scope small while adding the hard clean-subset examples that the smoke
+test skipped.
+
 ## Output Contract
 
 Experiment and analysis scripts should write:

@@ -332,7 +332,7 @@ Implemented PoW artifacts:
 Near-term next steps:
 
 1. keep the current PoW mainline focused on the three completed clean baselines;
-2. review targeted robustness smoke findings before any full perturbation sweep;
+2. extend the same robustness protocol to the deterministic 20-image clean subset;
 3. optionally add a small SAM2 AMG parameter-sensitivity smoke test after the baseline path is stable;
 4. keep legacy Cellpose3 `cyto3` and one-click restoration as optional cross-version work;
 5. keep YOLO fine-tuning and VLM segmentation as separate protocols, not part of the zero-shot ranking.

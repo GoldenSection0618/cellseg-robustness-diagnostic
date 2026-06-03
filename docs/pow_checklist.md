@@ -76,6 +76,7 @@ proof-of-work benchmark.
 - [x] PoW three-baseline robustness smoke test runs on the same small fixed subset.
 - [x] Robustness smoke metrics written to `results/robustness/`.
 - [x] Robustness smoke figures written to `figures/`.
+- [ ] Extend the same robustness protocol to the deterministic 20-image clean subset.
 
 ## Later Protocols After PoW Clean Baselines
 
