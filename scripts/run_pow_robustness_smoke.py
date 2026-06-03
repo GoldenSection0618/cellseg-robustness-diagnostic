@@ -66,61 +66,91 @@ def parse_args() -> argparse.Namespace:
     parser.add_argument(
         "--output-tag",
         default=DEFAULT_OUTPUT_TAG,
-        choices=["smoke", "clean20"],
+        choices=["smoke", "clean20", "full_train"],
         help="Output tag used in result and figure filenames.",
+    )
+    parser.add_argument(
+        "--methods",
+        nargs="+",
+        default=METHOD_ORDER,
+        choices=METHOD_ORDER,
+        help="Methods to run. Use this for staged full_train execution.",
+    )
+    parser.add_argument(
+        "--resume",
+        action="store_true",
+        help="Reuse an existing metrics CSV and skip completed rows.",
+    )
+    parser.add_argument(
+        "--overwrite",
+        action="store_true",
+        help="Delete existing outputs for this output tag before running.",
     )
     args = parser.parse_args()
     if args.output_tag == "clean20" and args.limit != 20:
         parser.error("--output-tag clean20 requires --limit 20")
+    if args.output_tag == "full_train" and args.limit != DEFAULT_LIMIT:
+        parser.error("--output-tag full_train uses all stage1_train images; omit --limit")
+    if args.resume and args.overwrite:
+        parser.error("--resume and --overwrite cannot be used together")
     return args
 
 
-def selected_image_dirs(limit: int) -> list[Path]:
+def selected_image_dirs(limit: int, output_tag: str) -> list[Path]:
     """Use the same deterministic spread as the clean subset scripts."""
     if limit <= 0:
         raise ValueError("limit must be positive")
     image_dirs = stage1_train_image_dirs()
+    if output_tag == "full_train":
+        return image_dirs
     if limit >= len(image_dirs):
         return image_dirs
     indices = np.linspace(0, len(image_dirs) - 1, num=limit, dtype=int)
     return [image_dirs[int(index)] for index in indices]
 
 
-def build_predictors() -> dict[str, Callable[[np.ndarray], np.ndarray]]:
+def build_predictors(methods: list[str]) -> dict[str, Callable[[np.ndarray], np.ndarray]]:
     """Initialize each completed PoW baseline once."""
     use_gpu = torch.cuda.is_available()
-    cellpose_model = models.CellposeModel(gpu=use_gpu, pretrained_model="cpsam")
-
-    if not SAM2_CHECKPOINT.exists():
-        raise FileNotFoundError(f"Missing SAM2 checkpoint: {SAM2_CHECKPOINT}")
-    sam2_device = "cuda" if use_gpu else "cpu"
-    sam2_model = build_sam2(SAM2_CONFIG, str(SAM2_CHECKPOINT), device=sam2_device)
-    sam2_generator = SAM2AutomaticMaskGenerator(
-        sam2_model,
-        points_per_side=24,
-        points_per_batch=64,
-        pred_iou_thresh=0.8,
-        stability_score_thresh=0.9,
-        box_nms_thresh=0.7,
-        crop_n_layers=0,
-        min_mask_region_area=15,
-        output_mode="binary_mask",
-    )
+    predictors: dict[str, Callable[[np.ndarray], np.ndarray]] = {}
 
     def predict_otsu(image: np.ndarray) -> np.ndarray:
         return otsu_watershed_predict(image)
 
-    def predict_cpsam(image: np.ndarray) -> np.ndarray:
-        return predict_cellpose(cellpose_model, image)
+    if "otsu_watershed" in methods:
+        predictors["otsu_watershed"] = predict_otsu
 
-    def predict_sam2_amg(image: np.ndarray) -> np.ndarray:
-        return predict_sam2(sam2_generator, image)
+    if "cellpose_cpsam" in methods:
+        cellpose_model = models.CellposeModel(gpu=use_gpu, pretrained_model="cpsam")
 
-    return {
-        "otsu_watershed": predict_otsu,
-        "cellpose_cpsam": predict_cpsam,
-        "sam2_amg": predict_sam2_amg,
-    }
+        def predict_cpsam(image: np.ndarray) -> np.ndarray:
+            return predict_cellpose(cellpose_model, image)
+
+        predictors["cellpose_cpsam"] = predict_cpsam
+
+    if "sam2_amg" in methods:
+        if not SAM2_CHECKPOINT.exists():
+            raise FileNotFoundError(f"Missing SAM2 checkpoint: {SAM2_CHECKPOINT}")
+        sam2_device = "cuda" if use_gpu else "cpu"
+        sam2_model = build_sam2(SAM2_CONFIG, str(SAM2_CHECKPOINT), device=sam2_device)
+        sam2_generator = SAM2AutomaticMaskGenerator(
+            sam2_model,
+            points_per_side=24,
+            points_per_batch=64,
+            pred_iou_thresh=0.8,
+            stability_score_thresh=0.9,
+            box_nms_thresh=0.7,
+            crop_n_layers=0,
+            min_mask_region_area=15,
+            output_mode="binary_mask",
+        )
+
+        def predict_sam2_amg(image: np.ndarray) -> np.ndarray:
+            return predict_sam2(sam2_generator, image)
+
+        predictors["sam2_amg"] = predict_sam2_amg
+
+    return predictors
 
 
 def summarize(metrics: pd.DataFrame, perturbations: list[Perturbation]) -> pd.DataFrame:
@@ -164,6 +194,11 @@ def summarize(metrics: pd.DataFrame, perturbations: list[Perturbation]) -> pd.Da
     return summary.sort_values(["method", "perturbation"]).reset_index(drop=True)
 
 
+def present_methods(frame: pd.DataFrame) -> list[str]:
+    available = set(frame["method"].astype(str).unique())
+    return [method for method in METHOD_ORDER if method in available]
+
+
 def output_stem(output_tag: str) -> str:
     return f"pow_baseline_robustness_{output_tag}"
 
@@ -173,12 +208,16 @@ def figure_stem(output_tag: str) -> str:
 
 
 def display_title(output_tag: str) -> str:
+    if output_tag == "full_train":
+        return "PoW Robustness Full Train"
     if output_tag == "clean20":
         return "PoW Robustness Clean20"
     return "PoW Robustness Smoke"
 
 
 def split_label(output_tag: str) -> str:
+    if output_tag == "full_train":
+        return "stage1_train_full"
     if output_tag == "clean20":
         return "stage1_train_clean20_subset"
     return "stage1_train_tiny_subset"
@@ -186,7 +225,7 @@ def split_label(output_tag: str) -> str:
 
 def save_mean_f1_plot(summary: pd.DataFrame, output_tag: str) -> None:
     fig, ax = plt.subplots(figsize=(9, 4.8))
-    for method in METHOD_ORDER:
+    for method in present_methods(summary):
         method_summary = summary[summary["method"] == method]
         ax.plot(
             method_summary["perturbation"].astype(str),
@@ -211,13 +250,15 @@ def save_relative_drop_plot(summary: pd.DataFrame, output_tag: str) -> None:
     plot_frame = summary[summary["perturbation"] != "clean"].copy()
     perturbations = plot_frame["perturbation"].astype(str).drop_duplicates().tolist()
     x = np.arange(len(perturbations))
-    width = 0.24
+    methods = present_methods(plot_frame)
+    width = min(0.8 / max(len(methods), 1), 0.24)
 
     fig, ax = plt.subplots(figsize=(10, 4.8))
-    for index, method in enumerate(METHOD_ORDER):
+    offsets = np.linspace(-(len(methods) - 1) / 2, (len(methods) - 1) / 2, len(methods))
+    for offset, method in zip(offsets, methods):
         method_summary = plot_frame[plot_frame["method"] == method]
         ax.bar(
-            x + (index - 1) * width,
+            x + offset * width,
             method_summary["relative_object_f1_drop"],
             width=width,
             color=METHOD_COLORS[method],
@@ -236,7 +277,7 @@ def save_relative_drop_plot(summary: pd.DataFrame, output_tag: str) -> None:
 
 def save_method_condition_heatmap(summary: pd.DataFrame, output_tag: str) -> None:
     pivot = summary.pivot(index="method_label", columns="perturbation", values="mean_object_f1")
-    pivot = pivot.loc[[METHOD_LABELS[method] for method in METHOD_ORDER]]
+    pivot = pivot.loc[[METHOD_LABELS[method] for method in present_methods(summary)]]
 
     fig, ax = plt.subplots(figsize=(8, 4.5))
     image = ax.imshow(pivot.to_numpy(), aspect="auto", vmin=0, vmax=1, cmap="viridis")
@@ -279,12 +320,64 @@ def save_overlay_examples(
     plt.close(fig)
 
 
+def output_paths(output_tag: str) -> tuple[Path, Path]:
+    stem = output_stem(output_tag)
+    metrics_path = RESULT_SUBDIRS["robustness"] / f"{stem}_metrics.csv"
+    summary_path = RESULT_SUBDIRS["robustness"] / f"{stem}_summary.csv"
+    return metrics_path, summary_path
+
+
+def figure_paths(output_tag: str) -> list[Path]:
+    stem = figure_stem(output_tag)
+    return [
+        FIGURES_DIR / f"{stem}_mean_f1.png",
+        FIGURES_DIR / f"{stem}_relative_f1_drop.png",
+        FIGURES_DIR / f"{stem}_method_condition_heatmap.png",
+        FIGURES_DIR / f"{stem}_overlay_examples.png",
+    ]
+
+
+def prepare_existing_outputs(args: argparse.Namespace) -> pd.DataFrame:
+    metrics_path, summary_path = output_paths(args.output_tag)
+    existing_paths = [metrics_path, summary_path, *figure_paths(args.output_tag)]
+    existing_paths = [path for path in existing_paths if path.exists()]
+
+    if args.overwrite:
+        for path in existing_paths:
+            path.unlink()
+        return pd.DataFrame()
+
+    if existing_paths and not args.resume:
+        joined = "\n".join(str(path) for path in existing_paths)
+        raise FileExistsError(
+            f"Existing outputs found for tag {args.output_tag}. Use --resume or --overwrite.\n{joined}"
+        )
+
+    if args.resume and metrics_path.exists():
+        return pd.read_csv(metrics_path)
+    return pd.DataFrame()
+
+
+def completed_keys(existing_metrics: pd.DataFrame) -> set[tuple[str, str, str]]:
+    if existing_metrics.empty:
+        return set()
+    return set(
+        zip(
+            existing_metrics["image_id"].astype(str),
+            existing_metrics["method"].astype(str),
+            existing_metrics["perturbation"].astype(str),
+        )
+    )
+
+
 def main() -> None:
     args = parse_args()
     ensure_output_dirs()
     perturbations = smoke_test_perturbations()
-    image_dirs = selected_image_dirs(args.limit)
-    predictors = build_predictors()
+    image_dirs = selected_image_dirs(args.limit, args.output_tag)
+    existing_metrics = prepare_existing_outputs(args)
+    done = completed_keys(existing_metrics)
+    predictors = build_predictors(args.methods)
     autocast_enabled = torch.cuda.is_available()
     split = split_label(args.output_tag)
 
@@ -296,7 +389,9 @@ def main() -> None:
             image_id, image, truth = load_train_example(image_dir)
             for perturbation in perturbations:
                 perturbed = apply_perturbation(image, perturbation)
-                for method in METHOD_ORDER:
+                for method in args.methods:
+                    if (image_id, method, perturbation.name) in done:
+                        continue
                     start = time.perf_counter()
                     prediction = predictors[method](perturbed)
                     latency_ms = (time.perf_counter() - start) * 1000
@@ -319,11 +414,13 @@ def main() -> None:
                         overlay_examples.append((method, image_id, perturbation.name, perturbed, truth, prediction))
 
     metrics_df = pd.DataFrame(rows)
+    if not existing_metrics.empty:
+        metrics_df = pd.concat([existing_metrics, metrics_df], ignore_index=True)
+    if metrics_df.empty:
+        raise RuntimeError("No metrics were produced or loaded")
     summary_df = summarize(metrics_df, perturbations)
 
-    stem = output_stem(args.output_tag)
-    metrics_path = RESULT_SUBDIRS["robustness"] / f"{stem}_metrics.csv"
-    summary_path = RESULT_SUBDIRS["robustness"] / f"{stem}_summary.csv"
+    metrics_path, summary_path = output_paths(args.output_tag)
     metrics_df.to_csv(metrics_path, index=False)
     summary_df.to_csv(summary_path, index=False)
 
