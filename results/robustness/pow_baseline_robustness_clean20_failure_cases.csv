@@ -1,0 +1,61 @@
+method,method_label,perturbation,image_id,clean_object_f1,object_f1,absolute_object_f1_drop,relative_object_f1_drop,precision_drop,recall_drop,absolute_count_error_delta,true_instances,pred_instances,false_positives,false_negatives,failure_hint
+otsu_watershed,Otsu + watershed,gaussian_noise,942d56861fc83e195e9c559a000bb86627d8682f8dcc2300818458e5b6850dd0,0.8519,0.614,0.2378,0.2792,0.2515,0.2157,6,51,63,28,16,FP/OVER
+otsu_watershed,Otsu + watershed,gaussian_noise,5afcbfd0dd64392aa1e233b996d0bfb4354ee7119f30ae111c33d0fe4df11590,0.3556,0.1194,0.2362,0.6642,0.1792,0.2963,44,27,107,99,19,FN
+otsu_watershed,Otsu + watershed,gaussian_noise,d7d12a2acc47a94961aeb56fd56e8a0873016af75f5dd10915de9db8af8e4f5e,0.4225,0.1915,0.231,0.5468,0.1811,0.2727,23,22,72,63,13,FN
+otsu_watershed,Otsu + watershed,gaussian_noise,e52960d31f8bddf85400259beb4521383f5ceface1080be3429f2f926cc9b5c2,0.4703,0.2452,0.2251,0.4786,0.1758,0.3077,29,130,286,235,79,FN
+otsu_watershed,Otsu + watershed,gaussian_noise,ff599c7301daa1f783924ac8cbe3ce7b42878f15a39c2d19659189951f540f48,0.3303,0.1077,0.2226,0.6739,0.1457,0.4583,21,24,106,99,17,FN
+otsu_watershed,Otsu + watershed,gaussian_blur,c6216cdc42f61bc345434986db42e2ef9b9741aee3210b7a808e952e319d2305,0.8136,0.6429,0.1707,0.2098,0.1389,0.1875,3,32,24,6,14,MIXED
+otsu_watershed,Otsu + watershed,gaussian_blur,33a5b0ff232b425796ee6a9dd5b516ff9aad54ca723b4ec490bf5cd9b2e2a731,0.381,0.2703,0.1107,0.2905,0.1039,0.087,11,23,51,41,13,MIXED
+otsu_watershed,Otsu + watershed,gaussian_blur,0c6507d493bf79b2ba248c5cca3d14df8b67328b89efa5f4a32f97a06a88c92c,0.8727,0.8214,0.0513,0.0588,0.0675,0.0357,-1,28,28,5,5,MIXED
+otsu_watershed,Otsu + watershed,gaussian_blur,ff599c7301daa1f783924ac8cbe3ce7b42878f15a39c2d19659189951f540f48,0.3303,0.3048,0.0255,0.0772,0.0142,0.0833,-4,24,81,65,8,MIXED
+otsu_watershed,Otsu + watershed,gaussian_blur,b909aa8f6f4bec37c3fb6ff5a85d166162d07983506fcc57be742b0f9dbafbf7,0.1739,0.15,0.0239,0.1375,0.0113,0.1111,-6,9,31,28,6,MIXED
+otsu_watershed,Otsu + watershed,downsample_upsample,c6216cdc42f61bc345434986db42e2ef9b9741aee3210b7a808e952e319d2305,0.8136,0.6429,0.1707,0.2098,0.1389,0.1875,3,32,24,6,14,MIXED
+otsu_watershed,Otsu + watershed,downsample_upsample,33a5b0ff232b425796ee6a9dd5b516ff9aad54ca723b4ec490bf5cd9b2e2a731,0.381,0.2778,0.1032,0.2708,0.0959,0.087,9,23,49,39,13,MIXED
+otsu_watershed,Otsu + watershed,downsample_upsample,b909aa8f6f4bec37c3fb6ff5a85d166162d07983506fcc57be742b0f9dbafbf7,0.1739,0.15,0.0239,0.1375,0.0113,0.1111,-6,9,31,28,6,MIXED
+otsu_watershed,Otsu + watershed,downsample_upsample,4e07a653352b30bb95b60ebc6c57afbc7215716224af731c51ff8d430788cd40,0.0552,0.032,0.0232,0.4206,0.0134,0.0809,-83,136,615,603,124,MIXED
+otsu_watershed,Otsu + watershed,downsample_upsample,ff599c7301daa1f783924ac8cbe3ce7b42878f15a39c2d19659189951f540f48,0.3303,0.3137,0.0165,0.0501,0.0066,0.0833,-7,24,78,62,8,MIXED
+otsu_watershed,Otsu + watershed,contrast_inversion,ff599c7301daa1f783924ac8cbe3ce7b42878f15a39c2d19659189951f540f48,0.3303,0.243,0.0873,0.2643,0.0551,0.2083,-2,24,83,70,11,MIXED
+otsu_watershed,Otsu + watershed,contrast_inversion,942d56861fc83e195e9c559a000bb86627d8682f8dcc2300818458e5b6850dd0,0.8519,0.789,0.0629,0.0738,0.0656,0.0588,1,51,58,15,8,MIXED
+otsu_watershed,Otsu + watershed,contrast_inversion,b909aa8f6f4bec37c3fb6ff5a85d166162d07983506fcc57be742b0f9dbafbf7,0.1739,0.1333,0.0406,0.2333,0.0248,0.1111,-1,9,36,33,6,MIXED
+otsu_watershed,Otsu + watershed,contrast_inversion,a1777737270c5f96c4523dff76e4097756f8f7d4c9d59bac079e31f9510deabd,0.2558,0.2174,0.0384,0.1502,0.0318,0.0385,6,26,66,56,16,MIXED
+otsu_watershed,Otsu + watershed,contrast_inversion,33a5b0ff232b425796ee6a9dd5b516ff9aad54ca723b4ec490bf5cd9b2e2a731,0.381,0.3438,0.0372,0.0977,0.0317,0.0435,1,23,41,30,12,MIXED
+cellpose_cpsam,Cellpose-SAM,gaussian_noise,c6216cdc42f61bc345434986db42e2ef9b9741aee3210b7a808e952e319d2305,0.9032,0.8065,0.0968,0.1071,0.1,0.0938,0,32,30,5,7,MIXED
+cellpose_cpsam,Cellpose-SAM,gaussian_noise,d7d12a2acc47a94961aeb56fd56e8a0873016af75f5dd10915de9db8af8e4f5e,0.9524,0.8718,0.0806,0.0846,0.0,0.1364,3,22,17,0,5,MIXED
+cellpose_cpsam,Cellpose-SAM,gaussian_noise,ad473063dab4bf4f2461d9a99a9c0166d4871f156516d9e0a523484e7cf2258d,0.8212,0.7421,0.0791,0.0963,0.1387,0.0357,-8,84,75,16,25,MIXED
+cellpose_cpsam,Cellpose-SAM,gaussian_noise,5afcbfd0dd64392aa1e233b996d0bfb4354ee7119f30ae111c33d0fe4df11590,0.9615,0.8846,0.0769,0.08,0.08,0.0741,0,27,25,2,4,MIXED
+cellpose_cpsam,Cellpose-SAM,gaussian_noise,4e07a653352b30bb95b60ebc6c57afbc7215716224af731c51ff8d430788cd40,0.5556,0.4929,0.0627,0.1128,0.0567,0.0588,5,136,75,23,84,MIXED
+cellpose_cpsam,Cellpose-SAM,gaussian_blur,c6216cdc42f61bc345434986db42e2ef9b9741aee3210b7a808e952e319d2305,0.9032,0.6071,0.2961,0.3278,0.225,0.3438,6,32,24,7,15,FN
+cellpose_cpsam,Cellpose-SAM,gaussian_blur,ad473063dab4bf4f2461d9a99a9c0166d4871f156516d9e0a523484e7cf2258d,0.8212,0.7075,0.1137,0.1385,0.1,0.119,4,84,63,11,32,MIXED
+cellpose_cpsam,Cellpose-SAM,gaussian_blur,4e07a653352b30bb95b60ebc6c57afbc7215716224af731c51ff8d430788cd40,0.5556,0.4631,0.0925,0.1665,0.0485,0.0956,13,136,67,20,89,MIXED
+cellpose_cpsam,Cellpose-SAM,gaussian_blur,a1777737270c5f96c4523dff76e4097756f8f7d4c9d59bac079e31f9510deabd,0.902,0.8679,0.034,0.0377,0.0681,0.0,0,26,27,4,3,MIXED
+cellpose_cpsam,Cellpose-SAM,gaussian_blur,d7d12a2acc47a94961aeb56fd56e8a0873016af75f5dd10915de9db8af8e4f5e,0.9524,0.9268,0.0256,0.0268,0.0,0.0455,1,22,19,0,3,MIXED
+cellpose_cpsam,Cellpose-SAM,downsample_upsample,c6216cdc42f61bc345434986db42e2ef9b9741aee3210b7a808e952e319d2305,0.9032,0.7797,0.1236,0.1368,0.0815,0.1562,3,32,27,4,9,MIXED
+cellpose_cpsam,Cellpose-SAM,downsample_upsample,ad473063dab4bf4f2461d9a99a9c0166d4871f156516d9e0a523484e7cf2258d,0.8212,0.7651,0.0561,0.0683,0.0485,0.0595,2,84,65,8,27,MIXED
+cellpose_cpsam,Cellpose-SAM,downsample_upsample,4e07a653352b30bb95b60ebc6c57afbc7215716224af731c51ff8d430788cd40,0.5556,0.5,0.0556,0.1,0.0526,0.0515,4,136,76,23,83,MIXED
+cellpose_cpsam,Cellpose-SAM,downsample_upsample,a1777737270c5f96c4523dff76e4097756f8f7d4c9d59bac079e31f9510deabd,0.902,0.8679,0.034,0.0377,0.0681,0.0,0,26,27,4,3,MIXED
+cellpose_cpsam,Cellpose-SAM,downsample_upsample,f29fd9c52e04403cd2c7d43b6fe2479292e53b2f61969d25256d2d2aca7c6a81,0.8533,0.8492,0.0041,0.0048,-0.027,0.0251,10,199,159,7,47,MIXED
+cellpose_cpsam,Cellpose-SAM,contrast_inversion,853a4c67900c411abd04467f7bc7813d3c58a5f565c8b0807e13c6e6dea21344,0.9714,0.9,0.0714,0.0735,0.1818,-0.0556,3,18,22,4,0,MIXED
+cellpose_cpsam,Cellpose-SAM,contrast_inversion,4193474b2f1c72f735b13633b219d9cabdd43c21d9c2bb4dfc4809f104ba4c06,0.88,0.8462,0.0338,0.0385,0.0604,0.0,1,12,14,3,1,MIXED
+cellpose_cpsam,Cellpose-SAM,contrast_inversion,d7d12a2acc47a94961aeb56fd56e8a0873016af75f5dd10915de9db8af8e4f5e,0.9524,0.9268,0.0256,0.0268,0.0,0.0455,1,22,19,0,3,MIXED
+cellpose_cpsam,Cellpose-SAM,contrast_inversion,a1777737270c5f96c4523dff76e4097756f8f7d4c9d59bac079e31f9510deabd,0.902,0.8846,0.0173,0.0192,0.0354,0.0,-1,26,26,3,3,MIXED
+cellpose_cpsam,Cellpose-SAM,contrast_inversion,e52960d31f8bddf85400259beb4521383f5ceface1080be3429f2f926cc9b5c2,0.981,0.9771,0.0039,0.004,0.0002,0.0077,-1,130,132,4,2,MIXED
+sam2_amg,SAM2 AMG,gaussian_noise,5afcbfd0dd64392aa1e233b996d0bfb4354ee7119f30ae111c33d0fe4df11590,0.9455,0.0,0.9455,1.0,0.9286,0.963,25,27,1,1,27,COLLAPSE
+sam2_amg,SAM2 AMG,gaussian_noise,1b518cd2ea84a389c267662840f3d902d0129fab27696215db2488de6d4316c5,0.9396,0.0,0.9396,1.0,0.9589,0.9211,72,76,1,1,76,COLLAPSE
+sam2_amg,SAM2 AMG,gaussian_noise,ff599c7301daa1f783924ac8cbe3ce7b42878f15a39c2d19659189951f540f48,0.902,0.0,0.902,1.0,0.8519,0.9583,20,24,1,1,24,COLLAPSE
+sam2_amg,SAM2 AMG,gaussian_noise,a1777737270c5f96c4523dff76e4097756f8f7d4c9d59bac079e31f9510deabd,0.8214,0.0,0.8214,1.0,0.7667,0.8846,21,26,1,1,26,COLLAPSE
+sam2_amg,SAM2 AMG,gaussian_noise,66612c188d73e931e1863af2c99d2af782c32f65fd97d224abb40bbadb87263f,0.8,0.0,0.8,1.0,0.8,0.8,14,15,1,1,15,COLLAPSE
+sam2_amg,SAM2 AMG,gaussian_blur,5afcbfd0dd64392aa1e233b996d0bfb4354ee7119f30ae111c33d0fe4df11590,0.9455,0.0,0.9455,1.0,0.9286,0.963,25,27,1,1,27,COLLAPSE
+sam2_amg,SAM2 AMG,gaussian_blur,1b518cd2ea84a389c267662840f3d902d0129fab27696215db2488de6d4316c5,0.9396,0.0,0.9396,1.0,0.9589,0.9211,72,76,1,1,76,COLLAPSE
+sam2_amg,SAM2 AMG,gaussian_blur,ff599c7301daa1f783924ac8cbe3ce7b42878f15a39c2d19659189951f540f48,0.902,0.0,0.902,1.0,0.8519,0.9583,20,24,1,1,24,COLLAPSE
+sam2_amg,SAM2 AMG,gaussian_blur,a1777737270c5f96c4523dff76e4097756f8f7d4c9d59bac079e31f9510deabd,0.8214,0.0,0.8214,1.0,0.7667,0.8846,21,26,1,1,26,COLLAPSE
+sam2_amg,SAM2 AMG,gaussian_blur,66612c188d73e931e1863af2c99d2af782c32f65fd97d224abb40bbadb87263f,0.8,0.0,0.8,1.0,0.8,0.8,14,15,1,1,15,COLLAPSE
+sam2_amg,SAM2 AMG,downsample_upsample,5afcbfd0dd64392aa1e233b996d0bfb4354ee7119f30ae111c33d0fe4df11590,0.9455,0.0,0.9455,1.0,0.9286,0.963,25,27,1,1,27,COLLAPSE
+sam2_amg,SAM2 AMG,downsample_upsample,1b518cd2ea84a389c267662840f3d902d0129fab27696215db2488de6d4316c5,0.9396,0.0,0.9396,1.0,0.9589,0.9211,72,76,1,1,76,COLLAPSE
+sam2_amg,SAM2 AMG,downsample_upsample,ff599c7301daa1f783924ac8cbe3ce7b42878f15a39c2d19659189951f540f48,0.902,0.0,0.902,1.0,0.8519,0.9583,20,24,1,1,24,COLLAPSE
+sam2_amg,SAM2 AMG,downsample_upsample,a1777737270c5f96c4523dff76e4097756f8f7d4c9d59bac079e31f9510deabd,0.8214,0.0,0.8214,1.0,0.7667,0.8846,21,26,1,1,26,COLLAPSE
+sam2_amg,SAM2 AMG,downsample_upsample,66612c188d73e931e1863af2c99d2af782c32f65fd97d224abb40bbadb87263f,0.8,0.0,0.8,1.0,0.8,0.8,14,15,1,1,15,COLLAPSE
+sam2_amg,SAM2 AMG,contrast_inversion,5afcbfd0dd64392aa1e233b996d0bfb4354ee7119f30ae111c33d0fe4df11590,0.9455,0.0,0.9455,1.0,0.9286,0.963,25,27,1,1,27,COLLAPSE
+sam2_amg,SAM2 AMG,contrast_inversion,1b518cd2ea84a389c267662840f3d902d0129fab27696215db2488de6d4316c5,0.9396,0.0,0.9396,1.0,0.9589,0.9211,72,76,1,1,76,COLLAPSE
+sam2_amg,SAM2 AMG,contrast_inversion,ff599c7301daa1f783924ac8cbe3ce7b42878f15a39c2d19659189951f540f48,0.902,0.0,0.902,1.0,0.8519,0.9583,20,24,1,1,24,COLLAPSE
+sam2_amg,SAM2 AMG,contrast_inversion,a1777737270c5f96c4523dff76e4097756f8f7d4c9d59bac079e31f9510deabd,0.8214,0.0,0.8214,1.0,0.7667,0.8846,21,26,1,1,26,COLLAPSE
+sam2_amg,SAM2 AMG,contrast_inversion,66612c188d73e931e1863af2c99d2af782c32f65fd97d224abb40bbadb87263f,0.8,0.0,0.8,1.0,0.8,0.8,14,15,1,1,15,COLLAPSE

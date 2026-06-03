@@ -283,9 +283,13 @@ Generated outputs:
 
 - `results/robustness/pow_baseline_robustness_clean20_metrics.csv`
 - `results/robustness/pow_baseline_robustness_clean20_summary.csv`
+- `results/robustness/pow_baseline_robustness_clean20_image_deltas.csv`
+- `results/robustness/pow_baseline_robustness_clean20_failure_cases.csv`
 - `figures/robustness_pow_clean20_mean_f1.png`
 - `figures/robustness_pow_clean20_relative_f1_drop.png`
 - `figures/robustness_pow_clean20_method_condition_heatmap.png`
+- `figures/robustness_pow_clean20_image_f1_drop_heatmap.png`
+- `figures/robustness_pow_clean20_worst_f1_drops.png`
 - `figures/robustness_pow_clean20_overlay_examples.png`
 
 Current clean20 robustness summary:
@@ -302,6 +306,12 @@ that the extension uses the same image subset and method implementations. The
 stable baseline, Otsu + watershed is mainly degraded by Gaussian noise, and SAM2 AMG
 collapses under all tested perturbations. The SAM2 result should still be interpreted
 with the known optional `_C` post-processing warning.
+
+The optimized diagnostic outputs add the missing per-image interpretation layer:
+`image_deltas.csv` records each image-method-condition drop from clean, while
+`failure_cases.csv` keeps the five largest drops for every method and perturbation.
+The per-method worst-drop figure avoids the global ranking being dominated only by
+SAM2 collapse cases.
 
 ## Output Contract
 

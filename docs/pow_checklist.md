@@ -79,6 +79,8 @@ proof-of-work benchmark.
 - [x] Same robustness protocol extended to the deterministic 20-image clean subset.
 - [x] Clean20 robustness metrics written to `results/robustness/`.
 - [x] Clean20 robustness figures written to `figures/`.
+- [x] Clean20 per-image robustness deltas and failure cases written to `results/robustness/`.
+- [x] Clean20 per-image drop and worst-drop diagnostic figures written to `figures/`.
 
 ## Later Protocols After PoW Clean Baselines
 
