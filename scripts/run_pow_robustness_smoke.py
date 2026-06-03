@@ -1,8 +1,9 @@
 #!/usr/bin/env python
-"""Run a small robustness smoke test across completed PoW baselines."""
+"""Run targeted robustness tests across completed PoW baselines."""
 
 from __future__ import annotations
 
+import argparse
 import os
 import sys
 import time
@@ -40,6 +41,7 @@ from run_sam2_amg_baseline import (
 
 IOU_THRESHOLD = 0.5
 DEFAULT_LIMIT = 5
+DEFAULT_OUTPUT_TAG = "smoke"
 METHOD_ORDER = ["otsu_watershed", "cellpose_cpsam", "sam2_amg"]
 METHOD_LABELS = {
     "otsu_watershed": "Otsu + watershed",
@@ -53,8 +55,30 @@ METHOD_COLORS = {
 }
 
 
+def parse_args() -> argparse.Namespace:
+    parser = argparse.ArgumentParser(description=__doc__)
+    parser.add_argument(
+        "--limit",
+        type=int,
+        default=DEFAULT_LIMIT,
+        help="Number of deterministic stage1_train images to evaluate.",
+    )
+    parser.add_argument(
+        "--output-tag",
+        default=DEFAULT_OUTPUT_TAG,
+        choices=["smoke", "clean20"],
+        help="Output tag used in result and figure filenames.",
+    )
+    args = parser.parse_args()
+    if args.output_tag == "clean20" and args.limit != 20:
+        parser.error("--output-tag clean20 requires --limit 20")
+    return args
+
+
 def selected_image_dirs(limit: int) -> list[Path]:
     """Use the same deterministic spread as the clean subset scripts."""
+    if limit <= 0:
+        raise ValueError("limit must be positive")
     image_dirs = stage1_train_image_dirs()
     if limit >= len(image_dirs):
         return image_dirs
@@ -140,7 +164,27 @@ def summarize(metrics: pd.DataFrame, perturbations: list[Perturbation]) -> pd.Da
     return summary.sort_values(["method", "perturbation"]).reset_index(drop=True)
 
 
-def save_mean_f1_plot(summary: pd.DataFrame) -> None:
+def output_stem(output_tag: str) -> str:
+    return f"pow_baseline_robustness_{output_tag}"
+
+
+def figure_stem(output_tag: str) -> str:
+    return f"robustness_pow_{output_tag}"
+
+
+def display_title(output_tag: str) -> str:
+    if output_tag == "clean20":
+        return "PoW Robustness Clean20"
+    return "PoW Robustness Smoke"
+
+
+def split_label(output_tag: str) -> str:
+    if output_tag == "clean20":
+        return "stage1_train_clean20_subset"
+    return "stage1_train_tiny_subset"
+
+
+def save_mean_f1_plot(summary: pd.DataFrame, output_tag: str) -> None:
     fig, ax = plt.subplots(figsize=(9, 4.8))
     for method in METHOD_ORDER:
         method_summary = summary[summary["method"] == method]
@@ -153,17 +197,17 @@ def save_mean_f1_plot(summary: pd.DataFrame) -> None:
             label=METHOD_LABELS[method],
         )
     ax.set_ylim(0, 1)
-    ax.set_title("PoW Robustness Smoke: Mean Object F1")
+    ax.set_title(f"{display_title(output_tag)}: Mean Object F1")
     ax.set_xlabel("Condition")
     ax.set_ylabel("Mean object F1")
     ax.tick_params(axis="x", rotation=20)
     ax.legend(frameon=False, loc="upper left", bbox_to_anchor=(1.01, 1.0))
     fig.tight_layout()
-    fig.savefig(FIGURES_DIR / "robustness_pow_smoke_mean_f1.png", dpi=160)
+    fig.savefig(FIGURES_DIR / f"{figure_stem(output_tag)}_mean_f1.png", dpi=160)
     plt.close(fig)
 
 
-def save_relative_drop_plot(summary: pd.DataFrame) -> None:
+def save_relative_drop_plot(summary: pd.DataFrame, output_tag: str) -> None:
     plot_frame = summary[summary["perturbation"] != "clean"].copy()
     perturbations = plot_frame["perturbation"].astype(str).drop_duplicates().tolist()
     x = np.arange(len(perturbations))
@@ -180,17 +224,17 @@ def save_relative_drop_plot(summary: pd.DataFrame) -> None:
             label=METHOD_LABELS[method],
         )
     ax.axhline(0, color="#111827", linewidth=1)
-    ax.set_title("PoW Robustness Smoke: Relative Object F1 Drop")
+    ax.set_title(f"{display_title(output_tag)}: Relative Object F1 Drop")
     ax.set_xlabel("Perturbation")
     ax.set_ylabel("Relative F1 drop from clean")
     ax.set_xticks(x, labels=perturbations, rotation=20)
     ax.legend(frameon=False, loc="upper left", bbox_to_anchor=(1.01, 1.0))
     fig.tight_layout()
-    fig.savefig(FIGURES_DIR / "robustness_pow_smoke_relative_f1_drop.png", dpi=160)
+    fig.savefig(FIGURES_DIR / f"{figure_stem(output_tag)}_relative_f1_drop.png", dpi=160)
     plt.close(fig)
 
 
-def save_method_condition_heatmap(summary: pd.DataFrame) -> None:
+def save_method_condition_heatmap(summary: pd.DataFrame, output_tag: str) -> None:
     pivot = summary.pivot(index="method_label", columns="perturbation", values="mean_object_f1")
     pivot = pivot.loc[[METHOD_LABELS[method] for method in METHOD_ORDER]]
 
@@ -198,7 +242,7 @@ def save_method_condition_heatmap(summary: pd.DataFrame) -> None:
     image = ax.imshow(pivot.to_numpy(), aspect="auto", vmin=0, vmax=1, cmap="viridis")
     ax.set_xticks(range(pivot.shape[1]), labels=[str(column) for column in pivot.columns], rotation=20)
     ax.set_yticks(range(pivot.shape[0]), labels=pivot.index)
-    ax.set_title("PoW Robustness Smoke: Mean Object F1 Heatmap")
+    ax.set_title(f"{display_title(output_tag)}: Mean Object F1 Heatmap")
 
     for row_index in range(pivot.shape[0]):
         for column_index in range(pivot.shape[1]):
@@ -209,12 +253,13 @@ def save_method_condition_heatmap(summary: pd.DataFrame) -> None:
     colorbar = fig.colorbar(image, ax=ax, fraction=0.046, pad=0.04)
     colorbar.set_label("Mean object F1")
     fig.tight_layout()
-    fig.savefig(FIGURES_DIR / "robustness_pow_smoke_method_condition_heatmap.png", dpi=160)
+    fig.savefig(FIGURES_DIR / f"{figure_stem(output_tag)}_method_condition_heatmap.png", dpi=160)
     plt.close(fig)
 
 
 def save_overlay_examples(
     examples: list[tuple[str, str, str, np.ndarray, np.ndarray, np.ndarray]],
+    output_tag: str,
 ) -> None:
     columns = 3
     rows = int(np.ceil(len(examples) / columns))
@@ -230,16 +275,18 @@ def save_overlay_examples(
         ax.axis("off")
 
     fig.tight_layout()
-    fig.savefig(FIGURES_DIR / "robustness_pow_smoke_overlay_examples.png", dpi=160)
+    fig.savefig(FIGURES_DIR / f"{figure_stem(output_tag)}_overlay_examples.png", dpi=160)
     plt.close(fig)
 
 
 def main() -> None:
+    args = parse_args()
     ensure_output_dirs()
     perturbations = smoke_test_perturbations()
-    image_dirs = selected_image_dirs(DEFAULT_LIMIT)
+    image_dirs = selected_image_dirs(args.limit)
     predictors = build_predictors()
     autocast_enabled = torch.cuda.is_available()
+    split = split_label(args.output_tag)
 
     rows: list[dict[str, object]] = []
     overlay_examples: list[tuple[str, str, str, np.ndarray, np.ndarray, np.ndarray]] = []
@@ -256,7 +303,7 @@ def main() -> None:
                     metrics = compute_instance_metrics(truth, prediction, iou_threshold=IOU_THRESHOLD)
                     rows.append(
                         {
-                            "split": "stage1_train_tiny_subset",
+                            "split": split,
                             "image_id": image_id,
                             "method": method,
                             "method_label": METHOD_LABELS[method],
@@ -274,22 +321,23 @@ def main() -> None:
     metrics_df = pd.DataFrame(rows)
     summary_df = summarize(metrics_df, perturbations)
 
-    metrics_path = RESULT_SUBDIRS["robustness"] / "pow_baseline_robustness_smoke_metrics.csv"
-    summary_path = RESULT_SUBDIRS["robustness"] / "pow_baseline_robustness_smoke_summary.csv"
+    stem = output_stem(args.output_tag)
+    metrics_path = RESULT_SUBDIRS["robustness"] / f"{stem}_metrics.csv"
+    summary_path = RESULT_SUBDIRS["robustness"] / f"{stem}_summary.csv"
     metrics_df.to_csv(metrics_path, index=False)
     summary_df.to_csv(summary_path, index=False)
 
-    save_mean_f1_plot(summary_df)
-    save_relative_drop_plot(summary_df)
-    save_method_condition_heatmap(summary_df)
-    save_overlay_examples(overlay_examples)
+    save_mean_f1_plot(summary_df, args.output_tag)
+    save_relative_drop_plot(summary_df, args.output_tag)
+    save_method_condition_heatmap(summary_df, args.output_tag)
+    save_overlay_examples(overlay_examples, args.output_tag)
 
     print(f"Wrote {metrics_path}")
     print(f"Wrote {summary_path}")
-    print(f"Wrote {FIGURES_DIR / 'robustness_pow_smoke_mean_f1.png'}")
-    print(f"Wrote {FIGURES_DIR / 'robustness_pow_smoke_relative_f1_drop.png'}")
-    print(f"Wrote {FIGURES_DIR / 'robustness_pow_smoke_method_condition_heatmap.png'}")
-    print(f"Wrote {FIGURES_DIR / 'robustness_pow_smoke_overlay_examples.png'}")
+    print(f"Wrote {FIGURES_DIR / f'{figure_stem(args.output_tag)}_mean_f1.png'}")
+    print(f"Wrote {FIGURES_DIR / f'{figure_stem(args.output_tag)}_relative_f1_drop.png'}")
+    print(f"Wrote {FIGURES_DIR / f'{figure_stem(args.output_tag)}_method_condition_heatmap.png'}")
+    print(f"Wrote {FIGURES_DIR / f'{figure_stem(args.output_tag)}_overlay_examples.png'}")
 
 
 if __name__ == "__main__":
