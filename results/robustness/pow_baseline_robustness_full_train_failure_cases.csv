@@ -1,0 +1,81 @@
+method,method_label,perturbation,image_id,clean_object_f1,object_f1,absolute_object_f1_drop,relative_object_f1_drop,precision_drop,recall_drop,absolute_count_error_delta,true_instances,pred_instances,false_positives,false_negatives,no_prediction,failure_hint
+otsu_watershed,Otsu + watershed,gaussian_noise,93c5638e7e6433b5c9cc87c152bcbe28873d2f9d6a392cca0642520807542a77,1.0,0.0,1.0,1.0,1.0,1.0,28,1,29,29,1,False,COLLAPSE
+otsu_watershed,Otsu + watershed,gaussian_noise,866a8cba7bfe1ea73e383d6cf492e53752579140c8b833bb56839a55bf79d855,0.7273,0.0045,0.7228,0.9938,0.6644,0.6,433,5,439,438,4,False,FN+FP
+otsu_watershed,Otsu + watershed,gaussian_noise,84eeec681987753029eb83ea5f3ff7e8b5697783cdb2035f2882d40c9a3f1029,0.6667,0.0,0.6667,1.0,0.5,1.0,63,1,65,65,1,False,COLLAPSE
+otsu_watershed,Otsu + watershed,gaussian_noise,3d0ca3498d97edebd28dbc7035eced40baa4af199af09cbb7251792accaa69fe,0.8571,0.2222,0.6349,0.7407,0.8571,0.25,9,4,14,12,2,False,FP/OVER
+otsu_watershed,Otsu + watershed,gaussian_noise,8ecdb93582b2d5270457b36651b62776256ade3aaa2d7432ae65c14f07432d49,0.9091,0.3333,0.5758,0.6333,0.75,0.3333,5,6,12,9,3,False,FN+FP
+otsu_watershed,Otsu + watershed,gaussian_noise,fc9269fb2e651cd4a32b65ae164f79b0a2ea823e0a83508c85d7985a6bed43cf,0.9091,0.375,0.5341,0.5875,0.5606,0.4,5,5,11,8,2,False,FN+FP
+otsu_watershed,Otsu + watershed,gaussian_noise,f26f4c2c70c38fe12e00d5a814d5116691f2ca548908126923fd76ddd665ed24,0.6286,0.1176,0.5109,0.8128,0.5182,0.5,14,52,67,60,45,False,FN+FP
+otsu_watershed,Otsu + watershed,gaussian_noise,58c593bcb98386e7fd42a1d34e291db93477624b164e83ab2afa3caa90d1d921,0.5714,0.0645,0.5069,0.8871,0.3655,0.5,24,2,29,28,1,False,FN+FP
+otsu_watershed,Otsu + watershed,gaussian_noise,b3a9f4c9035a0df7e033b18c63bfb0f0d87ff5a4d9aa8bdf417159bb733abb80,0.9231,0.4348,0.4883,0.529,0.563,0.1667,10,6,17,12,1,False,FP/OVER
+otsu_watershed,Otsu + watershed,gaussian_noise,4327d27591871e9c8d317071a390d1b3dcedad05a9746175b005c41ea0d797b2,0.5974,0.1216,0.4758,0.7964,0.4231,0.4516,71,31,117,108,22,False,FN+FP
+otsu_watershed,Otsu + watershed,gaussian_blur,93c5638e7e6433b5c9cc87c152bcbe28873d2f9d6a392cca0642520807542a77,1.0,0.0,1.0,1.0,1.0,1.0,1,1,2,2,1,False,COLLAPSE
+otsu_watershed,Otsu + watershed,gaussian_blur,0b0d577159f0d6c266f360f7b8dfde46e16fa665138bf577ec3c6f9c70c0cd1e,0.4211,0.0,0.4211,1.0,0.3333,0.5714,4,7,16,16,7,False,COLLAPSE
+otsu_watershed,Otsu + watershed,gaussian_blur,fa73f24532b3667718ede7ac5c2e24ad7d3cae17b0a42ed17bbb81b15c28f4ae,0.7692,0.3636,0.4056,0.5273,0.3333,0.4286,2,7,4,2,5,False,FN+FP
+otsu_watershed,Otsu + watershed,gaussian_blur,1740b0a67ca337ea31648b57c81bcfbb841c7bb5cad185199a9f4da596d531b9,1.0,0.6364,0.3636,0.3636,0.4615,0.2222,4,9,13,6,2,False,FP/OVER
+otsu_watershed,Otsu + watershed,gaussian_blur,5b0bde771bc67c505d1b59405cbcad0a2766ec3ee4e35852e959552c1b454233,0.8421,0.5,0.3421,0.4063,0.2222,0.4,3,10,6,2,6,False,FN
+otsu_watershed,Otsu + watershed,gaussian_blur,21408476af0506331e8b5d49b385833e5ef1fbb90815fbf9af9d19b4bb145f76,0.9333,0.625,0.3083,0.3304,0.375,0.25,-1,8,8,3,3,False,FP/OVER
+otsu_watershed,Otsu + watershed,gaussian_blur,fc9269fb2e651cd4a32b65ae164f79b0a2ea823e0a83508c85d7985a6bed43cf,0.9091,0.6154,0.2937,0.3231,0.3333,0.2,2,5,8,4,1,False,FP/OVER
+otsu_watershed,Otsu + watershed,gaussian_blur,b3bfd873fca7ff9b2e90f507dfdbe165bb8c153399b6ba5829aa59bae677a91d,0.875,0.5882,0.2868,0.3277,0.3194,0.25,1,8,9,4,3,False,FP/OVER
+otsu_watershed,Otsu + watershed,gaussian_blur,d1dbc6ee7c44a7027e935d040e496793186b884a1028d0e26284a206c6f5aff0,0.6667,0.4,0.2667,0.4,0.4385,0.1765,-3,17,13,7,11,False,FP/OVER
+otsu_watershed,Otsu + watershed,gaussian_blur,68f833de9f8c631cedd7031b8ed9b908c42cbbc1e14254722728a8b7d596fd4c,0.5714,0.32,0.2514,0.44,0.3791,0.1875,-1,32,18,10,24,False,FP/OVER
+otsu_watershed,Otsu + watershed,downsample_upsample,fa73f24532b3667718ede7ac5c2e24ad7d3cae17b0a42ed17bbb81b15c28f4ae,0.7692,0.3636,0.4056,0.5273,0.3333,0.4286,2,7,4,2,5,False,FN+FP
+otsu_watershed,Otsu + watershed,downsample_upsample,0b0d577159f0d6c266f360f7b8dfde46e16fa665138bf577ec3c6f9c70c0cd1e,0.4211,0.08,0.3411,0.81,0.2778,0.4286,6,7,18,17,6,False,FN+FP
+otsu_watershed,Otsu + watershed,downsample_upsample,5419302571113e9aa74c7c0a9575333ca539b871a16c86ee92b35170b4ddc52e,0.875,0.5556,0.3194,0.3651,0.375,0.25,2,8,10,5,3,False,FP/OVER
+otsu_watershed,Otsu + watershed,downsample_upsample,7f4d7b549d0f1a110191e2aded872943d85892bc30667f19fe9de97a5370b08e,0.9,0.6364,0.2636,0.2929,0.3167,0.2,2,10,12,5,3,False,FP/OVER
+otsu_watershed,Otsu + watershed,downsample_upsample,5b0bde771bc67c505d1b59405cbcad0a2766ec3ee4e35852e959552c1b454233,0.8421,0.5882,0.2539,0.3015,0.1746,0.3,2,10,7,2,5,False,FN
+otsu_watershed,Otsu + watershed,downsample_upsample,fc9269fb2e651cd4a32b65ae164f79b0a2ea823e0a83508c85d7985a6bed43cf,0.9091,0.6667,0.2424,0.2667,0.2619,0.2,1,5,7,3,1,False,FP/OVER
+otsu_watershed,Otsu + watershed,downsample_upsample,40bcdad218ac5f0885fc247d88fcad9f729f55c81c79d241a8f1559b6d8c0574,0.9565,0.72,0.2365,0.2473,0.3077,0.1667,0,12,13,4,3,False,FP/OVER
+otsu_watershed,Otsu + watershed,downsample_upsample,68f833de9f8c631cedd7031b8ed9b908c42cbbc1e14254722728a8b7d596fd4c,0.5714,0.3396,0.2318,0.4057,0.395,0.1562,-4,32,21,12,23,False,FP/OVER
+otsu_watershed,Otsu + watershed,downsample_upsample,1a75e9f15481d11084fe66bc2a5afac6dc5bec20ed56a7351a6d65ef0fe8762b,0.7368,0.5263,0.2105,0.2857,0.1818,0.25,0,8,11,6,3,False,MIXED
+otsu_watershed,Otsu + watershed,downsample_upsample,e5aeb5b3577abbebe8982b5dd7d22c4257250ad3000661a42f38bf9248d291fd,1.0,0.8,0.2,0.2,0.3333,0.0,1,2,3,1,0,False,FP/OVER
+otsu_watershed,Otsu + watershed,contrast_inversion,b98681c74842c4058bd2f88b06063731c26a90da083b1ef348e0ec734c58752b,0.9091,0.4615,0.4476,0.4923,0.4583,0.4,2,5,8,5,2,False,FN+FP
+otsu_watershed,Otsu + watershed,contrast_inversion,f6b16c885c0b2bc0d0eb2bb2eeb0a2753ebafb5a7a91da10e89b0b0478984637,0.9333,0.7059,0.2275,0.2437,0.3333,0.125,0,8,9,3,2,False,FP/OVER
+otsu_watershed,Otsu + watershed,contrast_inversion,94a5a37c3b1153d5c5aef2eca53c960b9f21f2ef1758209d7ec502ec324b03a3,1.0,0.7778,0.2222,0.2222,0.3,0.125,2,8,10,3,1,False,FP/OVER
+otsu_watershed,Otsu + watershed,contrast_inversion,f487cc82271cf84b4414552aa8b0a9d82d902451ebe8e8bc639d4121c1672ff7,0.8687,0.6606,0.2081,0.2396,0.2463,0.1489,10,47,62,26,11,False,MIXED
+otsu_watershed,Otsu + watershed,contrast_inversion,33618678c167c5e07be02c49d0c43bcd90493ba5d83110a631409a4d3ccc1e51,0.4688,0.2667,0.2021,0.4311,0.1548,0.2632,11,19,56,46,9,False,FN
+otsu_watershed,Otsu + watershed,contrast_inversion,13c8ff1f49886e91c98ce795c93648ad8634c782ff57eb928ce29496b0425057,0.9714,0.7778,0.1937,0.1993,0.2076,0.1765,1,17,19,5,3,False,MIXED
+otsu_watershed,Otsu + watershed,contrast_inversion,8b12e18670e4b24d03567d1e17c0c24fadf0ea2c1e763983dd6bb4c44b7376a6,0.9333,0.75,0.1833,0.1964,0.2083,0.1429,1,7,9,3,1,False,MIXED
+otsu_watershed,Otsu + watershed,contrast_inversion,21408476af0506331e8b5d49b385833e5ef1fbb90815fbf9af9d19b4bb145f76,0.9333,0.75,0.1833,0.1964,0.25,0.125,-1,8,8,2,2,False,MIXED
+otsu_watershed,Otsu + watershed,contrast_inversion,b2c23ddb04531158da6a0abcaca78fec0ae5c6f64f60166e4f36f4a161efd76f,1.0,0.8182,0.1818,0.1818,0.25,0.1,2,10,12,3,1,False,MIXED
+otsu_watershed,Otsu + watershed,contrast_inversion,eb96fc6cbf6880bf05c4309857ae33844a4bc2152e228eff31024e5265cf9fc3,1.0,0.8235,0.1765,0.1765,0.2222,0.125,1,8,9,2,1,False,MIXED
+cellpose_cpsam,Cellpose-SAM,gaussian_noise,af576e8ec3a8d0b57eb6a311299e9e4fd2047970d3dd9d6f52e54ea6a91109da,0.8,0.0,0.8,1.0,0.6667,1.0,0,2,3,3,2,False,COLLAPSE
+cellpose_cpsam,Cellpose-SAM,gaussian_noise,4d14a3629b6af6de86d850be236b833a7bfcbf6d8665fd73c6dc339e06c14607,0.8587,0.0784,0.7803,0.9087,-0.0814,0.7653,82,98,4,0,94,False,FN
+cellpose_cpsam,Cellpose-SAM,gaussian_noise,5953af5080d981b554529971903d8bee9871457a4361b51f04ba04f43793dd8f,0.5312,0.1231,0.4082,0.7683,0.3975,0.4194,1,31,34,30,27,False,FN+FP
+cellpose_cpsam,Cellpose-SAM,gaussian_noise,bfe8ef193a68a0a86a5e4ae1ddc27bda3f9ffe170494395be4030ba72737c565,0.8406,0.4706,0.37,0.4402,0.3901,0.3514,1,37,31,15,21,False,FN+FP
+cellpose_cpsam,Cellpose-SAM,gaussian_noise,e49fc2b4f1f39d481a6525225ab3f688be5c87f56884456ad54c953315efae83,0.7934,0.4516,0.3418,0.4308,0.0481,0.3913,28,69,24,3,48,False,FN
+cellpose_cpsam,Cellpose-SAM,gaussian_noise,13c8ff1f49886e91c98ce795c93648ad8634c782ff57eb928ce29496b0425057,0.9091,0.6,0.3091,0.34,0.2452,0.3529,3,17,13,4,8,False,FN
+cellpose_cpsam,Cellpose-SAM,gaussian_noise,e1bcb583985325d0ef5f3ef52957d0371c96d4af767b13e48102bca9d5351a9b,0.6667,0.4,0.2667,0.4,0.1667,0.3333,2,6,4,2,4,False,FN
+cellpose_cpsam,Cellpose-SAM,gaussian_noise,619429303c1af7540916509fe7900cf483eba4391b06aac87ff7f66ca1ab6483,0.9167,0.6522,0.2645,0.2885,0.2348,0.2917,2,24,22,7,9,False,FN
+cellpose_cpsam,Cellpose-SAM,gaussian_noise,58cc121d37fb7f1b4a5252024d88415936781e540252b8f734faeedd29b682d5,0.7368,0.5,0.2368,0.3214,0.2502,0.2245,-1,49,47,23,25,False,FP/OVER
+cellpose_cpsam,Cellpose-SAM,gaussian_noise,a6e81120d1cb9f71f8a25f90a5d56c4b714a642fc496a705e38921fd90a3f69c,0.8966,0.6667,0.2299,0.2564,0.0397,0.3333,10,30,18,2,14,False,FN
+cellpose_cpsam,Cellpose-SAM,gaussian_blur,ddf1bf458312de2895dd9cc5ce7ec9d334ad54c35edc96ad6001d20b1d8588d8,0.8727,0.0645,0.8082,0.9261,-0.04,0.7667,24,30,1,0,29,False,FN
+cellpose_cpsam,Cellpose-SAM,gaussian_blur,be1916d0e5592c17f971315b5de720ef6894173087399daed94a52ef109c1572,0.8235,0.4,0.4235,0.5143,-0.2222,0.625,5,8,2,0,6,False,FN
+cellpose_cpsam,Cellpose-SAM,gaussian_blur,68f833de9f8c631cedd7031b8ed9b908c42cbbc1e14254722728a8b7d596fd4c,0.7931,0.4255,0.3676,0.4635,0.2179,0.4062,11,32,15,5,22,False,FN
+cellpose_cpsam,Cellpose-SAM,gaussian_blur,9c95eae11da041189e84cda20bdfb75716a6594684de4b6ce12a9aaadbb874c9,0.6452,0.3333,0.3118,0.4833,0.4091,0.25,1,20,10,5,15,False,FP/OVER
+cellpose_cpsam,Cellpose-SAM,gaussian_blur,fa73f24532b3667718ede7ac5c2e24ad7d3cae17b0a42ed17bbb81b15c28f4ae,0.6667,0.3636,0.303,0.4545,0.3,0.2857,1,7,4,2,5,False,FN+FP
+cellpose_cpsam,Cellpose-SAM,gaussian_blur,bf4a61bb81589c9a67e3343408befd3e135af5e88b50c17f998f2131d24bc271,0.8,0.5,0.3,0.375,0.0,0.3333,1,3,1,0,2,False,FN
+cellpose_cpsam,Cellpose-SAM,gaussian_blur,c6216cdc42f61bc345434986db42e2ef9b9741aee3210b7a808e952e319d2305,0.9032,0.6071,0.2961,0.3278,0.225,0.3438,6,32,24,7,15,False,FN
+cellpose_cpsam,Cellpose-SAM,gaussian_blur,e1bcb583985325d0ef5f3ef52957d0371c96d4af767b13e48102bca9d5351a9b,0.6667,0.4,0.2667,0.4,0.1667,0.3333,2,6,4,2,4,False,FN
+cellpose_cpsam,Cellpose-SAM,gaussian_blur,74a7785530687a11ecd073e772f90912d9967d02407a192bfab282c35f55ab94,0.4727,0.25,0.2227,0.4712,0.2006,0.25,1,24,32,25,17,False,MIXED
+cellpose_cpsam,Cellpose-SAM,gaussian_blur,7f38885521586fc6011bef1314a9fb2aa1e4935bd581b2991e1d963395eab770,0.7514,0.5443,0.2071,0.2757,0.1484,0.2178,15,101,57,14,58,False,MIXED
+cellpose_cpsam,Cellpose-SAM,downsample_upsample,ddf1bf458312de2895dd9cc5ce7ec9d334ad54c35edc96ad6001d20b1d8588d8,0.8727,0.1765,0.6963,0.7978,0.21,0.7,21,30,4,1,27,False,FN
+cellpose_cpsam,Cellpose-SAM,downsample_upsample,e1bcb583985325d0ef5f3ef52957d0371c96d4af767b13e48102bca9d5351a9b,0.6667,0.3636,0.303,0.4545,0.2667,0.3333,1,6,5,3,4,False,FN+FP
+cellpose_cpsam,Cellpose-SAM,downsample_upsample,bf4a61bb81589c9a67e3343408befd3e135af5e88b50c17f998f2131d24bc271,0.8,0.5,0.3,0.375,0.0,0.3333,1,3,1,0,2,False,FN
+cellpose_cpsam,Cellpose-SAM,downsample_upsample,68f833de9f8c631cedd7031b8ed9b908c42cbbc1e14254722728a8b7d596fd4c,0.7931,0.5882,0.2049,0.2583,0.0951,0.25,7,32,19,4,17,False,MIXED
+cellpose_cpsam,Cellpose-SAM,downsample_upsample,74a7785530687a11ecd073e772f90912d9967d02407a192bfab282c35f55ab94,0.4727,0.2857,0.187,0.3956,0.1694,0.2083,1,24,32,24,16,False,MIXED
+cellpose_cpsam,Cellpose-SAM,downsample_upsample,4217e25defac94ff465157d53f5a24b8a14045b763d8606ec4a97d71d99ee381,0.8361,0.6698,0.1663,0.1989,0.0432,0.2273,29,132,83,11,60,False,COUNT
+cellpose_cpsam,Cellpose-SAM,downsample_upsample,7f38885521586fc6011bef1314a9fb2aa1e4935bd581b2991e1d963395eab770,0.7514,0.5926,0.1589,0.2114,0.1159,0.1683,11,101,61,13,53,False,MIXED
+cellpose_cpsam,Cellpose-SAM,downsample_upsample,be1916d0e5592c17f971315b5de720ef6894173087399daed94a52ef109c1572,0.8235,0.6667,0.1569,0.1905,-0.2222,0.375,3,8,4,0,4,False,FN
+cellpose_cpsam,Cellpose-SAM,downsample_upsample,3d0ca3498d97edebd28dbc7035eced40baa4af199af09cbb7251792accaa69fe,1.0,0.8571,0.1429,0.1429,0.0,0.25,1,4,3,0,1,False,MIXED
+cellpose_cpsam,Cellpose-SAM,downsample_upsample,01d44a26f6680c42ba94c9bc6339228579a95d0e2695b149b7cc0c9592b21baf,0.8571,0.7143,0.1429,0.1667,0.1429,0.1429,0,7,7,2,2,False,MIXED
+cellpose_cpsam,Cellpose-SAM,contrast_inversion,af576e8ec3a8d0b57eb6a311299e9e4fd2047970d3dd9d6f52e54ea6a91109da,0.8,0.4,0.4,0.5,0.3333,0.5,0,2,3,2,1,False,FN+FP
+cellpose_cpsam,Cellpose-SAM,contrast_inversion,be1916d0e5592c17f971315b5de720ef6894173087399daed94a52ef109c1572,0.8235,0.5455,0.2781,0.3377,-0.2222,0.5,4,8,3,0,5,False,FN
+cellpose_cpsam,Cellpose-SAM,contrast_inversion,e1bcb583985325d0ef5f3ef52957d0371c96d4af767b13e48102bca9d5351a9b,0.6667,0.4,0.2667,0.4,0.1667,0.3333,2,6,4,2,4,False,FN
+cellpose_cpsam,Cellpose-SAM,contrast_inversion,3d0ca3498d97edebd28dbc7035eced40baa4af199af09cbb7251792accaa69fe,1.0,0.75,0.25,0.25,0.25,0.25,0,4,4,1,1,False,MIXED
+cellpose_cpsam,Cellpose-SAM,contrast_inversion,8a65e41c630d85c0004ce1772ff66fbc87aca34cb165f695255b39343fcfc832,0.8182,0.6,0.2182,0.2667,0.15,0.25,2,12,8,2,6,False,MIXED
+cellpose_cpsam,Cellpose-SAM,contrast_inversion,0b0d577159f0d6c266f360f7b8dfde46e16fa665138bf577ec3c6f9c70c0cd1e,0.9231,0.7692,0.1538,0.1667,0.1667,0.1429,0,7,6,1,2,False,MIXED
+cellpose_cpsam,Cellpose-SAM,contrast_inversion,a3a65623e079af7988b0c1cf1e54041003c6d730c91ecf200b71c47b93a67ed6,0.9032,0.7586,0.1446,0.1601,0.0893,0.2,0,15,14,3,4,False,MIXED
+cellpose_cpsam,Cellpose-SAM,contrast_inversion,0ddd8deaf1696db68b00c600601c6a74a0502caaf274222c8367bdc31458ae7e,0.7302,0.6102,0.12,0.1643,0.0753,0.1562,4,32,27,9,14,False,MIXED
+cellpose_cpsam,Cellpose-SAM,contrast_inversion,1815cf307859b3e13669041d181aa3b3dbbac1a95aef4c42164b223110c09168,0.9412,0.8235,0.1176,0.125,0.125,0.1111,0,9,8,1,2,False,MIXED
+cellpose_cpsam,Cellpose-SAM,contrast_inversion,57d88f45e479ce3821839b2706d667758c63ac769d76800d815c73d2507c1e42,0.7045,0.5977,0.1068,0.1516,0.0999,0.1136,1,44,43,17,18,False,MIXED

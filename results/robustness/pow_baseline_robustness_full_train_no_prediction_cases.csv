@@ -1,0 +1,15 @@
+method,method_label,perturbation,image_id,clean_object_f1,object_f1,true_instances,pred_instances,false_positives,false_negatives,absolute_count_error,no_prediction
+cellpose_cpsam,Cellpose-SAM,clean,220b37f4ca7cab486d2b71cd87a46ee7411a5aa142799d96ed98015ab5ba538a,0.0,0.0,1,0,0,1,1,True
+cellpose_cpsam,Cellpose-SAM,gaussian_noise,220b37f4ca7cab486d2b71cd87a46ee7411a5aa142799d96ed98015ab5ba538a,0.0,0.0,1,0,0,1,1,True
+cellpose_cpsam,Cellpose-SAM,gaussian_blur,220b37f4ca7cab486d2b71cd87a46ee7411a5aa142799d96ed98015ab5ba538a,0.0,0.0,1,0,0,1,1,True
+cellpose_cpsam,Cellpose-SAM,downsample_upsample,220b37f4ca7cab486d2b71cd87a46ee7411a5aa142799d96ed98015ab5ba538a,0.0,0.0,1,0,0,1,1,True
+cellpose_cpsam,Cellpose-SAM,contrast_inversion,220b37f4ca7cab486d2b71cd87a46ee7411a5aa142799d96ed98015ab5ba538a,0.0,0.0,1,0,0,1,1,True
+cellpose_cpsam,Cellpose-SAM,clean,93c5638e7e6433b5c9cc87c152bcbe28873d2f9d6a392cca0642520807542a77,0.0,0.0,1,0,0,1,1,True
+cellpose_cpsam,Cellpose-SAM,gaussian_noise,93c5638e7e6433b5c9cc87c152bcbe28873d2f9d6a392cca0642520807542a77,0.0,0.0,1,0,0,1,1,True
+cellpose_cpsam,Cellpose-SAM,gaussian_blur,93c5638e7e6433b5c9cc87c152bcbe28873d2f9d6a392cca0642520807542a77,0.0,0.0,1,0,0,1,1,True
+cellpose_cpsam,Cellpose-SAM,downsample_upsample,93c5638e7e6433b5c9cc87c152bcbe28873d2f9d6a392cca0642520807542a77,0.0,0.0,1,0,0,1,1,True
+cellpose_cpsam,Cellpose-SAM,contrast_inversion,93c5638e7e6433b5c9cc87c152bcbe28873d2f9d6a392cca0642520807542a77,0.0,0.0,1,0,0,1,1,True
+cellpose_cpsam,Cellpose-SAM,clean,e5aeb5b3577abbebe8982b5dd7d22c4257250ad3000661a42f38bf9248d291fd,0.0,0.0,2,0,0,2,2,True
+cellpose_cpsam,Cellpose-SAM,gaussian_blur,e5aeb5b3577abbebe8982b5dd7d22c4257250ad3000661a42f38bf9248d291fd,0.0,0.0,2,0,0,2,2,True
+cellpose_cpsam,Cellpose-SAM,downsample_upsample,e5aeb5b3577abbebe8982b5dd7d22c4257250ad3000661a42f38bf9248d291fd,0.0,0.0,2,0,0,2,2,True
+cellpose_cpsam,Cellpose-SAM,contrast_inversion,e5aeb5b3577abbebe8982b5dd7d22c4257250ad3000661a42f38bf9248d291fd,0.0,0.0,2,0,0,2,2,True

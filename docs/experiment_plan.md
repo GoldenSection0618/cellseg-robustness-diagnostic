@@ -135,9 +135,15 @@ Current Otsu + watershed and Cellpose-SAM outputs:
 
 - `results/robustness/pow_baseline_robustness_full_train_metrics.csv`
 - `results/robustness/pow_baseline_robustness_full_train_summary.csv`
+- `results/robustness/pow_baseline_robustness_full_train_image_deltas.csv`
+- `results/robustness/pow_baseline_robustness_full_train_failure_cases.csv`
+- `results/robustness/pow_baseline_robustness_full_train_no_prediction_cases.csv`
 - `figures/robustness_pow_full_train_mean_f1.png`
 - `figures/robustness_pow_full_train_relative_f1_drop.png`
 - `figures/robustness_pow_full_train_method_condition_heatmap.png`
+- `figures/robustness_pow_full_train_f1_drop_distributions.png`
+- `figures/robustness_pow_full_train_worst_f1_drops.png`
+- `figures/robustness_pow_full_train_failure_hint_counts.png`
 - `figures/robustness_pow_full_train_overlay_examples.png`
 
 The full-train output currently contains `otsu_watershed` and `cellpose_cpsam`.

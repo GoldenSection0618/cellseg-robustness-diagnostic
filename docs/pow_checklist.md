@@ -85,6 +85,8 @@ proof-of-work benchmark.
 - [x] Otsu + watershed full-train robustness run completed on all 670 `stage1_train` images.
 - [x] Cellpose-SAM full-train robustness run added with `--resume`.
 - [x] SAM2 AMG full-train robustness deferred pending parameter-sensitivity or post-processing work.
+- [x] Full-train per-image deltas, failure cases, and no-prediction cases written to `results/robustness/`.
+- [x] Full-train F1-drop distribution, worst-drop, and failure-hint figures written to `figures/`.
 
 ## Later Protocols After PoW Clean Baselines
 

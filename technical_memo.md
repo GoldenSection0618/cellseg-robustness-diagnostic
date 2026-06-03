@@ -323,9 +323,15 @@ Generated outputs:
 
 - `results/robustness/pow_baseline_robustness_full_train_metrics.csv`
 - `results/robustness/pow_baseline_robustness_full_train_summary.csv`
+- `results/robustness/pow_baseline_robustness_full_train_image_deltas.csv`
+- `results/robustness/pow_baseline_robustness_full_train_failure_cases.csv`
+- `results/robustness/pow_baseline_robustness_full_train_no_prediction_cases.csv`
 - `figures/robustness_pow_full_train_mean_f1.png`
 - `figures/robustness_pow_full_train_relative_f1_drop.png`
 - `figures/robustness_pow_full_train_method_condition_heatmap.png`
+- `figures/robustness_pow_full_train_f1_drop_distributions.png`
+- `figures/robustness_pow_full_train_worst_f1_drops.png`
+- `figures/robustness_pow_full_train_failure_hint_counts.png`
 - `figures/robustness_pow_full_train_overlay_examples.png`
 
 Current full-train summary:
@@ -341,6 +347,14 @@ downsample are slightly higher than clean on average, which is consistent with m
 smoothing reducing some oversegmentation. Cellpose-SAM remains substantially stronger
 and more stable, with relative object-F1 drops of 2.9% for Gaussian noise, 2.2% for
 blur, 1.2% for downsample, and 0.6% for inversion.
+
+The full-train interpretation layer intentionally uses a small metric set: per-image
+object-F1 drop from clean, precision drop, recall drop, absolute count-error delta,
+and no-prediction rows. This keeps the analysis focused on robustness failure
+direction rather than duplicating every segmentation metric. Cellpose-SAM produced
+14 no-prediction rows out of 3350 image-condition rows; these are recorded in
+`pow_baseline_robustness_full_train_no_prediction_cases.csv` and are counted as
+ordinary failures in the aggregate metrics.
 
 SAM2 AMG full-train robustness is deferred. Clean20 already shows near-total SAM2 AMG
 collapse under the tested perturbations, with relative object-F1 drops of 98.8% to
