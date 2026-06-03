@@ -332,7 +332,7 @@ Implemented PoW artifacts:
 Near-term next steps:
 
 1. keep the current PoW mainline focused on the three completed clean baselines;
-2. decide whether SAM2 AMG full-train robustness is worth running given its clean20 collapse;
+2. defer SAM2 AMG full-train robustness and keep SAM2 parameter sensitivity as future work;
 3. optionally add a small SAM2 AMG parameter-sensitivity smoke test after the baseline path is stable;
 4. keep legacy Cellpose3 `cyto3` and one-click restoration as optional cross-version work;
 5. keep YOLO fine-tuning and VLM segmentation as separate protocols, not part of the zero-shot ranking.

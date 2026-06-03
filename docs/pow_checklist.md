@@ -84,7 +84,7 @@ proof-of-work benchmark.
 - [x] Robustness runner supports staged `full_train` runs with method selection and resume/overwrite protection.
 - [x] Otsu + watershed full-train robustness run completed on all 670 `stage1_train` images.
 - [x] Cellpose-SAM full-train robustness run added with `--resume`.
-- [ ] Decide whether SAM2 AMG full-train robustness is worth running.
+- [x] SAM2 AMG full-train robustness deferred pending parameter-sensitivity or post-processing work.
 
 ## Later Protocols After PoW Clean Baselines
 

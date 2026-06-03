@@ -141,8 +141,10 @@ Current Otsu + watershed and Cellpose-SAM outputs:
 - `figures/robustness_pow_full_train_overlay_examples.png`
 
 The full-train output currently contains `otsu_watershed` and `cellpose_cpsam`.
-Defer SAM2 AMG full-train execution until the information gain is reviewed against
-its clean20 collapse behavior.
+SAM2 AMG full-train execution is deferred because clean20 already shows near-total
+collapse under all tested perturbations. The next SAM2 step should be parameter
+sensitivity or post-processing repair, not a full-train run with the current AMG
+settings.
 
 ## Optional Cross-Version Cellpose Work
 

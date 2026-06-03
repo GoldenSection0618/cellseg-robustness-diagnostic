@@ -342,6 +342,12 @@ smoothing reducing some oversegmentation. Cellpose-SAM remains substantially str
 and more stable, with relative object-F1 drops of 2.9% for Gaussian noise, 2.2% for
 blur, 1.2% for downsample, and 0.6% for inversion.
 
+SAM2 AMG full-train robustness is deferred. Clean20 already shows near-total SAM2 AMG
+collapse under the tested perturbations, with relative object-F1 drops of 98.8% to
+100.0%. Running the same current AMG settings across all 670 images is therefore
+lower information gain than first testing SAM2 parameter sensitivity or repairing
+the optional post-processing path.
+
 ## Output Contract
 
 Experiment and analysis scripts should write:
