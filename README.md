@@ -1,17 +1,22 @@
 # cellseg-robustness-diagnostic
 
-![Project Status](https://img.shields.io/badge/status-design%20stage-lightgrey)
+![Project Status](https://img.shields.io/badge/status-PoW%20results-green)
 ![Task](https://img.shields.io/badge/task-cell%20segmentation-blue)
 ![Protocol](https://img.shields.io/badge/protocol-robustness%20diagnostic-purple)
 ![Scope](https://img.shields.io/badge/scope-PoW%20mini--benchmark-green)
 
 A diagnostic mini-benchmark with a main **zero-shot robustness** protocol, plus separate supervised adaptation and exploratory VLM output-validity protocols for microscopy cell instance segmentation.
 
-This repository is currently in the planning and protocol-design stage. The goal is not to claim a new state-of-the-art benchmark, but to build a compact, reproducible proof-of-work project that compares several representative segmentation paradigms under controlled conditions.
+This repository now contains a compact proof-of-work implementation with completed
+clean-subset baselines, robustness smoke tests, a clean20 robustness extension, and
+staged full-train robustness results for Otsu + watershed and Cellpose-SAM. The goal
+is not to claim a new state-of-the-art benchmark, but to build a reproducible
+diagnostic project that compares representative segmentation paradigms under
+controlled conditions.
 
 ## At a Glance
 
-| Protocol | Question | Planned methods | Reported as |
+| Protocol | Question | Methods / planned methods | Reported as |
 | --- | --- | --- | --- |
 | A. Zero-shot / out-of-the-box robustness | Which methods produce usable instance masks without target-domain labels or manual prompts? | Otsu + watershed; Cellpose-SAM / `cpsam`; SAM2 automatic mask generator | Main PoW diagnostic comparison |
 | B. Supervised adaptation | How much performance can small-label task-specific training buy? | YOLO-seg fine-tuned; optional Cellpose fine-tuned | Separate supervised protocol |
@@ -35,7 +40,7 @@ This project is designed to make those assumptions explicit.
 
 ## Project Goal
 
-The planned benchmark asks:
+The benchmark asks:
 
 > Under controlled microscopy image perturbations, how do classical, specialist, bio-adapted foundation, and general segmentation methods differ in zero-shot or out-of-the-box robustness, latency, and failure modes?
 
@@ -66,7 +71,7 @@ This project will not attempt to:
 * tune every method to its best possible performance;
 * compare supervised and zero-shot methods in a single undifferentiated ranking.
 
-## Planned Experimental Protocols
+## Experimental Protocols
 
 ### Protocol A: Zero-shot / Out-of-the-box Robustness
 
@@ -95,7 +100,7 @@ This protocol is intended to answer:
 
 This protocol is separate from the main zero-shot comparison.
 
-Planned methods:
+Planned supervised methods:
 
 | Method              | Role                                       | Main Assumption                    |
 | ------------------- | ------------------------------------------ | ---------------------------------- |
@@ -141,7 +146,7 @@ The VLM protocol will report:
 * estimated cost;
 * prompt sensitivity.
 
-## Planned Robustness Perturbations
+## Robustness Perturbations
 
 The benchmark will evaluate each method on clean images and controlled perturbations.
 
@@ -161,7 +166,7 @@ Most perturbations are chosen to stress-test documented robustness claims around
 
 The final perturbation set will be kept small to avoid turning this proof-of-work project into a large benchmark paper.
 
-## Planned Metrics
+## Metrics
 
 ### Segmentation Metrics
 
@@ -315,9 +320,9 @@ Classical thresholding and watershed baselines are included to provide an interp
 
 ## Current Status
 
-This repository now has a small proof-of-work experiment skeleton rather than only a
-protocol design. The current implementation uses the DSB2018 local dataset and a
-deterministic 20-image clean subset for the first baseline comparisons.
+This repository now has a proof-of-work implementation and recorded results rather
+than only a protocol design. The current implementation uses the DSB2018 local
+dataset, deterministic clean subsets, and staged full-train robustness outputs.
 
 Implemented PoW artifacts:
 
@@ -331,9 +336,9 @@ Implemented PoW artifacts:
 
 Near-term next steps:
 
-1. keep the current PoW mainline focused on the three completed clean baselines;
-2. defer SAM2 AMG full-train robustness and keep SAM2 parameter sensitivity as future work;
-3. optionally add a small SAM2 AMG parameter-sensitivity smoke test after the baseline path is stable;
+1. keep the current PoW mainline focused on the completed zero-shot robustness artifacts;
+2. keep SAM2 AMG full-train robustness deferred unless parameter sensitivity or post-processing repair changes the clean20 failure pattern;
+3. optionally add a small SAM2 AMG parameter-sensitivity smoke test;
 4. keep legacy Cellpose3 `cyto3` and one-click restoration as optional cross-version work;
 5. keep YOLO fine-tuning and VLM segmentation as separate protocols, not part of the zero-shot ranking.
 

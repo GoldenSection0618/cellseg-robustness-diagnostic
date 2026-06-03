@@ -3,12 +3,12 @@
 ## Current Objective
 
 Build a compact proof-of-work benchmark for microscopy nucleus instance segmentation
-robustness. The current implementation is an end-to-end skeleton that can:
+robustness. The current implementation is an end-to-end PoW pipeline that can:
 
 1. read the local DSB2018 data;
 2. produce tabular analysis outputs in categorized `results/` subdirectories;
 3. produce visual analysis outputs in `figures/`;
-4. support later predictors through a common evaluation pipeline.
+4. support staged robustness evaluation through a common evaluation pipeline.
 
 ## Dataset
 
@@ -388,5 +388,7 @@ subdivided into nested folders.
 ## Current Scope Boundary
 
 This memo tracks proof-of-work engineering progress. It is not a final paper-style
-report. Model comparisons, robustness conclusions, and failure taxonomy should be
-added only after the evaluation pipeline is running end to end.
+report. The current robustness conclusions apply to the completed PoW scope:
+clean-subset baselines, clean20 robustness, and staged Otsu/Cellpose-SAM full-train
+robustness. Supervised YOLO, VLM output validity, Cellpose3 cross-version baselines,
+and SAM2 parameter-sensitivity work remain separate future protocols.

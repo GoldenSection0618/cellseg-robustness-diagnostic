@@ -92,7 +92,7 @@ proof-of-work benchmark.
 
 - [ ] Optional Cellpose3 default cross-version protocol.
 - [ ] Optional Cellpose3 restoration cross-version protocol.
-- [ ] Cellpose-SAM full protocol.
+- [ ] Optional Cellpose-SAM protocol refinements after the current full-train run.
 - [ ] Optional SAM2 AMG parameter-sensitivity smoke test.
 - [ ] YOLO-seg supervised adaptation protocol.
 - [ ] Gemini output-validity protocol.

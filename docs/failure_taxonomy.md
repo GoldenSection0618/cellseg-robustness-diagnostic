@@ -1,8 +1,9 @@
 # Failure-Case Taxonomy
 
-This taxonomy is a lightweight PoW artifact. It names failure modes that are visible
-in the current clean-subset baselines and the first perturbation smoke test, so later
-experiments can annotate failures consistently.
+This taxonomy is a lightweight PoW artifact. It names failure modes visible in the
+current clean-subset baselines, robustness smoke tests, clean20 robustness extension,
+and staged full-train robustness diagnostics, so later experiments can annotate
+failures consistently.
 
 ## Evidence Used
 

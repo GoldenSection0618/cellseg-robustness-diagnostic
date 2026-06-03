@@ -123,8 +123,8 @@ Current outputs:
 - `figures/robustness_pow_clean20_worst_f1_drops.png`
 - `figures/robustness_pow_clean20_overlay_examples.png`
 
-This is still a targeted PoW extension, not a full robustness sweep. Do not start a
-larger dataset or perturbation sweep until the 20-image extension is reviewed.
+This targeted PoW extension is complete and has been superseded by the staged
+full-train robustness run for Otsu + watershed and Cellpose-SAM.
 
 ## Phase 10: Staged Full-Train Robustness
 
@@ -171,7 +171,7 @@ These protocols should stay separate from the clean zero-shot baseline track:
 
 - optional Cellpose3 default cross-version protocol;
 - optional Cellpose3 restoration cross-version protocol;
-- Cellpose-SAM full protocol;
+- optional Cellpose-SAM protocol refinements after the current full-train run;
 - optional SAM2 AMG parameter-sensitivity smoke test;
 - YOLO-seg small-label supervised adaptation;
 - Gemini segmentation output-validity checks.
