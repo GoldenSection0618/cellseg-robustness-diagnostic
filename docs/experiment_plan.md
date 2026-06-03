@@ -126,6 +126,24 @@ Current outputs:
 This is still a targeted PoW extension, not a full robustness sweep. Do not start a
 larger dataset or perturbation sweep until the 20-image extension is reviewed.
 
+## Phase 10: Staged Full-Train Robustness
+
+Goal: extend the same five-condition robustness protocol to all 670 `stage1_train`
+images, one method at a time.
+
+Current Otsu + watershed outputs:
+
+- `results/robustness/pow_baseline_robustness_full_train_metrics.csv`
+- `results/robustness/pow_baseline_robustness_full_train_summary.csv`
+- `figures/robustness_pow_full_train_mean_f1.png`
+- `figures/robustness_pow_full_train_relative_f1_drop.png`
+- `figures/robustness_pow_full_train_method_condition_heatmap.png`
+- `figures/robustness_pow_full_train_overlay_examples.png`
+
+The full-train output currently contains only `otsu_watershed`. Add Cellpose-SAM
+with `--resume` as the next staged method. Defer SAM2 AMG full-train execution until
+the information gain is reviewed against its clean20 collapse behavior.
+
 ## Optional Cross-Version Cellpose Work
 
 Legacy Cellpose3 `cyto3` and one-click restoration are not required for the current

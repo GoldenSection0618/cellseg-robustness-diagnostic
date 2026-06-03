@@ -313,6 +313,32 @@ The optimized diagnostic outputs add the missing per-image interpretation layer:
 The per-method worst-drop figure avoids the global ranking being dominated only by
 SAM2 collapse cases.
 
+## Otsu Full-Train Robustness
+
+The full-train robustness run has started in staged form. The first completed method
+is Otsu + watershed over all 670 `stage1_train` images and the same five image
+conditions.
+
+Generated outputs:
+
+- `results/robustness/pow_baseline_robustness_full_train_metrics.csv`
+- `results/robustness/pow_baseline_robustness_full_train_summary.csv`
+- `figures/robustness_pow_full_train_mean_f1.png`
+- `figures/robustness_pow_full_train_relative_f1_drop.png`
+- `figures/robustness_pow_full_train_method_condition_heatmap.png`
+- `figures/robustness_pow_full_train_overlay_examples.png`
+
+Current Otsu full-train summary:
+
+| Method | Clean F1 | Gaussian noise F1 | Blur F1 | Downsample F1 | Inversion F1 |
+| --- | ---: | ---: | ---: | ---: | ---: |
+| Otsu + watershed | 0.5736 | 0.4298 | 0.5818 | 0.5825 | 0.5653 |
+
+This confirms the clean20 trend at full-train scale: Gaussian noise is the main
+Otsu failure condition, with a 25.1% relative object-F1 drop from clean. Blur and
+downsample are slightly higher than clean on average, which is consistent with mild
+smoothing reducing some oversegmentation.
+
 ## Output Contract
 
 Experiment and analysis scripts should write:
