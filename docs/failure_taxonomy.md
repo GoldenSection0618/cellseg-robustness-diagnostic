@@ -10,11 +10,13 @@ experiments can annotate failures consistently.
 - `results/baselines/clean_subset_baseline_failure_cases.csv`
 - `results/robustness/otsu_watershed_perturbation_smoke_summary.csv`
 - `results/robustness/pow_baseline_robustness_smoke_summary.csv`
+- `results/robustness/pow_baseline_robustness_clean20_summary.csv`
 - `figures/otsu_watershed_subset_overlay_examples.png`
 - `figures/cellpose_cpsam_subset_overlay_examples.png`
 - `figures/sam2_amg_subset_overlay_examples.png`
 - `figures/robustness_otsu_smoke_overlay_examples.png`
 - `figures/robustness_pow_smoke_overlay_examples.png`
+- `figures/robustness_pow_clean20_overlay_examples.png`
 
 ## Instance-Level Failure Modes
 

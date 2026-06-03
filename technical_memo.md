@@ -273,14 +273,35 @@ mainly affected by Gaussian noise, and SAM2 AMG collapses under all tested
 perturbations in this protocol. The SAM2 result should be interpreted with the known
 optional `_C` post-processing warning.
 
-The next robustness step is worth expanding only to the existing 20-image clean
-subset, not to the full dataset. The 5-image smoke subset is representative enough
-for a pipeline check, but not for a robustness conclusion: among the five worst
-clean-subset images per method, it covers one Cellpose-SAM image, no Otsu +
-watershed images, and one SAM2 AMG image. The observed standard error is also high
-for Otsu clean F1 (0.1088) and SAM2 AMG clean F1 (0.2251). A 20-image extension
-keeps the scope small while adding the hard clean-subset examples that the smoke
-test skipped.
+## PoW Clean20 Robustness Extension
+
+The robustness protocol has been extended to the deterministic 20-image clean subset
+used by the completed clean baselines. This keeps the scope within the current PoW
+mainline while covering clean-subset hard cases that the 5-image smoke test skipped.
+
+Generated outputs:
+
+- `results/robustness/pow_baseline_robustness_clean20_metrics.csv`
+- `results/robustness/pow_baseline_robustness_clean20_summary.csv`
+- `figures/robustness_pow_clean20_mean_f1.png`
+- `figures/robustness_pow_clean20_relative_f1_drop.png`
+- `figures/robustness_pow_clean20_method_condition_heatmap.png`
+- `figures/robustness_pow_clean20_overlay_examples.png`
+
+Current clean20 robustness summary:
+
+| Method | Clean F1 | Gaussian noise F1 | Blur F1 | Downsample F1 | Inversion F1 |
+| --- | ---: | ---: | ---: | ---: | ---: |
+| Otsu + watershed | 0.4685 | 0.3676 | 0.4730 | 0.4892 | 0.4678 |
+| Cellpose-SAM | 0.8892 | 0.8578 | 0.8672 | 0.8802 | 0.8960 |
+| SAM2 AMG | 0.3604 | 0.0043 | 0.0020 | 0.0016 | 0.0000 |
+
+The clean rows exactly match the existing 20-image clean baseline means, confirming
+that the extension uses the same image subset and method implementations. The
+20-image results preserve the smoke-test direction: Cellpose-SAM remains the most
+stable baseline, Otsu + watershed is mainly degraded by Gaussian noise, and SAM2 AMG
+collapses under all tested perturbations. The SAM2 result should still be interpreted
+with the known optional `_C` post-processing warning.
 
 ## Output Contract
 

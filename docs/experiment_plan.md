@@ -105,23 +105,22 @@ Current outputs:
 - `figures/robustness_pow_smoke_method_condition_heatmap.png`
 - `figures/robustness_pow_smoke_overlay_examples.png`
 
-## Deferred Robustness Work
+## Phase 9: PoW Robustness Clean20 Extension
 
-The next robustness step should remain targeted. The 5-image smoke test has already
-shown that the pipeline runs, but it misses most of the worst clean-subset images
-for Otsu + watershed, Cellpose-SAM, and SAM2 AMG. Extending the same perturbation
-set to the deterministic 20-image clean subset is therefore useful before any larger
-dataset or perturbation sweep.
+Goal: run the same perturbation set across the deterministic 20-image clean subset
+used by the completed clean baselines.
 
-Recommended next output:
+Current outputs:
 
 - `results/robustness/pow_baseline_robustness_clean20_metrics.csv`
 - `results/robustness/pow_baseline_robustness_clean20_summary.csv`
 - `figures/robustness_pow_clean20_mean_f1.png`
 - `figures/robustness_pow_clean20_relative_f1_drop.png`
 - `figures/robustness_pow_clean20_method_condition_heatmap.png`
+- `figures/robustness_pow_clean20_overlay_examples.png`
 
-Do not start a full robustness sweep until the 20-image extension is reviewed.
+This is still a targeted PoW extension, not a full robustness sweep. Do not start a
+larger dataset or perturbation sweep until the 20-image extension is reviewed.
 
 ## Optional Cross-Version Cellpose Work
 

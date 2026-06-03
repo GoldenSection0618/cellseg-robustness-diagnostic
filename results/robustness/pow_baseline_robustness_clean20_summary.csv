@@ -1,0 +1,16 @@
+method,perturbation,images,mean_object_f1,mean_matched_iou,mean_matched_dice,mean_precision,mean_recall,mean_absolute_count_error,median_latency_ms,mean_latency_ms,clean_mean_object_f1,absolute_object_f1_drop,relative_object_f1_drop,method_label
+otsu_watershed,clean,20,0.4685,0.7307,0.818,0.4274,0.5852,63.75,10.3995,31.6653,0.4685,0.0,0.0,Otsu + watershed
+otsu_watershed,gaussian_noise,20,0.3676,0.6924,0.7951,0.3369,0.4669,97.3,10.932,34.0959,0.4685,0.1009,0.2154,Otsu + watershed
+otsu_watershed,gaussian_blur,20,0.473,0.7094,0.8044,0.4336,0.5815,52.15,9.771,29.4388,0.4685,-0.0045,-0.0096,Otsu + watershed
+otsu_watershed,downsample_upsample,20,0.4892,0.7158,0.8082,0.4527,0.5946,56.3,10.334,30.4438,0.4685,-0.0207,-0.0442,Otsu + watershed
+otsu_watershed,contrast_inversion,20,0.4678,0.7285,0.8162,0.4286,0.579,68.6,10.0865,31.4486,0.4685,0.0007,0.0015,Otsu + watershed
+cellpose_cpsam,clean,20,0.8892,0.8514,0.9156,0.9335,0.8564,7.15,478.974,786.5594,0.8892,0.0,0.0,Cellpose-SAM
+cellpose_cpsam,gaussian_noise,20,0.8578,0.8308,0.9031,0.9088,0.8192,7.15,473.527,771.5938,0.8892,0.0314,0.0353,Cellpose-SAM
+cellpose_cpsam,gaussian_blur,20,0.8672,0.8325,0.904,0.9243,0.8261,8.5,475.308,762.0181,0.8892,0.022,0.0247,Cellpose-SAM
+cellpose_cpsam,downsample_upsample,20,0.8802,0.8388,0.9079,0.9291,0.8436,7.65,476.8755,762.3782,0.8892,0.009,0.0101,Cellpose-SAM
+cellpose_cpsam,contrast_inversion,20,0.896,0.85,0.9148,0.9263,0.8765,6.4,468.774,763.8886,0.8892,-0.0068,-0.0076,Cellpose-SAM
+sam2_amg,clean,20,0.3604,0.5424,0.5878,0.39,0.3456,31.55,1529.589,1549.2494,0.3604,0.0,0.0,SAM2 AMG
+sam2_amg,gaussian_noise,20,0.0043,0.0371,0.0423,0.0077,0.0029,45.95,1495.1445,1519.032,0.3604,0.3561,0.9881,SAM2 AMG
+sam2_amg,gaussian_blur,20,0.002,0.0386,0.0432,0.0031,0.0015,45.3,1488.876,1499.7198,0.3604,0.3584,0.9945,SAM2 AMG
+sam2_amg,downsample_upsample,20,0.0016,0.0371,0.0422,0.0027,0.0011,45.75,1483.1625,1487.5522,0.3604,0.3588,0.9956,SAM2 AMG
+sam2_amg,contrast_inversion,20,0.0,0.0,0.0,0.0,0.0,48.45,1485.1535,1511.9497,0.3604,0.3604,1.0,SAM2 AMG
