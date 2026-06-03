@@ -325,7 +325,7 @@ Implemented PoW artifacts:
 2. shared instance-mask metrics and visualization helpers under `src/`;
 3. clean-subset baselines for Otsu + watershed, Cellpose-SAM / `cpsam`, and SAM2 AMG;
 4. clean-subset comparison and failure-case tables in `results/baselines/`, with comparison figures in `figures/`;
-5. small Otsu-only and three-baseline perturbation smoke tests plus a 20-image clean-subset robustness extension in `results/robustness/`;
+5. small Otsu-only and three-baseline perturbation smoke tests plus a 20-image clean-subset robustness extension and interpretation layer in `results/robustness/`;
 6. root-level `technical_memo.md` with current summaries and limitations;
 7. PoW support docs under `docs/`, including data, environment, output contract, experiment plan, checklist, and failure taxonomy.
 

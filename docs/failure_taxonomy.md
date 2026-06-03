@@ -20,6 +20,7 @@ experiments can annotate failures consistently.
 - `figures/robustness_pow_smoke_overlay_examples.png`
 - `figures/robustness_pow_clean20_overlay_examples.png`
 - `figures/robustness_pow_clean20_image_f1_drop_heatmap.png`
+- `figures/robustness_pow_clean20_worst_f1_drops.png`
 
 ## Instance-Level Failure Modes
 
