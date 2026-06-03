@@ -313,11 +313,11 @@ The optimized diagnostic outputs add the missing per-image interpretation layer:
 The per-method worst-drop figure avoids the global ranking being dominated only by
 SAM2 collapse cases.
 
-## Otsu Full-Train Robustness
+## Staged Full-Train Robustness
 
-The full-train robustness run has started in staged form. The first completed method
-is Otsu + watershed over all 670 `stage1_train` images and the same five image
-conditions.
+The full-train robustness run has started in staged form over all 670 `stage1_train`
+images and the same five image conditions. The completed full-train methods are
+Otsu + watershed and Cellpose-SAM / `cpsam`.
 
 Generated outputs:
 
@@ -328,16 +328,19 @@ Generated outputs:
 - `figures/robustness_pow_full_train_method_condition_heatmap.png`
 - `figures/robustness_pow_full_train_overlay_examples.png`
 
-Current Otsu full-train summary:
+Current full-train summary:
 
 | Method | Clean F1 | Gaussian noise F1 | Blur F1 | Downsample F1 | Inversion F1 |
 | --- | ---: | ---: | ---: | ---: | ---: |
 | Otsu + watershed | 0.5736 | 0.4298 | 0.5818 | 0.5825 | 0.5653 |
+| Cellpose-SAM | 0.9042 | 0.8780 | 0.8845 | 0.8932 | 0.8984 |
 
-This confirms the clean20 trend at full-train scale: Gaussian noise is the main
-Otsu failure condition, with a 25.1% relative object-F1 drop from clean. Blur and
+This confirms the clean20 trend at full-train scale. Gaussian noise is the main Otsu
+failure condition, with a 25.1% relative object-F1 drop from clean. Blur and
 downsample are slightly higher than clean on average, which is consistent with mild
-smoothing reducing some oversegmentation.
+smoothing reducing some oversegmentation. Cellpose-SAM remains substantially stronger
+and more stable, with relative object-F1 drops of 2.9% for Gaussian noise, 2.2% for
+blur, 1.2% for downsample, and 0.6% for inversion.
 
 ## Output Contract
 

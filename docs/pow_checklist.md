@@ -83,7 +83,7 @@ proof-of-work benchmark.
 - [x] Clean20 per-image drop and worst-drop diagnostic figures written to `figures/`.
 - [x] Robustness runner supports staged `full_train` runs with method selection and resume/overwrite protection.
 - [x] Otsu + watershed full-train robustness run completed on all 670 `stage1_train` images.
-- [ ] Cellpose-SAM full-train robustness run added with `--resume`.
+- [x] Cellpose-SAM full-train robustness run added with `--resume`.
 - [ ] Decide whether SAM2 AMG full-train robustness is worth running.
 
 ## Later Protocols After PoW Clean Baselines

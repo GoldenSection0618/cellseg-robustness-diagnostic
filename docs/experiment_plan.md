@@ -131,7 +131,7 @@ larger dataset or perturbation sweep until the 20-image extension is reviewed.
 Goal: extend the same five-condition robustness protocol to all 670 `stage1_train`
 images, one method at a time.
 
-Current Otsu + watershed outputs:
+Current Otsu + watershed and Cellpose-SAM outputs:
 
 - `results/robustness/pow_baseline_robustness_full_train_metrics.csv`
 - `results/robustness/pow_baseline_robustness_full_train_summary.csv`
@@ -140,9 +140,9 @@ Current Otsu + watershed outputs:
 - `figures/robustness_pow_full_train_method_condition_heatmap.png`
 - `figures/robustness_pow_full_train_overlay_examples.png`
 
-The full-train output currently contains only `otsu_watershed`. Add Cellpose-SAM
-with `--resume` as the next staged method. Defer SAM2 AMG full-train execution until
-the information gain is reviewed against its clean20 collapse behavior.
+The full-train output currently contains `otsu_watershed` and `cellpose_cpsam`.
+Defer SAM2 AMG full-train execution until the information gain is reviewed against
+its clean20 collapse behavior.
 
 ## Optional Cross-Version Cellpose Work
 
