@@ -1,0 +1,16 @@
+config_id,sweep_group,perturbation,images,mean_object_f1,mean_precision,mean_recall,mean_matched_iou,mean_matched_dice,mean_true_instances,mean_pred_instances,mean_raw_amg_masks,mean_absolute_count_error,zero_prediction_rate,median_latency_ms,mean_latency_ms,clean_mean_object_f1,absolute_object_f1_drop,relative_object_f1_drop
+box_nms_thresh_0.5,box_nms_thresh,clean,20,0.3806,0.404,0.3701,0.5378,0.5849,49.5,18.75,36.15,31.55,0.0,1672.4225,1708.7426,0.3806,0.0,0.0
+box_nms_thresh_0.9,box_nms_thresh,clean,20,0.3659,0.3919,0.3534,0.5416,0.5874,49.5,19.2,43.7,31.2,0.0,1684.012,1706.4244,0.3659,0.0,0.0
+crop_n_layers_1,crop_n_layers,clean,20,0.3827,0.4004,0.3797,0.5776,0.6281,49.5,21.15,43.6,30.55,0.0,7089.717,7147.0905,0.3827,0.0,0.0
+default_current,default,clean,20,0.3683,0.3973,0.3534,0.5416,0.5874,49.5,18.7,37.5,31.6,0.0,1702.0985,1756.5178,0.3683,0.0,0.0
+min_mask_region_area_0,min_mask_region_area,clean,20,0.3683,0.3973,0.3534,0.5416,0.5874,49.5,18.7,37.5,31.6,0.0,1747.426,1736.2254,0.3683,0.0,0.0
+min_mask_region_area_100,min_mask_region_area,clean,20,0.3683,0.3973,0.3534,0.5416,0.5874,49.5,18.7,37.5,31.6,0.0,1674.2,1686.9376,0.3683,0.0,0.0
+min_mask_region_area_25,min_mask_region_area,clean,20,0.3683,0.3973,0.3534,0.5416,0.5874,49.5,18.7,37.5,31.6,0.0,1686.173,1683.0804,0.3683,0.0,0.0
+points_per_side_16,points_per_side,clean,20,0.3688,0.454,0.3383,0.642,0.6885,49.5,17.5,28.65,32.2,0.0,824.474,842.6962,0.3688,0.0,0.0
+points_per_side_32,points_per_side,clean,20,0.3894,0.4169,0.3841,0.6165,0.6717,49.5,20.25,40.4,30.25,0.0,2888.886,3024.1272,0.3894,0.0,0.0
+pred_iou_thresh_0.5,pred_iou_thresh,clean,20,0.3624,0.3842,0.3548,0.5421,0.5877,49.5,20.2,43.5,30.8,0.0,1654.459,1725.2626,0.3624,0.0,0.0
+pred_iou_thresh_0.7,pred_iou_thresh,clean,20,0.3653,0.3912,0.3534,0.5416,0.5874,49.5,19.15,39.05,31.35,0.0,1669.1725,1702.6939,0.3653,0.0,0.0
+pred_iou_thresh_0.88,pred_iou_thresh,clean,20,0.3684,0.4054,0.3462,0.5426,0.588,49.5,17.65,34.45,32.05,0.0,1620.865,1654.0668,0.3684,0.0,0.0
+stability_score_thresh_0.5,stability_score_thresh,clean,20,0.288,0.3062,0.2788,0.5216,0.5748,49.5,18.65,41.25,31.55,0.0,2130.78,2180.0877,0.288,0.0,0.0
+stability_score_thresh_0.75,stability_score_thresh,clean,20,0.3127,0.3299,0.3052,0.5312,0.5809,49.5,18.65,40.15,31.65,0.0,1849.2485,1930.1442,0.3127,0.0,0.0
+stability_score_thresh_0.95,stability_score_thresh,clean,20,0.419,0.4884,0.389,0.5881,0.6359,49.5,21.1,31.9,28.6,0.0,1411.1665,1470.5112,0.419,0.0,0.0

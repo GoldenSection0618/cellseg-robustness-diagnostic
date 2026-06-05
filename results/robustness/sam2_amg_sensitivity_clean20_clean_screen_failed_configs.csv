@@ -1,0 +1,2 @@
+stage,config_id,sweep_group,points_per_side,pred_iou_thresh,stability_score_thresh,min_mask_region_area,crop_n_layers,box_nms_thresh,error_type,error_message
+clean_screen,points_per_side_64,points_per_side,64,0.8,0.9,15,0,0.7,AcceleratorError,CUDA error: out of memory
