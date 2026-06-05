@@ -58,7 +58,7 @@ class Sam2AmgConfig:
     def generator_kwargs(self) -> dict[str, Any]:
         return {
             "points_per_side": self.points_per_side,
-            "points_per_batch": 64,
+            "points_per_batch": 16,
             "pred_iou_thresh": self.pred_iou_thresh,
             "stability_score_thresh": self.stability_score_thresh,
             "box_nms_thresh": self.box_nms_thresh,
@@ -87,7 +87,15 @@ def parse_args() -> argparse.Namespace:
         action="store_true",
         help="Delete existing outputs for the selected stage before running.",
     )
-    return parser.parse_args()
+    parser.add_argument(
+        "--resume",
+        action="store_true",
+        help="Reuse an existing metrics CSV and skip completed configurations.",
+    )
+    args = parser.parse_args()
+    if args.resume and args.overwrite:
+        parser.error("--resume and --overwrite cannot be used together")
+    return args
 
 
 def selected_image_dirs(limit: int = DEFAULT_LIMIT) -> list[Path]:
@@ -209,6 +217,10 @@ def validation_failure_path() -> Path:
     return RESULT_SUBDIRS["robustness"] / f"{OUTPUT_PREFIX}_failure_cases.csv"
 
 
+def failed_config_path(stage: str) -> Path:
+    return RESULT_SUBDIRS["robustness"] / f"{OUTPUT_PREFIX}_{stage}_failed_configs.csv"
+
+
 def figure_paths(stage: str) -> list[Path]:
     if stage == "clean_screen":
         return [
@@ -222,18 +234,47 @@ def figure_paths(stage: str) -> list[Path]:
     ]
 
 
-def prepare_outputs(stage: str, overwrite: bool) -> None:
-    paths = [*stage_paths(stage), *figure_paths(stage)]
+def prepare_outputs(stage: str, overwrite: bool, resume: bool) -> pd.DataFrame:
+    metrics_path, summary_path = stage_paths(stage)
+    paths = [summary_path, *figure_paths(stage), failed_config_path(stage)]
     if stage == "validation":
         paths.append(validation_failure_path())
     existing = [path for path in paths if path.exists()]
-    if not existing:
-        return
-    if not overwrite:
-        joined = "\n".join(str(path) for path in existing)
-        raise FileExistsError(f"Existing outputs found. Use --overwrite to replace them.\n{joined}")
-    for path in existing:
-        path.unlink()
+    if overwrite:
+        for path in [metrics_path, *existing]:
+            if path.exists():
+                path.unlink()
+        return pd.DataFrame()
+    if resume:
+        return pd.read_csv(metrics_path) if metrics_path.exists() else pd.DataFrame()
+    if existing or metrics_path.exists():
+        all_existing = [path for path in [metrics_path, *existing] if path.exists()]
+        joined = "\n".join(str(path) for path in all_existing)
+        raise FileExistsError(f"Existing outputs found. Use --resume or --overwrite.\n{joined}")
+    return pd.DataFrame()
+
+
+def append_failed_config(stage: str, config: Sam2AmgConfig, error: BaseException) -> None:
+    row = {
+        "stage": stage,
+        "config_id": config.config_id,
+        "sweep_group": config.sweep_group,
+        "points_per_side": config.points_per_side,
+        "pred_iou_thresh": config.pred_iou_thresh,
+        "stability_score_thresh": config.stability_score_thresh,
+        "min_mask_region_area": config.min_mask_region_area,
+        "crop_n_layers": config.crop_n_layers,
+        "box_nms_thresh": config.box_nms_thresh,
+        "error_type": type(error).__name__,
+        "error_message": str(error).splitlines()[0],
+    }
+    path = failed_config_path(stage)
+    pd.DataFrame([row]).to_csv(path, mode="a", header=not path.exists(), index=False)
+
+
+def is_cuda_oom(error: BaseException) -> bool:
+    message = str(error).lower()
+    return "out of memory" in message or "cudaerrormemoryallocation" in message
 
 
 def build_generator(config: Sam2AmgConfig, device: str) -> SAM2AutomaticMaskGenerator:
@@ -542,53 +583,88 @@ def save_failure_cases(metrics: pd.DataFrame, summary: pd.DataFrame) -> pd.DataF
     return cases[columns]
 
 
-def run_stage(stage: str, configs: list[Sam2AmgConfig]) -> pd.DataFrame:
+def completed_config_ids(existing_metrics: pd.DataFrame) -> set[str]:
+    if existing_metrics.empty:
+        return set()
+    return set(existing_metrics["config_id"].astype(str).unique())
+
+
+def run_stage(
+    stage: str,
+    configs: list[Sam2AmgConfig],
+    existing_metrics: pd.DataFrame,
+    metrics_path: Path,
+) -> pd.DataFrame:
     device = "cuda" if torch.cuda.is_available() else "cpu"
     perturbations = stage_perturbations(stage)
     image_dirs = selected_image_dirs()
-    rows: list[dict[str, object]] = []
+    frames: list[pd.DataFrame] = []
+    if not existing_metrics.empty:
+        frames.append(existing_metrics)
+    done_configs = completed_config_ids(existing_metrics)
     autocast_enabled = device == "cuda"
 
     with torch.inference_mode(), torch.autocast("cuda", dtype=torch.bfloat16, enabled=autocast_enabled):
         for config in configs:
-            generator = build_generator(config, device)
-            for image_dir in image_dirs:
-                image_id, image, truth = load_train_example(image_dir)
-                for perturbation_index, perturbation in enumerate(perturbations):
-                    perturbed = apply_perturbation(image, perturbation)
-                    start = time.perf_counter()
-                    prediction, raw_amg_masks = predict_with_raw_count(generator, perturbed)
-                    latency_ms = (time.perf_counter() - start) * 1000
-                    rows.append(
-                        row_for_prediction(
-                            image_id=image_id,
-                            config=config,
-                            perturbation=perturbation,
-                            perturbation_index=perturbation_index,
-                            latency_ms=latency_ms,
-                            raw_amg_masks=raw_amg_masks,
-                            truth=truth,
-                            prediction=prediction,
+            if config.config_id in done_configs:
+                print(f"Skipping completed config {config.config_id}", flush=True)
+                continue
+
+            rows: list[dict[str, object]] = []
+            try:
+                generator = build_generator(config, device)
+                for image_dir in image_dirs:
+                    image_id, image, truth = load_train_example(image_dir)
+                    for perturbation_index, perturbation in enumerate(perturbations):
+                        perturbed = apply_perturbation(image, perturbation)
+                        start = time.perf_counter()
+                        prediction, raw_amg_masks = predict_with_raw_count(generator, perturbed)
+                        latency_ms = (time.perf_counter() - start) * 1000
+                        rows.append(
+                            row_for_prediction(
+                                image_id=image_id,
+                                config=config,
+                                perturbation=perturbation,
+                                perturbation_index=perturbation_index,
+                                latency_ms=latency_ms,
+                                raw_amg_masks=raw_amg_masks,
+                                truth=truth,
+                                prediction=prediction,
+                            )
                         )
-                    )
+            except Exception as error:
+                if not is_cuda_oom(error):
+                    raise
+                append_failed_config(stage, config, error)
+                print(f"Recorded CUDA OOM for config {config.config_id}", flush=True)
+                if device == "cuda":
+                    torch.cuda.empty_cache()
+                continue
+
+            config_frame = pd.DataFrame(rows)
+            frames.append(config_frame)
+            pd.concat(frames, ignore_index=True).to_csv(metrics_path, index=False)
+            print(f"Wrote partial metrics through {config.config_id}", flush=True)
             if device == "cuda":
                 torch.cuda.empty_cache()
-    return pd.DataFrame(rows)
+    return pd.concat(frames, ignore_index=True) if frames else pd.DataFrame()
 
 
 def main() -> None:
     args = parse_args()
     ensure_output_dirs()
-    prepare_outputs(args.stage, args.overwrite)
+    existing_metrics = prepare_outputs(args.stage, args.overwrite, args.resume)
 
     if args.stage == "clean_screen":
         configs = clean_screen_configs()
     else:
         configs = validation_configs(args.top_k)
 
-    metrics = run_stage(args.stage, configs)
-    summary = summarize(metrics)
     metrics_path, summary_path = stage_paths(args.stage)
+    metrics = run_stage(args.stage, configs, existing_metrics, metrics_path)
+    if metrics.empty:
+        raise RuntimeError("No metrics were produced or loaded")
+    summary = summarize(metrics)
     metrics.to_csv(metrics_path, index=False)
     summary.to_csv(summary_path, index=False)
 
