@@ -272,9 +272,25 @@ def append_failed_config(stage: str, config: Sam2AmgConfig, error: BaseException
     pd.DataFrame([row]).to_csv(path, mode="a", header=not path.exists(), index=False)
 
 
+def failed_config_ids(stage: str) -> set[str]:
+    path = failed_config_path(stage)
+    if not path.exists():
+        return set()
+    return set(pd.read_csv(path)["config_id"].astype(str).unique())
+
+
 def is_cuda_oom(error: BaseException) -> bool:
     message = str(error).lower()
     return "out of memory" in message or "cudaerrormemoryallocation" in message
+
+
+def try_empty_cuda_cache() -> None:
+    if not torch.cuda.is_available():
+        return
+    try:
+        torch.cuda.empty_cache()
+    except Exception as error:
+        print(f"Skipping CUDA cache cleanup after error: {type(error).__name__}", flush=True)
 
 
 def build_generator(config: Sam2AmgConfig, device: str) -> SAM2AutomaticMaskGenerator:
@@ -602,12 +618,16 @@ def run_stage(
     if not existing_metrics.empty:
         frames.append(existing_metrics)
     done_configs = completed_config_ids(existing_metrics)
+    skipped_failed_configs = failed_config_ids(stage)
     autocast_enabled = device == "cuda"
 
     with torch.inference_mode(), torch.autocast("cuda", dtype=torch.bfloat16, enabled=autocast_enabled):
         for config in configs:
             if config.config_id in done_configs:
                 print(f"Skipping completed config {config.config_id}", flush=True)
+                continue
+            if config.config_id in skipped_failed_configs:
+                print(f"Skipping previously failed config {config.config_id}", flush=True)
                 continue
 
             rows: list[dict[str, object]] = []
@@ -637,16 +657,14 @@ def run_stage(
                     raise
                 append_failed_config(stage, config, error)
                 print(f"Recorded CUDA OOM for config {config.config_id}", flush=True)
-                if device == "cuda":
-                    torch.cuda.empty_cache()
+                try_empty_cuda_cache()
                 continue
 
             config_frame = pd.DataFrame(rows)
             frames.append(config_frame)
             pd.concat(frames, ignore_index=True).to_csv(metrics_path, index=False)
             print(f"Wrote partial metrics through {config.config_id}", flush=True)
-            if device == "cuda":
-                torch.cuda.empty_cache()
+            try_empty_cuda_cache()
     return pd.concat(frames, ignore_index=True) if frames else pd.DataFrame()
 
 
