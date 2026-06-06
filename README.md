@@ -332,7 +332,7 @@ Implemented PoW artifacts:
 4. clean-subset comparison and failure-case tables in `results/baselines/`, with comparison figures in `figures/`;
 5. small Otsu-only and three-baseline perturbation smoke tests, a 20-image clean-subset robustness extension, staged Otsu/Cellpose-SAM full-train robustness runs, and SAM2 AMG clean20 parameter-sensitivity results in `results/robustness/`;
 6. root-level `technical_memo.md` with current summaries and limitations;
-7. PoW support docs under `docs/`, including data, environment, output contract, experiment plan, checklist, failure taxonomy, and findings.
+7. PoW support docs under `docs/`, including data, environment, output contract, experiment plan, checklist, failure taxonomy, findings, and stage report.
 
 Near-term next steps:
 
