@@ -252,7 +252,7 @@ The analysis is expected to focus on questions such as:
 
 * whether Cellpose-SAM shows smaller robustness drops under the perturbations associated with its documented robustness claims;
 * whether SAM2 automatic mask generation fails mainly through missed objects, false positives, over-segmentation, or under-segmentation in dense microscopy images;
-* whether SAM2 AMG quality improves under a small future parameter-sensitivity check, for example grid density, IoU threshold, stability threshold, minimum mask area, and optional post-processing support;
+* whether simple SAM2 AMG parameter changes repair the clean20 perturbation failure pattern;
 * whether optional cross-version Cellpose3 baselines are worth adding after the PoW path is stable;
 * how much supervised fine-tuning improves performance relative to the zero-shot methods, given the recorded training budget;
 * whether VLM segmentation failures are dominated by output validity, JSON parsing, empty outputs, count errors, or mask overlap quality;
@@ -330,15 +330,15 @@ Implemented PoW artifacts:
 2. shared instance-mask metrics and visualization helpers under `src/`;
 3. clean-subset baselines for Otsu + watershed, Cellpose-SAM / `cpsam`, and SAM2 AMG;
 4. clean-subset comparison and failure-case tables in `results/baselines/`, with comparison figures in `figures/`;
-5. small Otsu-only and three-baseline perturbation smoke tests, a 20-image clean-subset robustness extension, and staged Otsu/Cellpose-SAM full-train robustness runs in `results/robustness/`;
+5. small Otsu-only and three-baseline perturbation smoke tests, a 20-image clean-subset robustness extension, staged Otsu/Cellpose-SAM full-train robustness runs, and SAM2 AMG clean20 parameter-sensitivity results in `results/robustness/`;
 6. root-level `technical_memo.md` with current summaries and limitations;
 7. PoW support docs under `docs/`, including data, environment, output contract, experiment plan, checklist, failure taxonomy, and findings.
 
 Near-term next steps:
 
 1. keep the current PoW mainline focused on the completed zero-shot robustness artifacts;
-2. keep SAM2 AMG full-train robustness deferred unless parameter sensitivity or post-processing repair changes the clean20 failure pattern;
-3. optionally add a small SAM2 AMG parameter-sensitivity smoke test;
+2. keep SAM2 AMG full-train robustness deferred because clean20 parameter sensitivity did not repair the failure pattern;
+3. treat any further SAM2 work as a different protocol, such as prompted SAM2 or post-processing repair;
 4. keep legacy Cellpose3 `cyto3` and one-click restoration as optional cross-version work;
 5. keep YOLO fine-tuning and VLM segmentation as separate protocols, not part of the zero-shot ranking.
 

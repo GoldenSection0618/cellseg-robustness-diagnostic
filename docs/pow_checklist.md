@@ -87,12 +87,15 @@ proof-of-work benchmark.
 - [x] SAM2 AMG full-train robustness deferred pending parameter-sensitivity or post-processing work.
 - [x] Full-train per-image deltas, failure cases, and no-prediction cases written to `results/robustness/`.
 - [x] Full-train F1-drop distribution, worst-drop, and failure-hint figures written to `figures/`.
+- [x] SAM2 AMG clean20 parameter-sensitivity clean-screen run completed.
+- [x] SAM2 AMG clean20 parameter-sensitivity validation run completed.
+- [x] SAM2 AMG sensitivity metrics, failed-config record, failure cases, and figures written.
 
 ## Later Protocols After PoW Clean Baselines
 
 - [ ] Optional Cellpose3 default cross-version protocol.
 - [ ] Optional Cellpose3 restoration cross-version protocol.
 - [ ] Optional Cellpose-SAM protocol refinements after the current full-train run.
-- [ ] Optional SAM2 AMG parameter-sensitivity smoke test.
+- [ ] Optional prompted SAM2 or SAM2 post-processing repair protocol.
 - [ ] YOLO-seg supervised adaptation protocol.
 - [ ] Gemini output-validity protocol.

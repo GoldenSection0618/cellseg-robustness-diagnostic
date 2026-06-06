@@ -152,6 +152,30 @@ collapse under all tested perturbations. The next SAM2 step should be parameter
 sensitivity or post-processing repair, not a full-train run with the current AMG
 settings.
 
+## Phase 11: SAM2 AMG Parameter Sensitivity
+
+Goal: test whether simple SAM2 AMG parameter changes can repair the clean20
+perturbation collapse before considering any full-train SAM2 run.
+
+Generated outputs:
+
+- `results/robustness/sam2_amg_sensitivity_clean20_clean_screen_metrics.csv`
+- `results/robustness/sam2_amg_sensitivity_clean20_clean_screen_summary.csv`
+- `results/robustness/sam2_amg_sensitivity_clean20_clean_screen_failed_configs.csv`
+- `results/robustness/sam2_amg_sensitivity_clean20_validation_metrics.csv`
+- `results/robustness/sam2_amg_sensitivity_clean20_validation_summary.csv`
+- `results/robustness/sam2_amg_sensitivity_clean20_failure_cases.csv`
+- `figures/robustness_sam2_amg_sensitivity_clean20_clean_screen_f1.png`
+- `figures/robustness_sam2_amg_sensitivity_clean20_clean_screen_counts.png`
+- `figures/robustness_sam2_amg_sensitivity_clean20_mean_f1.png`
+- `figures/robustness_sam2_amg_sensitivity_clean20_zero_pred_rate.png`
+- `figures/robustness_sam2_amg_sensitivity_clean20_count_error.png`
+
+Result: the sensitivity run does not justify expanding SAM2 AMG to full_train.
+`stability_score_thresh_0.95` is the best clean setting, but blur and downsample
+remain near collapse and Gaussian noise remains weak. The future SAM2 path should
+change protocol, not scale the current AMG settings.
+
 ## Optional Cross-Version Cellpose Work
 
 Legacy Cellpose3 `cyto3` and one-click restoration are not required for the current
@@ -172,6 +196,6 @@ These protocols should stay separate from the clean zero-shot baseline track:
 - optional Cellpose3 default cross-version protocol;
 - optional Cellpose3 restoration cross-version protocol;
 - optional Cellpose-SAM protocol refinements after the current full-train run;
-- optional SAM2 AMG parameter-sensitivity smoke test;
+- optional prompted SAM2 or SAM2 post-processing repair protocol;
 - YOLO-seg small-label supervised adaptation;
 - Gemini segmentation output-validity checks.

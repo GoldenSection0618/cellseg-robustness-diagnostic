@@ -362,6 +362,57 @@ collapse under the tested perturbations, with relative object-F1 drops of 98.8% 
 lower information gain than first testing SAM2 parameter sensitivity or repairing
 the optional post-processing path.
 
+## SAM2 AMG Parameter Sensitivity
+
+The SAM2 AMG parameter-sensitivity experiment has now been run on the deterministic
+clean20 subset. It remains a zero-shot AMG experiment: no manual prompts and no
+ground-truth-derived prompts are used.
+
+Generated outputs:
+
+- `results/robustness/sam2_amg_sensitivity_clean20_clean_screen_metrics.csv`
+- `results/robustness/sam2_amg_sensitivity_clean20_clean_screen_summary.csv`
+- `results/robustness/sam2_amg_sensitivity_clean20_clean_screen_failed_configs.csv`
+- `results/robustness/sam2_amg_sensitivity_clean20_validation_metrics.csv`
+- `results/robustness/sam2_amg_sensitivity_clean20_validation_summary.csv`
+- `results/robustness/sam2_amg_sensitivity_clean20_failure_cases.csv`
+- `figures/robustness_sam2_amg_sensitivity_clean20_clean_screen_f1.png`
+- `figures/robustness_sam2_amg_sensitivity_clean20_clean_screen_counts.png`
+- `figures/robustness_sam2_amg_sensitivity_clean20_mean_f1.png`
+- `figures/robustness_sam2_amg_sensitivity_clean20_zero_pred_rate.png`
+- `figures/robustness_sam2_amg_sensitivity_clean20_count_error.png`
+
+The clean-only screen evaluated 15 runnable configurations. `points_per_side_64`
+was recorded as a CUDA out-of-memory configuration on this machine and was excluded
+from the clean-screen summary. The best clean-screen setting was
+`stability_score_thresh_0.95`, with mean object F1 0.4190 versus 0.3683 for the
+current default. `points_per_side_32` reached 0.3894, and `crop_n_layers_1` reached
+0.3827 but was much slower.
+
+The validation stage carried the top five clean-screen configurations plus the
+current default across the same five clean20 conditions. Validation produced 600
+metric rows and 30 summary rows. It recorded zero no-prediction rows, so the main
+failure is not that AMG returns no masks; it returns masks that do not match the
+cell instances well under several perturbations.
+
+Validation summary:
+
+| Config | Clean F1 | Noise F1 | Blur F1 | Downsample F1 | Inversion F1 |
+| --- | ---: | ---: | ---: | ---: | ---: |
+| `stability_score_thresh_0.95` | 0.4190 | 0.1252 | 0.0286 | 0.0313 | 0.5676 |
+| `points_per_side_32` | 0.3894 | 0.1700 | 0.0145 | 0.0272 | 0.5021 |
+| `crop_n_layers_1` | 0.3827 | 0.1489 | 0.0334 | 0.0425 | 0.5176 |
+| `box_nms_thresh_0.5` | 0.3806 | 0.1800 | 0.0214 | 0.0618 | 0.5026 |
+| `points_per_side_16` | 0.3688 | 0.1867 | 0.0122 | 0.0377 | 0.4690 |
+| `default_current` | 0.3683 | 0.1799 | 0.0213 | 0.0310 | 0.4996 |
+
+This sensitivity result does not change the SAM2 full-train decision. The best clean
+setting improves clean F1 modestly, and contrast inversion often scores higher than
+clean, but Gaussian noise remains weak and blur/downsample remain near collapse.
+The next SAM2 work should therefore be a different protocol, such as prompted SAM2,
+post-processing repair, or a separate checkpoint/runtime investigation, not
+full_train execution of the current AMG family.
+
 ## Output Contract
 
 Experiment and analysis scripts should write:
@@ -390,5 +441,6 @@ subdivided into nested folders.
 This memo tracks proof-of-work engineering progress. It is not a final paper-style
 report. The current robustness conclusions apply to the completed PoW scope:
 clean-subset baselines, clean20 robustness, and staged Otsu/Cellpose-SAM full-train
-robustness. Supervised YOLO, VLM output validity, Cellpose3 cross-version baselines,
-and SAM2 parameter-sensitivity work remain separate future protocols.
+robustness, plus SAM2 AMG clean20 parameter sensitivity. Supervised YOLO, VLM output
+validity, Cellpose3 cross-version baselines, prompted SAM2, and SAM2 post-processing
+repair remain separate future protocols.
