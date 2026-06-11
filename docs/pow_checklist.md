@@ -97,5 +97,14 @@ proof-of-work benchmark.
 - [ ] Optional Cellpose3 restoration cross-version protocol.
 - [ ] Optional Cellpose-SAM protocol refinements after the current full-train run.
 - [ ] Optional prompted SAM2 or SAM2 post-processing repair protocol.
-- [ ] YOLO-seg supervised adaptation protocol.
 - [ ] Gemini output-validity protocol.
+
+## Protocol B: YOLO Supervised Adaptation
+
+- [x] Supervised adaptation protocol documented.
+- [x] DSB2018-to-YOLO segmentation label-conversion smoke script implemented.
+- [x] Deterministic 20-image YOLO label smoke completed.
+- [x] YOLO label smoke manifest, summary, labels, data YAML, and overlay figure written.
+- [ ] Tiny YOLO training smoke.
+- [ ] YOLO prediction-to-repository-metrics evaluation smoke.
+- [ ] Full supervised baseline.

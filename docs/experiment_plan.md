@@ -199,3 +199,29 @@ These protocols should stay separate from the clean zero-shot baseline track:
 - optional prompted SAM2 or SAM2 post-processing repair protocol;
 - YOLO-seg small-label supervised adaptation;
 - Gemini segmentation output-validity checks.
+
+## Protocol B: YOLO Supervised Adaptation
+
+Goal: evaluate how much target-domain supervised training can improve over the
+zero-shot baselines without mixing results into the zero-shot ranking.
+
+Current completed setup step:
+
+- `docs/supervised_protocol.md`
+- `scripts/prepare_yolo_label_smoke.py`
+- `results/supervised/yolo_label_smoke/labels/*.txt`
+- `results/supervised/yolo_label_smoke/images.txt`
+- `results/supervised/yolo_label_smoke/train.txt`
+- `results/supervised/yolo_label_smoke/val.txt`
+- `results/supervised/yolo_label_smoke/data.yaml`
+- `results/supervised/yolo_label_smoke_manifest.csv`
+- `results/supervised/yolo_label_smoke_summary.csv`
+- `figures/supervised_yolo_label_smoke_overlays.png`
+
+The label-conversion smoke uses the deterministic 20-image subset. It converts 990
+instances to YOLO segmentation polygons with zero dropped instances; two tiny
+instances use the documented rectangle fallback.
+
+Next Protocol B step: inspect the overlay figure and then run a tiny YOLO training
+smoke. Do not run a full supervised baseline until the tiny train/predict/evaluate
+loop is verified.

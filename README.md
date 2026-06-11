@@ -309,7 +309,9 @@ VLM-based segmentation is included as an exploratory protocol. The focus is not 
 * [Ultralytics YOLO segmentation documentation](https://docs.ultralytics.com/tasks/segment/)
 * [Ultralytics YOLO11 documentation](https://docs.ultralytics.com/models/yolo11/)
 
-YOLO-seg is planned as a supervised real-time segmentation baseline, not as a zero-shot method. It will be evaluated under a separate fine-tuning protocol if implementation time allows.
+YOLO-seg is tracked as a supervised real-time segmentation baseline, not as a
+zero-shot method. Protocol B has started with a DSB2018-to-YOLO label-conversion
+smoke test; supervised training has not started yet.
 
 ### Classical Segmentation Baselines
 
@@ -331,8 +333,9 @@ Implemented PoW artifacts:
 3. clean-subset baselines for Otsu + watershed, Cellpose-SAM / `cpsam`, and SAM2 AMG;
 4. clean-subset comparison and failure-case tables in `results/baselines/`, with comparison figures in `figures/`;
 5. small Otsu-only and three-baseline perturbation smoke tests, a 20-image clean-subset robustness extension, staged Otsu/Cellpose-SAM full-train robustness runs, and SAM2 AMG clean20 parameter-sensitivity results in `results/robustness/`;
-6. root-level `technical_memo.md` with current summaries and limitations;
-7. PoW support docs under `docs/`, including data, environment, output contract, experiment plan, checklist, failure taxonomy, findings, and stage report.
+6. YOLO supervised adaptation protocol and a 20-image label-conversion smoke test in `results/supervised/`;
+7. root-level `technical_memo.md` with current summaries and limitations;
+8. PoW support docs under `docs/`, including data, environment, supervised protocol, output contract, experiment plan, checklist, failure taxonomy, findings, and stage report.
 
 Near-term next steps:
 
@@ -340,7 +343,7 @@ Near-term next steps:
 2. keep SAM2 AMG full-train robustness deferred because clean20 parameter sensitivity did not repair the failure pattern;
 3. treat any further SAM2 work as a different protocol, such as prompted SAM2 or post-processing repair;
 4. keep legacy Cellpose3 `cyto3` and one-click restoration as optional cross-version work;
-5. keep YOLO fine-tuning and VLM segmentation as separate protocols, not part of the zero-shot ranking.
+5. run a tiny YOLO supervised training smoke only after the label-conversion outputs have been inspected.
 
 ## Reproducibility Principles
 
