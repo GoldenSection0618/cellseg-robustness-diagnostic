@@ -1,13 +1,19 @@
 # Local datasets and downloaded archives
 data/
 
+# Local model weights downloaded outside source control
+model_assets/
+
 # Python caches
 __pycache__/
 *.py[cod]
+*.cache
+
+# Reproducible trainer internals; summaries are tracked separately.
+results/supervised/yolo_tiny_train_smoke_run/
 
 # ide specific files
 .idea/
 *.iml
 .vscode/
 *.code-workspace
-

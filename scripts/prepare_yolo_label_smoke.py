@@ -76,7 +76,9 @@ def prepare_output_dir(overwrite: bool) -> Path:
         RESULT_SUBDIRS["supervised"] / f"{OUTPUT_NAME}_summary.csv",
         FIGURES_DIR / "supervised_yolo_label_smoke_overlays.png",
     ]
+    images_dir = root / "images"
     labels_dir = root / "labels"
+    existing.extend(images_dir.glob("*.png") if images_dir.exists() else [])
     existing.extend(labels_dir.glob("*.txt") if labels_dir.exists() else [])
     existing = [path for path in existing if path.exists()]
     if existing and not overwrite:
@@ -85,6 +87,7 @@ def prepare_output_dir(overwrite: bool) -> Path:
     if overwrite:
         for path in existing:
             path.unlink()
+    images_dir.mkdir(parents=True, exist_ok=True)
     labels_dir.mkdir(parents=True, exist_ok=True)
     return root
 
@@ -169,7 +172,7 @@ def labels_for_mask(mask: np.ndarray) -> tuple[list[str], list[dict[str, object]
 def save_image_list(path: Path, image_paths: list[Path]) -> None:
     with path.open("w", encoding="utf-8") as handle:
         for path in image_paths:
-            handle.write(f"{path.resolve()}\n")
+            handle.write(f"{path.absolute().as_posix()}\n")
 
 
 def save_data_yaml(root: Path) -> None:
@@ -184,6 +187,13 @@ def save_data_yaml(root: Path) -> None:
         ]
     )
     (root / "data.yaml").write_text(text, encoding="utf-8")
+
+
+def link_image(source: Path, destination: Path) -> None:
+    if destination.exists() or destination.is_symlink():
+        destination.unlink()
+    relative_source = os.path.relpath(source.resolve(), start=destination.parent.resolve())
+    destination.symlink_to(relative_source)
 
 
 def polygon_overlay(image: np.ndarray, mask: np.ndarray) -> np.ndarray:
@@ -228,6 +238,7 @@ def main() -> None:
     args = parse_args()
     ensure_output_dirs()
     root = prepare_output_dir(args.overwrite)
+    images_dir = root / "images"
     labels_dir = root / "labels"
     image_dirs = selected_image_dirs(args.limit)
     splits = split_names(image_dirs, args.train_fraction)
@@ -244,11 +255,13 @@ def main() -> None:
         label_path = labels_dir / f"{image_id}.txt"
         label_path.write_text("\n".join(rows) + ("\n" if rows else ""), encoding="utf-8")
         source_image_path = image_path_from_dir(image_dir)
-        image_paths.append(source_image_path)
+        yolo_image_path = images_dir / f"{image_id}.png"
+        link_image(source_image_path, yolo_image_path)
+        image_paths.append(yolo_image_path)
         if splits[image_id] == "train":
-            train_image_paths.append(source_image_path)
+            train_image_paths.append(yolo_image_path)
         else:
-            val_image_paths.append(source_image_path)
+            val_image_paths.append(yolo_image_path)
         if len(overlay_examples) < 6:
             overlay_examples.append((image_id, image, mask))
         converted_count = sum(1 for stat in polygon_stats if stat["converted"])
@@ -258,7 +271,8 @@ def main() -> None:
             {
                 "split": splits[image_id],
                 "image_id": image_id,
-                "image_path": source_image_path.as_posix(),
+                "source_image_path": source_image_path.as_posix(),
+                "image_path": yolo_image_path.relative_to(REPO_ROOT).as_posix(),
                 "label_path": label_path.relative_to(REPO_ROOT).as_posix(),
                 "image_height": int(mask.shape[0]),
                 "image_width": int(mask.shape[1]),

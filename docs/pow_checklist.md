@@ -105,6 +105,6 @@ proof-of-work benchmark.
 - [x] DSB2018-to-YOLO segmentation label-conversion smoke script implemented.
 - [x] Deterministic 20-image YOLO label smoke completed.
 - [x] YOLO label smoke manifest, summary, labels, data YAML, and overlay figure written.
-- [ ] Tiny YOLO training smoke.
+- [x] Tiny YOLO training smoke.
 - [ ] YOLO prediction-to-repository-metrics evaluation smoke.
 - [ ] Full supervised baseline.

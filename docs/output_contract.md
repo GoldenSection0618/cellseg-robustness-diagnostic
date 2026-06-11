@@ -30,6 +30,8 @@ results/robustness/pow_baseline_robustness_full_train_failure_cases.csv
 results/robustness/pow_baseline_robustness_full_train_no_prediction_cases.csv
 results/supervised/yolo_label_smoke_manifest.csv
 results/supervised/yolo_label_smoke_summary.csv
+results/supervised/yolo_tiny_train_smoke_metadata.csv
+results/supervised/yolo_tiny_train_smoke_summary.csv
 ```
 
 Initial result categories:

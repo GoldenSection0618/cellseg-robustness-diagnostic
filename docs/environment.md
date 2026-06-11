@@ -29,7 +29,7 @@ Install the segmentation, supervised training, and API packages:
 ```bash
 conda run -n cell python -m pip install --retries 10 --timeout 120 \
   cellpose==4.1.1 sam2==1.1.0 ultralytics ultralytics-thop \
-  google-genai transformers
+  pi-heif google-genai transformers
 ```
 
 ## Verification

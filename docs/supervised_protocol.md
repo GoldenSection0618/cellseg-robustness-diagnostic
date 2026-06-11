@@ -105,3 +105,21 @@ reuse the repository's existing object-level metrics:
 The first training run should be a tiny smoke run. A full supervised baseline should
 only run after label conversion, prediction export, and metric conversion are all
 verified.
+
+## Tiny Training Smoke
+
+The tiny training smoke should use pretrained YOLO segmentation weights when network
+access is available. Store downloaded YOLO weights under `model_assets/yolo/`, which
+is not tracked by git.
+
+Expected tracked outputs:
+
+- `results/supervised/yolo_tiny_train_smoke_metadata.csv`
+- `results/supervised/yolo_tiny_train_smoke_summary.csv`
+
+Ultralytics trainer internals, including checkpoints, are reproducible smoke
+artifacts and are ignored under `results/supervised/yolo_tiny_train_smoke_run/`.
+
+The completed smoke used `model_assets/yolo/yolo11n-seg.pt`, 16 train images, 4 val
+images, 1 epoch, `imgsz=256`, `batch=2`, CUDA, and AMP disabled. Validation saw 375
+instances, confirming that the YOLO label path is wired correctly.

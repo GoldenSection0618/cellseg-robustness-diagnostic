@@ -225,3 +225,14 @@ instances use the documented rectangle fallback.
 Next Protocol B step: inspect the overlay figure and then run a tiny YOLO training
 smoke. Do not run a full supervised baseline until the tiny train/predict/evaluate
 loop is verified.
+
+Tiny YOLO training smoke outputs:
+
+- `scripts/run_yolo_tiny_train_smoke.py`
+- `results/supervised/yolo_tiny_train_smoke_metadata.csv`
+- `results/supervised/yolo_tiny_train_smoke_summary.csv`
+
+The tiny smoke used pretrained `yolo11n-seg.pt` from `model_assets/yolo/`, 1 epoch,
+`imgsz=256`, `batch=2`, and the 16/4 train/val split from the label smoke. It is a
+pipeline check, not a supervised baseline result. The next Protocol B step is
+prediction export and conversion back to repository instance metrics.
