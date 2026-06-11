@@ -123,3 +123,18 @@ artifacts and are ignored under `results/supervised/yolo_tiny_train_smoke_run/`.
 The completed smoke used `model_assets/yolo/yolo11n-seg.pt`, 16 train images, 4 val
 images, 1 epoch, `imgsz=256`, `batch=2`, CUDA, and AMP disabled. Validation saw 375
 instances, confirming that the YOLO label path is wired correctly.
+
+## Tiny Evaluation Smoke
+
+The tiny evaluation smoke converts YOLO predictions back to labeled instance masks
+and evaluates them with the same repository metrics used by the zero-shot protocols.
+
+Expected tracked outputs:
+
+- `results/supervised/yolo_tiny_train_smoke_metrics.csv`
+- `results/supervised/yolo_tiny_train_smoke_eval_summary.csv`
+- `figures/supervised_yolo_tiny_train_smoke_overlays.png`
+
+The completed 1-epoch tiny model predicts masks, but they do not match cell
+instances well: mean object F1 is 0.0 on the four-image validation smoke. This is a
+pipeline check, not a supervised baseline performance claim.

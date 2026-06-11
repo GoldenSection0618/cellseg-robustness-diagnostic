@@ -236,3 +236,16 @@ The tiny smoke used pretrained `yolo11n-seg.pt` from `model_assets/yolo/`, 1 epo
 `imgsz=256`, `batch=2`, and the 16/4 train/val split from the label smoke. It is a
 pipeline check, not a supervised baseline result. The next Protocol B step is
 prediction export and conversion back to repository instance metrics.
+
+Tiny YOLO prediction evaluation outputs:
+
+- `scripts/evaluate_yolo_tiny_train_smoke.py`
+- `results/supervised/yolo_tiny_train_smoke_metrics.csv`
+- `results/supervised/yolo_tiny_train_smoke_eval_summary.csv`
+- `figures/supervised_yolo_tiny_train_smoke_overlays.png`
+
+The evaluation smoke confirms that YOLO predictions can be converted back to
+repository instance masks and scored with object F1, precision, recall, matched IoU,
+Dice, and count error. The 1-epoch smoke model has mean object F1 0.0 on the four
+validation images, so this is only a pipeline check. The next Protocol B decision is
+whether to run a longer supervised baseline with a fixed training budget.
