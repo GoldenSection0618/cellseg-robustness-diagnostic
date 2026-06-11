@@ -138,3 +138,41 @@ Expected tracked outputs:
 The completed 1-epoch tiny model predicts masks, but they do not match cell
 instances well: mean object F1 is 0.0 on the four-image validation smoke. This is a
 pipeline check, not a supervised baseline performance claim.
+
+## Fixed YOLO Baseline Decision
+
+The first full Protocol B baseline should be a small-label YOLO baseline, not a
+full-label training run. This matches the README question: how much task-specific
+supervised adaptation can buy when only a small labeled split is available.
+
+Fixed dataset policy:
+
+- source data: all 670 `stage1_train` images;
+- deterministic stable-order 80/20 pool split;
+- validation pool: held-out 20% of `stage1_train` images, expected 134 images;
+- training budget: 100 labeled images sampled evenly from the 80% training pool;
+- no validation images used for training or training-budget selection.
+
+Fixed training budget:
+
+- model: `model_assets/yolo/yolo11n-seg.pt`;
+- task: segmentation;
+- epochs: 50;
+- image size: 512;
+- batch size: 4, reduced only if CUDA memory requires it;
+- workers: 0 for reproducibility in this environment;
+- AMP: disabled, matching the smoke path and avoiding extra Ultralytics downloads;
+- optimizer and augmentation: Ultralytics defaults unless explicitly recorded;
+- early stopping: disabled for the first baseline by setting patience equal to the
+  epoch budget, so the run uses the declared fixed budget.
+
+Fixed evaluation:
+
+- predict on the held-out validation pool;
+- convert YOLO masks back to repository labeled instance masks;
+- report object F1, precision, recall, matched IoU, Dice, count error, and latency;
+- compare against zero-shot baselines only on the same held-out validation image ids.
+
+This baseline is intentionally modest. It is large enough to test whether supervised
+adaptation changes the conclusion, but small enough to stay aligned with the
+diagnostic, small-scale scope of the repository.

@@ -249,3 +249,17 @@ repository instance masks and scored with object F1, precision, recall, matched 
 Dice, and count error. The 1-epoch smoke model has mean object F1 0.0 on the four
 validation images, so this is only a pipeline check. The next Protocol B decision is
 whether to run a longer supervised baseline with a fixed training budget.
+
+Fixed baseline decision:
+
+- train on 100 labeled images sampled evenly from the deterministic 80% training
+  pool of `stage1_train`;
+- validate on the held-out 20% pool, expected 134 images;
+- use pretrained `model_assets/yolo/yolo11n-seg.pt`;
+- train for 50 epochs at `imgsz=512`, `batch=4`, `workers=0`, AMP disabled, and
+  patience set to the epoch budget;
+- evaluate with repository instance metrics on the same held-out validation ids;
+- compare supervised and zero-shot methods only on that same validation image set.
+
+Next implementation step: create the full Protocol B split/label conversion script
+for this fixed budget, then run the YOLO supervised baseline.

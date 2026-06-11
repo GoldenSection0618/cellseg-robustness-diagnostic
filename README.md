@@ -310,8 +310,8 @@ VLM-based segmentation is included as an exploratory protocol. The focus is not 
 * [Ultralytics YOLO11 documentation](https://docs.ultralytics.com/models/yolo11/)
 
 YOLO-seg is tracked as a supervised real-time segmentation baseline, not as a
-zero-shot method. Protocol B has started with a DSB2018-to-YOLO label-conversion
-smoke test; supervised training has not started yet.
+zero-shot method. Protocol B has completed label-conversion, tiny training, and
+tiny evaluation smokes. The fixed-budget full supervised baseline has not run yet.
 
 ### Classical Segmentation Baselines
 
@@ -343,7 +343,7 @@ Near-term next steps:
 2. keep SAM2 AMG full-train robustness deferred because clean20 parameter sensitivity did not repair the failure pattern;
 3. treat any further SAM2 work as a different protocol, such as prompted SAM2 or post-processing repair;
 4. keep legacy Cellpose3 `cyto3` and one-click restoration as optional cross-version work;
-5. decide the fixed YOLO training budget before running a full supervised baseline.
+5. implement the fixed-budget YOLO supervised baseline and evaluate it on a held-out validation split.
 
 ## Reproducibility Principles
 

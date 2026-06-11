@@ -107,4 +107,5 @@ proof-of-work benchmark.
 - [x] YOLO label smoke manifest, summary, labels, data YAML, and overlay figure written.
 - [x] Tiny YOLO training smoke.
 - [x] YOLO prediction-to-repository-metrics evaluation smoke.
+- [x] Fixed YOLO supervised baseline budget decided.
 - [ ] Full supervised baseline.
