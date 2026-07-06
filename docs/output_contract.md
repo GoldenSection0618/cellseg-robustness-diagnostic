@@ -45,6 +45,11 @@ results/supervised/yolo_fixed_budget_val_comparison_metrics.csv
 results/supervised/yolo_fixed_budget_val_comparison_summary.csv
 results/supervised/yolo_threshold_diagnostic_metrics.csv
 results/supervised/yolo_threshold_diagnostic_summary.csv
+results/supervised/yolo_label_budget_diagnostic_manifest.csv
+results/supervised/yolo_label_budget_diagnostic_split.csv
+results/supervised/yolo_label_budget_diagnostic_summary.csv
+results/supervised/yolo_label_budget_diagnostic/budget_250/
+results/supervised/yolo_label_budget_diagnostic/full_train_pool/
 ```
 
 Initial result categories:

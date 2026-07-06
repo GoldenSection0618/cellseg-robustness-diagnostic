@@ -285,6 +285,7 @@ Fixed-budget supervised baseline outputs:
 - `scripts/evaluate_yolo_fixed_budget.py`
 - `scripts/summarize_yolo_fixed_budget_comparison.py`
 - `scripts/run_yolo_threshold_diagnostic.py`
+- `scripts/prepare_yolo_label_budget_diagnostic.py`
 - `results/supervised/yolo_fixed_budget_train_metadata.csv`
 - `results/supervised/yolo_fixed_budget_train_summary.csv`
 - `results/supervised/yolo_fixed_budget_metrics.csv`
@@ -293,6 +294,11 @@ Fixed-budget supervised baseline outputs:
 - `results/supervised/yolo_fixed_budget_val_comparison_summary.csv`
 - `results/supervised/yolo_threshold_diagnostic_metrics.csv`
 - `results/supervised/yolo_threshold_diagnostic_summary.csv`
+- `results/supervised/yolo_label_budget_diagnostic_manifest.csv`
+- `results/supervised/yolo_label_budget_diagnostic_split.csv`
+- `results/supervised/yolo_label_budget_diagnostic_summary.csv`
+- `results/supervised/yolo_label_budget_diagnostic/budget_250/`
+- `results/supervised/yolo_label_budget_diagnostic/full_train_pool/`
 - `figures/supervised_yolo_fixed_budget_eval_overlays.png`
 - `figures/supervised_yolo_threshold_diagnostic_f1.png`
 - `figures/supervised_yolo_threshold_diagnostic_count_error.png`
@@ -331,3 +337,10 @@ compared with 0.8571 for the v1 `conf=0.25` operating point and 0.9100 for
 Cellpose-SAM on the same image ids. This excludes a poor confidence threshold as the
 main explanation, so the next diagnostic should directly test the original
 training-side concern: label budget first, then model capacity if needed.
+
+Label-budget diagnostic split/label conversion is prepared but not yet trained.
+The 100-image fixed-budget v1 remains the first point on the budget curve. The new
+nested budgets add `budget_250` and `full_train_pool`: `budget_250` contains the
+original 100 training image ids plus 150 additional train-pool images, while
+`full_train_pool` contains all 536 train-pool images and therefore contains
+`budget_250`. Both budgets reuse the same 134 held-out validation image ids.

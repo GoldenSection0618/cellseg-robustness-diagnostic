@@ -1,0 +1,7 @@
+budget,train_budget,split,images,true_instances,converted_polygons,dropped_instances,fallback_polygons,min_polygon_points,median_polygon_points,max_polygon_points,source_images,train_pool_images,validation_pool_images
+budget_250,250,all_selected,384,17132,17132,0,18,3,9.25,52,670,536,134
+budget_250,250,train,250,11533,11533,0,14,3,10.0,52,670,536,134
+budget_250,250,val,134,5599,5599,0,4,3,9.0,37,670,536,134
+full_train_pool,536,all_selected,670,29461,29461,0,24,3,9.0,81,670,536,134
+full_train_pool,536,train,536,23862,23862,0,20,3,9.0,81,670,536,134
+full_train_pool,536,val,134,5599,5599,0,4,3,9.0,37,670,536,134

@@ -495,3 +495,12 @@ same image ids. Lower thresholds increase false positives and count error; the
 highest threshold trades recall away. This result does not introduce the training
 adaptation concern; it removes threshold choice as the main competing explanation,
 leaving label budget and model capacity as the next concrete tests.
+
+The label-budget diagnostic split/label conversion is prepared as a nested extension
+of the existing Protocol B v1 split. The 100-image v1 result remains the first budget
+point. `budget_250` contains the original 100 training images plus 150 additional
+train-pool images, and `full_train_pool` contains all 536 train-pool images. Both
+reuse the same 134 held-out validation images. Conversion produced 11533 train
+instances for `budget_250`, 23862 train instances for `full_train_pool`, 5599 shared
+validation instances, and 0 dropped instances. No training has been run for these
+new budgets yet.

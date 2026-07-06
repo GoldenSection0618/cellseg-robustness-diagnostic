@@ -352,3 +352,37 @@ Cellpose-SAM's 0.9100 mean object F1 on the same held-out validation ids. This d
 not create a new training-side hypothesis; it supports the existing concern that the
 main gap is more likely tied to fine-tuning budget, capacity, or method fit than to a
 single inference threshold.
+
+## YOLO Label-Budget Diagnostic Conversion
+
+`scripts/prepare_yolo_label_budget_diagnostic.py` prepares nested label-budget
+datasets for the training-side diagnostic without running training. The existing
+100-image fixed-budget YOLO v1 result is reused as the first point on the budget
+curve. The script only creates the two additional budgets:
+
+- `budget_250`: the original 100 training image ids plus 150 additional train-pool
+  images;
+- `full_train_pool`: all 536 train-pool images.
+
+Both budgets reuse the same 134 held-out validation image ids from Protocol B v1.
+The nesting checks are part of the script: original 100 ids must be a subset of
+`budget_250`, and `budget_250` must be a subset of `full_train_pool`.
+
+Outputs:
+
+- `results/supervised/yolo_label_budget_diagnostic_manifest.csv`
+- `results/supervised/yolo_label_budget_diagnostic_split.csv`
+- `results/supervised/yolo_label_budget_diagnostic_summary.csv`
+- `results/supervised/yolo_label_budget_diagnostic/budget_250/`
+- `results/supervised/yolo_label_budget_diagnostic/full_train_pool/`
+
+Conversion summary:
+
+| Budget | Train images | Val images | Train instances | Val instances | Dropped instances |
+| --- | ---: | ---: | ---: | ---: | ---: |
+| budget_250 | 250 | 134 | 11533 | 5599 | 0 |
+| full_train_pool | 536 | 134 | 23862 | 5599 | 0 |
+
+This stage intentionally stops before training. The next experimental stage should
+train and evaluate `budget_250` first, then run `full_train_pool` as the planned
+completion of the label-budget curve if runtime remains practical.

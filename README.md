@@ -334,7 +334,7 @@ Implemented PoW artifacts:
 3. clean-subset baselines for Otsu + watershed, Cellpose-SAM / `cpsam`, and SAM2 AMG;
 4. clean-subset comparison and failure-case tables in `results/baselines/`, with comparison figures in `figures/`;
 5. small Otsu-only and three-baseline perturbation smoke tests, a 20-image clean-subset robustness extension, staged Otsu/Cellpose-SAM full-train robustness runs, and SAM2 AMG clean20 parameter-sensitivity results in `results/robustness/`;
-6. YOLO supervised adaptation protocol, a 20-image label-conversion smoke test, fixed-budget YOLO split/label conversion, fixed-budget held-out validation results, and threshold diagnostic results in `results/supervised/`;
+6. YOLO supervised adaptation protocol, a 20-image label-conversion smoke test, fixed-budget YOLO split/label conversion, fixed-budget held-out validation results, threshold diagnostic results, and nested label-budget diagnostic conversion in `results/supervised/`;
 7. root-level `technical_memo.md` with current summaries and limitations;
 8. PoW support docs under `docs/`, including data, environment, supervised protocol, output contract, experiment plan, checklist, failure taxonomy, findings, and stage report.
 
