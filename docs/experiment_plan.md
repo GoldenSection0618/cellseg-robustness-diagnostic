@@ -284,13 +284,18 @@ Fixed-budget supervised baseline outputs:
 - `scripts/run_yolo_fixed_budget_train.py`
 - `scripts/evaluate_yolo_fixed_budget.py`
 - `scripts/summarize_yolo_fixed_budget_comparison.py`
+- `scripts/run_yolo_threshold_diagnostic.py`
 - `results/supervised/yolo_fixed_budget_train_metadata.csv`
 - `results/supervised/yolo_fixed_budget_train_summary.csv`
 - `results/supervised/yolo_fixed_budget_metrics.csv`
 - `results/supervised/yolo_fixed_budget_eval_summary.csv`
 - `results/supervised/yolo_fixed_budget_val_comparison_metrics.csv`
 - `results/supervised/yolo_fixed_budget_val_comparison_summary.csv`
+- `results/supervised/yolo_threshold_diagnostic_metrics.csv`
+- `results/supervised/yolo_threshold_diagnostic_summary.csv`
 - `figures/supervised_yolo_fixed_budget_eval_overlays.png`
+- `figures/supervised_yolo_threshold_diagnostic_f1.png`
+- `figures/supervised_yolo_threshold_diagnostic_count_error.png`
 
 Result: the fixed-budget YOLO run used 100 train images, 134 held-out validation
 images, 50 epochs, `imgsz=512`, `batch=4`, `workers=0`, AMP disabled, and
@@ -316,3 +321,10 @@ replacement for a valid result. The recommended sequence is:
 
 The purpose is to identify why YOLO remains below Cellpose-SAM under repository
 metrics, not to tune until YOLO wins.
+
+First follow-up result: the frozen v1 checkpoint was evaluated on the predeclared
+confidence grid `0.05`, `0.10`, `0.25`, `0.40`, and `0.60` over the same 134
+held-out validation images. The best mean object F1 is 0.8676 at `conf=0.40`,
+compared with 0.8571 for the v1 `conf=0.25` operating point and 0.9100 for
+Cellpose-SAM on the same image ids. This is a modest operating-point improvement,
+not enough to explain the full gap to Cellpose-SAM.

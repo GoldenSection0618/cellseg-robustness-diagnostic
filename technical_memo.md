@@ -484,3 +484,11 @@ valid Protocol B v1 baseline. Any further YOLO work should be framed as a diagno
 extension with predeclared axes: operating point, label budget, model capacity, and
 possibly post-processing. The goal is to identify the cause of the gap to
 Cellpose-SAM, not to tune until a preferred ranking appears.
+
+The first YOLO follow-up diagnostic evaluated the frozen v1 checkpoint over
+confidence thresholds `0.05`, `0.10`, `0.25`, `0.40`, and `0.60` on the same 134
+held-out validation images. The best mean object F1 is 0.8676 at `conf=0.40`, only
+0.0105 above the v1 `conf=0.25` result and still below Cellpose-SAM's 0.9100 on the
+same image ids. Lower thresholds increase false positives and count error; the
+highest threshold trades recall away. This makes the next useful YOLO question
+label budget or model capacity, not further threshold tuning.

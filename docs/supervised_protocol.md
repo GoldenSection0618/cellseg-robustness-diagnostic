@@ -298,6 +298,8 @@ Suggested output names:
 
 - `results/supervised/yolo_threshold_diagnostic_metrics.csv`
 - `results/supervised/yolo_threshold_diagnostic_summary.csv`
+- `figures/supervised_yolo_threshold_diagnostic_f1.png`
+- `figures/supervised_yolo_threshold_diagnostic_count_error.png`
 - `results/supervised/yolo_label_budget_diagnostic_summary.csv`
 - `results/supervised/yolo_model_capacity_diagnostic_summary.csv`
 - `results/supervised/yolo_postprocessing_diagnostic_summary.csv`
@@ -313,3 +315,31 @@ Interpretation rules:
 - If none of these axes closes the gap, report evidence that Cellpose-SAM's
   cell-specific prior remains stronger for this dataset under the tested budgets.
 - In all cases, keep the v1 result in comparison tables.
+
+## YOLO Threshold Diagnostic Result
+
+`scripts/run_yolo_threshold_diagnostic.py` evaluates the frozen fixed-budget YOLO
+v1 checkpoint on the same 134 held-out validation images without retraining. The
+predeclared confidence grid is `0.05`, `0.10`, `0.25`, `0.40`, and `0.60`.
+
+Outputs:
+
+- `results/supervised/yolo_threshold_diagnostic_metrics.csv`
+- `results/supervised/yolo_threshold_diagnostic_summary.csv`
+- `figures/supervised_yolo_threshold_diagnostic_f1.png`
+- `figures/supervised_yolo_threshold_diagnostic_count_error.png`
+
+Summary:
+
+| Confidence | Mean object F1 | Mean precision | Mean recall | Mean absolute count error |
+| ---: | ---: | ---: | ---: | ---: |
+| 0.05 | 0.7640 | 0.6860 | 0.8836 | 15.8806 |
+| 0.10 | 0.8097 | 0.7610 | 0.8810 | 10.2090 |
+| 0.25 | 0.8571 | 0.8494 | 0.8734 | 6.7612 |
+| 0.40 | 0.8676 | 0.8974 | 0.8502 | 6.7836 |
+| 0.60 | 0.8338 | 0.9382 | 0.7644 | 11.8657 |
+
+The best threshold in this small diagnostic is `conf=0.40`, with mean object F1
+0.8676. This improves over the v1 `conf=0.25` result by 0.0105 F1 but remains below
+Cellpose-SAM's 0.9100 mean object F1 on the same held-out validation ids. The gap is
+therefore not mainly explained by a poor confidence threshold.
