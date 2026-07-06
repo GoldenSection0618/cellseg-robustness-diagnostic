@@ -102,9 +102,9 @@ reuse the repository's existing object-level metrics:
 - absolute count error;
 - latency.
 
-The first training run should be a tiny smoke run. A full supervised baseline should
-only run after label conversion, prediction export, and metric conversion are all
-verified.
+The first training run should be a tiny smoke run. The fixed-budget supervised
+baseline should only run after label conversion, prediction export, and metric
+conversion are all verified.
 
 ## Tiny Training Smoke
 
@@ -141,9 +141,10 @@ pipeline check, not a supervised baseline performance claim.
 
 ## Fixed YOLO Baseline Decision
 
-The first full Protocol B baseline should be a small-label YOLO baseline, not a
-full-label training run. This matches the README question: how much task-specific
-supervised adaptation can buy when only a small labeled split is available.
+The first Protocol B baseline should be a fixed-budget small-label YOLO baseline,
+not an all-label training-pool run. This matches the README question: how much
+task-specific supervised adaptation can buy when only a small labeled split is
+available.
 
 Fixed dataset policy:
 

@@ -109,4 +109,4 @@ proof-of-work benchmark.
 - [x] YOLO prediction-to-repository-metrics evaluation smoke.
 - [x] Fixed YOLO supervised baseline budget decided.
 - [x] Fixed-budget YOLO split and label conversion completed.
-- [x] Full supervised baseline.
+- [x] Fixed-budget supervised baseline.
