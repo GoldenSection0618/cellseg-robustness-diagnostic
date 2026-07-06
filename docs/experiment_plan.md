@@ -312,7 +312,9 @@ Protocol B follow-up decision:
 
 The fixed-budget YOLO result is retained as Protocol B v1 and should not be
 overwritten. Follow-up work is justified only as diagnostic extension, not as a
-replacement for a valid result. The recommended sequence is:
+replacement for a valid result. The motivating concern is that direct YOLO-seg
+fine-tuning may be under-adapted to dense cell instance segmentation or under-trained
+under the 100-image fixed budget. The recommended sequence is:
 
 - operating-point diagnostic on the frozen v1 checkpoint;
 - label-budget diagnostic with predeclared budgets;
@@ -326,5 +328,6 @@ First follow-up result: the frozen v1 checkpoint was evaluated on the predeclare
 confidence grid `0.05`, `0.10`, `0.25`, `0.40`, and `0.60` over the same 134
 held-out validation images. The best mean object F1 is 0.8676 at `conf=0.40`,
 compared with 0.8571 for the v1 `conf=0.25` operating point and 0.9100 for
-Cellpose-SAM on the same image ids. This is a modest operating-point improvement,
-not enough to explain the full gap to Cellpose-SAM.
+Cellpose-SAM on the same image ids. This excludes a poor confidence threshold as the
+main explanation, so the next diagnostic should directly test the original
+training-side concern: label budget first, then model capacity if needed.

@@ -253,12 +253,18 @@ was not an appropriate primary operating point for a trained YOLO baseline. The
 recorded v1 result uses `conf=0.25`. Further changes should be treated as separately
 named follow-up diagnostics, not corrections to v1.
 
+The motivating hypothesis for follow-up work is broader than threshold choice:
+YOLO v1 underperformance is consistent with a training-side mismatch, such as direct
+YOLO-seg fine-tuning being under-adapted to dense cell instance masks or the
+100-image fixed budget being insufficient. The operating-point diagnostic is a
+low-cost exclusion step before retraining, not the origin of that hypothesis.
+
 Follow-up diagnostics should answer narrower questions:
 
-1. Is YOLO performance mainly limited by the confidence operating point?
-2. Is it mainly limited by the 100-image label budget?
-3. Is it mainly limited by the nano model capacity?
-4. Is it mainly limited by YOLO-seg's fit to dense microscopy instance masks?
+1. Is the gap explainable by a poor confidence operating point, without retraining?
+2. Is YOLO mainly limited by the 100-image label budget?
+3. Is YOLO mainly limited by the nano model capacity?
+4. Is direct YOLO-seg fine-tuning poorly matched to dense microscopy instance masks?
 
 Guardrails:
 
@@ -291,8 +297,9 @@ Recommended follow-up sequence:
    record whether it mainly reduces false positives or also removes true cells.
 
 The intended outcome is not to make YOLO win by repeated tuning. The intended
-outcome is to determine whether the v1 gap to Cellpose-SAM is explained by budget,
-capacity, operating point, or method fit.
+outcome is to test the pre-existing training-adaptation concern by first excluding
+operating point as a cheap alternative explanation, then checking budget, capacity,
+and method fit.
 
 Suggested output names:
 
@@ -341,5 +348,7 @@ Summary:
 
 The best threshold in this small diagnostic is `conf=0.40`, with mean object F1
 0.8676. This improves over the v1 `conf=0.25` result by 0.0105 F1 but remains below
-Cellpose-SAM's 0.9100 mean object F1 on the same held-out validation ids. The gap is
-therefore not mainly explained by a poor confidence threshold.
+Cellpose-SAM's 0.9100 mean object F1 on the same held-out validation ids. This does
+not create a new training-side hypothesis; it supports the existing concern that the
+main gap is more likely tied to fine-tuning budget, capacity, or method fit than to a
+single inference threshold.

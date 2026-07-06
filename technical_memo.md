@@ -475,9 +475,11 @@ Held-out validation comparison on the same 134 image ids:
 
 This result shows that 100-image supervised YOLO adaptation is useful and much
 stronger than the classical lower bound, but it does not overtake Cellpose-SAM under
-the repository object-level metrics. The remaining Protocol B question is whether
-confidence-threshold calibration is worthwhile as future work, because the operating
-point materially affects false positives.
+the repository object-level metrics. The main Protocol B concern is therefore on the
+training side: direct YOLO-seg fine-tuning may be under-adapted to dense cell
+instance segmentation, or the fixed 100-image label budget may be insufficient.
+Confidence-threshold calibration is a cheap diagnostic to exclude before retraining,
+not the main explanation being tested.
 
 The YOLO result should not be treated as a failed experiment to be replaced. It is a
 valid Protocol B v1 baseline. Any further YOLO work should be framed as a diagnostic
@@ -490,5 +492,6 @@ confidence thresholds `0.05`, `0.10`, `0.25`, `0.40`, and `0.60` on the same 134
 held-out validation images. The best mean object F1 is 0.8676 at `conf=0.40`, only
 0.0105 above the v1 `conf=0.25` result and still below Cellpose-SAM's 0.9100 on the
 same image ids. Lower thresholds increase false positives and count error; the
-highest threshold trades recall away. This makes the next useful YOLO question
-label budget or model capacity, not further threshold tuning.
+highest threshold trades recall away. This result does not introduce the training
+adaptation concern; it removes threshold choice as the main competing explanation,
+leaving label budget and model capacity as the next concrete tests.
