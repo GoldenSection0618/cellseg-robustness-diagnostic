@@ -176,3 +176,26 @@ Fixed evaluation:
 This baseline is intentionally modest. It is large enough to test whether supervised
 adaptation changes the conclusion, but small enough to stay aligned with the
 diagnostic, small-scale scope of the repository.
+
+## Fixed YOLO Label Conversion
+
+The fixed-budget dataset is prepared by `scripts/prepare_yolo_fixed_budget.py`.
+
+Tracked outputs:
+
+- `results/supervised/yolo_fixed_budget/images/*.png`
+- `results/supervised/yolo_fixed_budget/labels/*.txt`
+- `results/supervised/yolo_fixed_budget/images.txt`
+- `results/supervised/yolo_fixed_budget/train.txt`
+- `results/supervised/yolo_fixed_budget/val.txt`
+- `results/supervised/yolo_fixed_budget/data.yaml`
+- `results/supervised/yolo_fixed_budget_manifest.csv`
+- `results/supervised/yolo_fixed_budget_split.csv`
+- `results/supervised/yolo_fixed_budget_summary.csv`
+- `figures/supervised_yolo_fixed_budget_overlays.png`
+
+The completed conversion uses 100 training images, 134 held-out validation images,
+and leaves 436 training-pool images unused. It converts all 10,766 selected
+instances to YOLO segmentation polygons, with 0 dropped instances and 7 tiny-mask
+rectangle fallbacks. The overlay figure confirms that polygon labels align with
+ground-truth cell boundaries.

@@ -261,5 +261,22 @@ Fixed baseline decision:
 - evaluate with repository instance metrics on the same held-out validation ids;
 - compare supervised and zero-shot methods only on that same validation image set.
 
-Next implementation step: create the full Protocol B split/label conversion script
-for this fixed budget, then run the YOLO supervised baseline.
+Fixed-budget label conversion outputs:
+
+- `scripts/prepare_yolo_fixed_budget.py`
+- `results/supervised/yolo_fixed_budget/images/*.png`
+- `results/supervised/yolo_fixed_budget/labels/*.txt`
+- `results/supervised/yolo_fixed_budget/images.txt`
+- `results/supervised/yolo_fixed_budget/train.txt`
+- `results/supervised/yolo_fixed_budget/val.txt`
+- `results/supervised/yolo_fixed_budget/data.yaml`
+- `results/supervised/yolo_fixed_budget_manifest.csv`
+- `results/supervised/yolo_fixed_budget_split.csv`
+- `results/supervised/yolo_fixed_budget_summary.csv`
+- `figures/supervised_yolo_fixed_budget_overlays.png`
+
+Result: the fixed-budget split has 100 train images, 134 held-out validation images,
+and 436 unused training-pool images. The selected train/validation labels contain
+10,766 converted polygons, 0 dropped instances, and 7 tiny-mask rectangle fallbacks.
+
+Next implementation step: run the fixed-budget YOLO supervised baseline.

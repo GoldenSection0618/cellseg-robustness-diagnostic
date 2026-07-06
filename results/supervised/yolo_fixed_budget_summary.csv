@@ -1,0 +1,4 @@
+split,images,true_instances,converted_polygons,dropped_instances,fallback_polygons,min_polygon_points,median_polygon_points,max_polygon_points,source_images,train_pool_images,validation_pool_images,unused_train_pool_images
+train,100,5167,5167,0,3,3,10.0,44,670,536,134,436
+val,134,5599,5599,0,4,3,9.0,37,670,536,134,436
+all_selected,234,10766,10766,0,7,3,9.5,44,670,536,134,436

@@ -1,0 +1,5 @@
+path: /home/user/cellseg-robustness-diagnostic/results/supervised/yolo_fixed_budget
+train: train.txt
+val: val.txt
+names:
+  0: cell
