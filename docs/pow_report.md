@@ -4,6 +4,11 @@ This report closes the current zero-shot proof-of-work stage for DSB2018 instanc
 segmentation robustness. It summarizes what was tested, what the evidence supports,
 and what should happen next.
 
+Status note: this is a zero-shot stage report. Its recommendation to run a separate
+supervised adaptation protocol has since been followed by Protocol B fixed-budget
+YOLO results; those results are documented in `docs/supervised_protocol.md` and are
+not part of the zero-shot ranking summarized here.
+
 ## Scope
 
 The current PoW stage covers zero-shot or out-of-the-box methods only:
@@ -96,8 +101,8 @@ Cellpose-SAM is the practical zero-shot baseline to carry forward, Otsu + waters
 is the lower-bound reference, and SAM2 AMG should not be scaled to full_train without
 a protocol change.
 
-The next experimental protocol should be separate from this PoW stage. The best
-candidate is supervised adaptation, such as YOLO-seg fine-tuning, because it asks a
-new question: how much target-domain annotation improves performance over the
-zero-shot baselines. Further SAM2 work should be prompted SAM2 or post-processing
-repair, not more current-AMG scaling.
+The next experimental protocol should be separate from this PoW stage. In the
+subsequent work, that became Protocol B supervised adaptation with YOLO-seg
+fine-tuning, asking a new question: how much target-domain annotation improves
+performance over the zero-shot baselines. Further SAM2 work should be prompted SAM2
+or post-processing repair, not more current-AMG scaling.

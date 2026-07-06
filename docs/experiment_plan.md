@@ -222,9 +222,9 @@ The label-conversion smoke uses the deterministic 20-image subset. It converts 9
 instances to YOLO segmentation polygons with zero dropped instances; two tiny
 instances use the documented rectangle fallback.
 
-Next Protocol B step: inspect the overlay figure and then run a tiny YOLO training
-smoke. Do not run a full supervised baseline until the tiny train/predict/evaluate
-loop is verified.
+This label-conversion smoke was followed by a tiny YOLO training smoke. A full
+supervised baseline should not run until the tiny train/predict/evaluate loop is
+verified.
 
 Tiny YOLO training smoke outputs:
 
@@ -234,8 +234,8 @@ Tiny YOLO training smoke outputs:
 
 The tiny smoke used pretrained `yolo11n-seg.pt` from `model_assets/yolo/`, 1 epoch,
 `imgsz=256`, `batch=2`, and the 16/4 train/val split from the label smoke. It is a
-pipeline check, not a supervised baseline result. The next Protocol B step is
-prediction export and conversion back to repository instance metrics.
+pipeline check, not a supervised baseline result. It was followed by prediction
+export and conversion back to repository instance metrics.
 
 Tiny YOLO prediction evaluation outputs:
 
@@ -247,8 +247,8 @@ Tiny YOLO prediction evaluation outputs:
 The evaluation smoke confirms that YOLO predictions can be converted back to
 repository instance masks and scored with object F1, precision, recall, matched IoU,
 Dice, and count error. The 1-epoch smoke model has mean object F1 0.0 on the four
-validation images, so this is only a pipeline check. The next Protocol B decision is
-whether to run a longer supervised baseline with a fixed training budget.
+validation images, so this is only a pipeline check. The next Protocol B decision
+was to run a longer supervised baseline with a fixed training budget.
 
 Fixed baseline decision:
 
