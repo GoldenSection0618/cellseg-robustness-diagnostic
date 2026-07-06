@@ -344,3 +344,11 @@ nested budgets add `budget_250` and `full_train_pool`: `budget_250` contains the
 original 100 training image ids plus 150 additional train-pool images, while
 `full_train_pool` contains all 536 train-pool images and therefore contains
 `budget_250`. Both budgets reuse the same 134 held-out validation image ids.
+
+`budget_250` has now been trained and evaluated with the same YOLO11n-seg recipe as
+v1: 50 epochs, `imgsz=512`, `batch=4`, workers 0, AMP disabled, and repository
+evaluation at `conf=0.25`. Training took 964.063 seconds. On the same 134 held-out
+validation images, mean object F1 is 0.8663, mean precision is 0.8550, mean recall
+is 0.8845, and mean absolute count error is 5.2612. This is a modest improvement
+over the 100-image v1 result at the same operating point (0.8571 F1), but it does
+not close the gap to Cellpose-SAM (0.9100 F1).

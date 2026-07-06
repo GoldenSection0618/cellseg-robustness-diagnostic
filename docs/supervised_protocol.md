@@ -383,6 +383,37 @@ Conversion summary:
 | budget_250 | 250 | 134 | 11533 | 5599 | 0 |
 | full_train_pool | 536 | 134 | 23862 | 5599 | 0 |
 
-This stage intentionally stops before training. The next experimental stage should
-train and evaluate `budget_250` first, then run `full_train_pool` as the planned
-completion of the label-budget curve if runtime remains practical.
+## YOLO Label-Budget 250 Result
+
+`budget_250` was trained with the same YOLO11n-seg recipe as the fixed-budget v1
+run: 50 epochs, `imgsz=512`, `batch=4`, workers 0, AMP disabled, and repository
+metric evaluation at `conf=0.25`.
+
+Outputs:
+
+- `results/supervised/yolo_label_budget_diagnostic_budget_250_train_metadata.csv`
+- `results/supervised/yolo_label_budget_diagnostic_budget_250_train_summary.csv`
+- `results/supervised/yolo_label_budget_diagnostic_budget_250_metrics.csv`
+- `results/supervised/yolo_label_budget_diagnostic_budget_250_eval_summary.csv`
+- `results/supervised/yolo_label_budget_diagnostic_val_comparison_metrics.csv`
+- `results/supervised/yolo_label_budget_diagnostic_val_comparison_summary.csv`
+- `figures/supervised_yolo_label_budget_diagnostic_budget_250_eval_overlays.png`
+
+Training took 964.063 seconds on the local RTX 4060 Laptop GPU. Ultralytics mask
+mAP50 peaked at 0.8333 on epoch 39, and mask mAP50-95 peaked at 0.4693 on epoch 39.
+The last 10 epochs were broadly plateaued, so this run does not look like a simple
+case where 50 epochs were obviously too short.
+
+Held-out validation comparison on the same 134 image ids:
+
+| Method | Train images | Mean object F1 | Mean precision | Mean recall | Mean absolute count error |
+| --- | ---: | ---: | ---: | ---: | ---: |
+| Cellpose-SAM | 0 | 0.9100 | 0.9420 | 0.8854 | 3.1194 |
+| YOLO label-budget 250 | 250 | 0.8663 | 0.8550 | 0.8845 | 5.2612 |
+| YOLO fixed-budget 100 | 100 | 0.8571 | 0.8494 | 0.8734 | 6.7612 |
+| Otsu + watershed | 0 | 0.6442 | 0.6103 | 0.7219 | 19.8806 |
+
+The 250-image label budget improves the 100-image v1 operating point by 0.0092 F1
+and reduces mean absolute count error by 1.5000, but it remains well below
+Cellpose-SAM. This suggests that increasing the label budget from 100 to 250 helps,
+but does not by itself explain the main YOLO-to-Cellpose-SAM gap.

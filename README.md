@@ -334,7 +334,7 @@ Implemented PoW artifacts:
 3. clean-subset baselines for Otsu + watershed, Cellpose-SAM / `cpsam`, and SAM2 AMG;
 4. clean-subset comparison and failure-case tables in `results/baselines/`, with comparison figures in `figures/`;
 5. small Otsu-only and three-baseline perturbation smoke tests, a 20-image clean-subset robustness extension, staged Otsu/Cellpose-SAM full-train robustness runs, and SAM2 AMG clean20 parameter-sensitivity results in `results/robustness/`;
-6. YOLO supervised adaptation protocol, a 20-image label-conversion smoke test, fixed-budget YOLO split/label conversion, fixed-budget held-out validation results, threshold diagnostic results, and nested label-budget diagnostic conversion in `results/supervised/`;
+6. YOLO supervised adaptation protocol, a 20-image label-conversion smoke test, fixed-budget YOLO split/label conversion, fixed-budget held-out validation results, threshold diagnostic results, nested label-budget diagnostic conversion, and `budget_250` label-budget result in `results/supervised/`;
 7. root-level `technical_memo.md` with current summaries and limitations;
 8. PoW support docs under `docs/`, including data, environment, supervised protocol, output contract, experiment plan, checklist, failure taxonomy, findings, and stage report.
 
@@ -344,7 +344,7 @@ Near-term next steps:
 2. keep SAM2 AMG full-train robustness deferred because clean20 parameter sensitivity did not repair the failure pattern;
 3. treat any further SAM2 work as a different protocol, such as prompted SAM2 or post-processing repair;
 4. keep legacy Cellpose3 `cyto3` and one-click restoration as optional cross-version work;
-5. use the YOLO threshold diagnostic result as evidence that the next supervised diagnostic should test the original training-side concern: label budget first, then model capacity if needed.
+5. decide whether to complete the YOLO label-budget curve with `full_train_pool` or switch to a model-capacity diagnostic, given that `budget_250` only modestly improves over the 100-image v1 result.
 
 ## Reproducibility Principles
 

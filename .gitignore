@@ -12,6 +12,7 @@ __pycache__/
 # Reproducible trainer internals; summaries are tracked separately.
 results/supervised/yolo_tiny_train_smoke_run/
 results/supervised/yolo_fixed_budget_train_run/
+results/supervised/yolo_label_budget_diagnostic_train_runs/
 
 # ide specific files
 .idea/

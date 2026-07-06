@@ -502,5 +502,13 @@ point. `budget_250` contains the original 100 training images plus 150 additiona
 train-pool images, and `full_train_pool` contains all 536 train-pool images. Both
 reuse the same 134 held-out validation images. Conversion produced 11533 train
 instances for `budget_250`, 23862 train instances for `full_train_pool`, 5599 shared
-validation instances, and 0 dropped instances. No training has been run for these
-new budgets yet.
+validation instances, and 0 dropped instances.
+
+The `budget_250` run used the same YOLO11n-seg recipe as v1 and trained for 50
+epochs in 964.063 seconds. Repository-metric evaluation at `conf=0.25` gives mean
+object F1 0.8663, precision 0.8550, recall 0.8845, and mean absolute count error
+5.2612. This is only a modest gain over the 100-image v1 result at the same
+operating point (0.8571 F1) and remains below Cellpose-SAM's 0.9100 F1. The
+label-budget hypothesis is therefore only weakly supported by the 100-to-250 step;
+the remaining question is whether the full 536-image train pool changes that
+trajectory enough to matter.
