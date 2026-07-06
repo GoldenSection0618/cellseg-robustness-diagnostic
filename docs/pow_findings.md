@@ -90,9 +90,10 @@ the current automatic mask generator settings are not a good mainline robustness
 baseline. Prompted SAM2, smaller/larger checkpoints, and fixed optional
 post-processing are separate future experiments.
 
-These findings also do not compare supervised adaptation methods. YOLO-seg,
-Cellpose fine-tuning, and VLM-based segmentation remain outside the current zero-shot
-PoW ranking and should be evaluated under separate protocols.
+These zero-shot findings do not fold supervised adaptation methods into the main
+PoW ranking. YOLO-seg is now evaluated separately under Protocol B on the same
+held-out validation ids used for comparison; Cellpose fine-tuning and VLM-based
+segmentation remain separate future protocols.
 
 ## Current Decision
 

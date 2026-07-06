@@ -199,3 +199,41 @@ and leaves 436 training-pool images unused. It converts all 10,766 selected
 instances to YOLO segmentation polygons, with 0 dropped instances and 7 tiny-mask
 rectangle fallbacks. The overlay figure confirms that polygon labels align with
 ground-truth cell boundaries.
+
+## Fixed YOLO Baseline Result
+
+The fixed-budget supervised baseline is trained by
+`scripts/run_yolo_fixed_budget_train.py` and evaluated by
+`scripts/evaluate_yolo_fixed_budget.py`.
+
+Tracked outputs:
+
+- `results/supervised/yolo_fixed_budget_train_metadata.csv`
+- `results/supervised/yolo_fixed_budget_train_summary.csv`
+- `results/supervised/yolo_fixed_budget_metrics.csv`
+- `results/supervised/yolo_fixed_budget_eval_summary.csv`
+- `results/supervised/yolo_fixed_budget_val_comparison_metrics.csv`
+- `results/supervised/yolo_fixed_budget_val_comparison_summary.csv`
+- `figures/supervised_yolo_fixed_budget_eval_overlays.png`
+
+The completed run used `yolo11n-seg.pt`, 100 training images, 134 held-out
+validation images, 50 epochs, `imgsz=512`, `batch=4`, `workers=0`, AMP disabled,
+and `patience=50`. Training completed in 533.474 seconds on the local RTX 4060
+Laptop GPU, with peak allocated CUDA memory of 1706.18 MB.
+
+The primary repository-metric evaluation uses `conf=0.25`, the conventional
+Ultralytics prediction operating point. On the held-out validation split, YOLO
+fixed-budget supervised reaches mean object F1 0.8571, precision 0.8494, recall
+0.8734, mean matched IoU 0.8230, mean matched Dice 0.8990, and mean absolute count
+error 6.7612.
+
+On the same 134 held-out validation image ids, the clean zero-shot comparison is:
+
+- Cellpose-SAM: mean object F1 0.9100, mean absolute count error 3.1194;
+- YOLO fixed-budget supervised: mean object F1 0.8571, mean absolute count error
+  6.7612;
+- Otsu + watershed: mean object F1 0.6442, mean absolute count error 19.8806.
+
+This means the fixed-budget YOLO baseline is a strong supervised result relative to
+the classical lower bound, but it does not replace Cellpose-SAM as the strongest
+current baseline under the repository object-level metrics.

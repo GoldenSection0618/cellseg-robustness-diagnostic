@@ -279,4 +279,25 @@ Result: the fixed-budget split has 100 train images, 134 held-out validation ima
 and 436 unused training-pool images. The selected train/validation labels contain
 10,766 converted polygons, 0 dropped instances, and 7 tiny-mask rectangle fallbacks.
 
-Next implementation step: run the fixed-budget YOLO supervised baseline.
+Fixed-budget supervised baseline outputs:
+
+- `scripts/run_yolo_fixed_budget_train.py`
+- `scripts/evaluate_yolo_fixed_budget.py`
+- `scripts/summarize_yolo_fixed_budget_comparison.py`
+- `results/supervised/yolo_fixed_budget_train_metadata.csv`
+- `results/supervised/yolo_fixed_budget_train_summary.csv`
+- `results/supervised/yolo_fixed_budget_metrics.csv`
+- `results/supervised/yolo_fixed_budget_eval_summary.csv`
+- `results/supervised/yolo_fixed_budget_val_comparison_metrics.csv`
+- `results/supervised/yolo_fixed_budget_val_comparison_summary.csv`
+- `figures/supervised_yolo_fixed_budget_eval_overlays.png`
+
+Result: the fixed-budget YOLO run used 100 train images, 134 held-out validation
+images, 50 epochs, `imgsz=512`, `batch=4`, `workers=0`, AMP disabled, and
+`conf=0.25` for repository-metric evaluation. On the same held-out validation ids,
+mean object F1 is 0.9100 for Cellpose-SAM, 0.8571 for YOLO fixed-budget supervised,
+and 0.6442 for Otsu + watershed. YOLO improves clearly over the classical lower
+bound but remains below Cellpose-SAM under the repository object-level metrics.
+
+Next implementation step: interpret the fixed-budget supervised result and decide
+whether confidence-threshold calibration belongs in Protocol B future work.

@@ -1,0 +1,4 @@
+method,method_label,protocol,condition,images,mean_object_f1,median_object_f1,mean_precision,mean_recall,mean_matched_iou,mean_matched_dice,mean_absolute_count_error,median_absolute_count_error,mean_true_instances,mean_pred_instances,no_prediction_rate,median_latency_ms,mean_latency_ms
+cellpose_cpsam,Cellpose-SAM,zero_shot,same_held_out_val_clean,134,0.91,0.94,0.942,0.8854,0.8578,0.9164,3.1194,1.0,41.7836,39.3507,0.0075,450.2565,599.6303
+yolo_fixed_budget,YOLO fixed-budget supervised,supervised,held_out_val,134,0.8571,0.9003,0.8494,0.8734,0.823,0.899,6.7612,2.0,41.7836,40.5448,0.0,19.7005,41.4222
+otsu_watershed,Otsu + watershed,zero_shot,same_held_out_val_clean,134,0.6442,0.7059,0.6103,0.7219,0.7946,0.8772,19.8806,6.0,41.7836,59.5299,0.0,8.183,16.2954

@@ -441,6 +441,40 @@ subdivided into nested folders.
 This memo tracks proof-of-work engineering progress. It is not a final paper-style
 report. The current robustness conclusions apply to the completed PoW scope:
 clean-subset baselines, clean20 robustness, and staged Otsu/Cellpose-SAM full-train
-robustness, plus SAM2 AMG clean20 parameter sensitivity. Supervised YOLO, VLM output
-validity, Cellpose3 cross-version baselines, prompted SAM2, and SAM2 post-processing
-repair remain separate future protocols.
+robustness, plus SAM2 AMG clean20 parameter sensitivity. Fixed-budget supervised
+YOLO is completed as separate Protocol B evidence, not as part of the zero-shot
+ranking. VLM output validity, Cellpose3 cross-version baselines, prompted SAM2, and
+SAM2 post-processing repair remain separate future protocols.
+
+## Fixed-Budget YOLO Supervised Baseline
+
+Protocol B now includes a fixed-budget YOLO11n-seg supervised run using 100 labeled
+training images and a 134-image held-out validation split.
+
+Generated outputs:
+
+- `results/supervised/yolo_fixed_budget_train_metadata.csv`
+- `results/supervised/yolo_fixed_budget_train_summary.csv`
+- `results/supervised/yolo_fixed_budget_metrics.csv`
+- `results/supervised/yolo_fixed_budget_eval_summary.csv`
+- `results/supervised/yolo_fixed_budget_val_comparison_metrics.csv`
+- `results/supervised/yolo_fixed_budget_val_comparison_summary.csv`
+- `figures/supervised_yolo_fixed_budget_eval_overlays.png`
+
+The run used `yolo11n-seg.pt`, 50 epochs, `imgsz=512`, `batch=4`, `workers=0`, AMP
+disabled, and `conf=0.25` for repository-metric evaluation. Training took 533.474
+seconds on the local RTX 4060 Laptop GPU.
+
+Held-out validation comparison on the same 134 image ids:
+
+| Method | Protocol | Mean object F1 | Mean precision | Mean recall | Mean absolute count error |
+| --- | --- | ---: | ---: | ---: | ---: |
+| Cellpose-SAM | zero-shot | 0.9100 | 0.9420 | 0.8854 | 3.1194 |
+| YOLO fixed-budget supervised | supervised | 0.8571 | 0.8494 | 0.8734 | 6.7612 |
+| Otsu + watershed | zero-shot | 0.6442 | 0.6103 | 0.7219 | 19.8806 |
+
+This result shows that 100-image supervised YOLO adaptation is useful and much
+stronger than the classical lower bound, but it does not overtake Cellpose-SAM under
+the repository object-level metrics. The remaining Protocol B question is whether
+confidence-threshold calibration is worthwhile as future work, because the operating
+point materially affects false positives.
