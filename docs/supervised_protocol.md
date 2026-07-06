@@ -238,3 +238,78 @@ On the same 134 held-out validation image ids, the clean zero-shot comparison is
 This means the fixed-budget YOLO baseline is a strong supervised result relative to
 the classical lower bound, but it does not replace Cellpose-SAM as the strongest
 current baseline under the repository object-level metrics.
+
+## YOLO Follow-up Diagnostic Plan
+
+The fixed-budget YOLO result is a valid completed baseline and must remain frozen as
+Protocol B v1. It should not be replaced, renamed, or overwritten because it did not
+overtake Cellpose-SAM. A corrective rerun is justified only if a pre-result logic
+defect is found, such as data leakage, broken label conversion, an incorrect
+checkpoint, a mask-conversion bug, or a clearly inappropriate evaluation setting.
+
+The `conf=0.001` value inherited from the tiny smoke path was one such evaluation
+logic issue: it was useful for confirming that predictions could be produced, but it
+was not an appropriate primary operating point for a trained YOLO baseline. The
+recorded v1 result uses `conf=0.25`. Further changes should be treated as separately
+named follow-up diagnostics, not corrections to v1.
+
+Follow-up diagnostics should answer narrower questions:
+
+1. Is YOLO performance mainly limited by the confidence operating point?
+2. Is it mainly limited by the 100-image label budget?
+3. Is it mainly limited by the nano model capacity?
+4. Is it mainly limited by YOLO-seg's fit to dense microscopy instance masks?
+
+Guardrails:
+
+- keep the 134-image held-out validation ids fixed for final comparison;
+- keep Protocol B v1 outputs unchanged and make follow-up output names explicit;
+- do not tune repeatedly on the held-out validation split and then report only the
+  best run as if it were a new baseline;
+- report all attempted follow-up runs, including no-improvement results;
+- compare against Cellpose-SAM and Otsu only on the same image ids used by the
+  follow-up evaluation;
+- stop each diagnostic axis after the predeclared small set of runs.
+
+Recommended follow-up sequence:
+
+1. Operating-point diagnostic. Train nothing new. Evaluate the frozen v1 checkpoint
+   on a small predeclared confidence grid, for example `0.05`, `0.10`, `0.25`,
+   `0.40`, and `0.60`. This should be reported as threshold sensitivity, not as a
+   replacement for v1. If a separate calibration split is created from the training
+   pool, the 134-image held-out validation split should be used only for final
+   readout.
+2. Label-budget diagnostic. Keep model size and training recipe fixed, then train
+   predeclared budgets such as 100, 250, and the full 536-image training pool. This
+   answers whether the gap to Cellpose-SAM is mainly label-budget limited.
+3. Model-capacity diagnostic. Keep the 100-image budget fixed and compare
+   `yolo11n-seg` against one larger model such as `yolo11s-seg`, using the same
+   training/evaluation contract. Larger models should be attempted only if GPU memory
+   and runtime remain practical.
+4. Post-processing diagnostic. Only after the previous diagnostics, test a small
+   predeclared mask filtering rule, such as minimum area or confidence filtering, and
+   record whether it mainly reduces false positives or also removes true cells.
+
+The intended outcome is not to make YOLO win by repeated tuning. The intended
+outcome is to determine whether the v1 gap to Cellpose-SAM is explained by budget,
+capacity, operating point, or method fit.
+
+Suggested output names:
+
+- `results/supervised/yolo_threshold_diagnostic_metrics.csv`
+- `results/supervised/yolo_threshold_diagnostic_summary.csv`
+- `results/supervised/yolo_label_budget_diagnostic_summary.csv`
+- `results/supervised/yolo_model_capacity_diagnostic_summary.csv`
+- `results/supervised/yolo_postprocessing_diagnostic_summary.csv`
+
+Interpretation rules:
+
+- If threshold sensitivity closes most of the gap, report YOLO as operating-point
+  sensitive rather than claiming the v1 baseline was invalid.
+- If larger label budgets improve monotonically, report the v1 gap as label-budget
+  limited.
+- If a larger YOLO model improves at the same 100-image budget, report a capacity
+  limitation.
+- If none of these axes closes the gap, report evidence that Cellpose-SAM's
+  cell-specific prior remains stronger for this dataset under the tested budgets.
+- In all cases, keep the v1 result in comparison tables.

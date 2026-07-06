@@ -299,5 +299,20 @@ mean object F1 is 0.9100 for Cellpose-SAM, 0.8571 for YOLO fixed-budget supervis
 and 0.6442 for Otsu + watershed. YOLO improves clearly over the classical lower
 bound but remains below Cellpose-SAM under the repository object-level metrics.
 
-Next implementation step: interpret the fixed-budget supervised result and decide
-whether confidence-threshold calibration belongs in Protocol B future work.
+Current interpretation: the fixed-budget supervised result is valid Protocol B v1.
+It should be retained as the first-pass YOLO fine-tuning baseline, not replaced by
+later optimization experiments.
+
+Protocol B follow-up decision:
+
+The fixed-budget YOLO result is retained as Protocol B v1 and should not be
+overwritten. Follow-up work is justified only as diagnostic extension, not as a
+replacement for a valid result. The recommended sequence is:
+
+- operating-point diagnostic on the frozen v1 checkpoint;
+- label-budget diagnostic with predeclared budgets;
+- model-capacity diagnostic with a larger YOLO-seg model if runtime permits;
+- optional predeclared post-processing diagnostic.
+
+The purpose is to identify why YOLO remains below Cellpose-SAM under repository
+metrics, not to tune until YOLO wins.

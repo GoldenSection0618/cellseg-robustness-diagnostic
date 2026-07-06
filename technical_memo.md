@@ -478,3 +478,9 @@ stronger than the classical lower bound, but it does not overtake Cellpose-SAM u
 the repository object-level metrics. The remaining Protocol B question is whether
 confidence-threshold calibration is worthwhile as future work, because the operating
 point materially affects false positives.
+
+The YOLO result should not be treated as a failed experiment to be replaced. It is a
+valid Protocol B v1 baseline. Any further YOLO work should be framed as a diagnostic
+extension with predeclared axes: operating point, label budget, model capacity, and
+possibly post-processing. The goal is to identify the cause of the gap to
+Cellpose-SAM, not to tune until a preferred ranking appears.
