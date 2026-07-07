@@ -17,6 +17,7 @@ from cellseg_robustness.paths import RESULT_SUBDIRS, ensure_output_dirs
 
 FIXED_YOLO_METRICS = RESULT_SUBDIRS["supervised"] / "yolo_fixed_budget_metrics.csv"
 BUDGET_250_METRICS = RESULT_SUBDIRS["supervised"] / "yolo_label_budget_diagnostic_budget_250_metrics.csv"
+FULL_TRAIN_POOL_METRICS = RESULT_SUBDIRS["supervised"] / "yolo_label_budget_diagnostic_full_train_pool_metrics.csv"
 VAL_MANIFEST = RESULT_SUBDIRS["supervised"] / "yolo_fixed_budget_manifest.csv"
 ZERO_SHOT_METRICS = RESULT_SUBDIRS["robustness"] / "pow_baseline_robustness_full_train_metrics.csv"
 COMPARISON_METRICS = RESULT_SUBDIRS["supervised"] / "yolo_label_budget_diagnostic_val_comparison_metrics.csv"
@@ -108,6 +109,7 @@ def main() -> None:
     val_ids = set(manifest.loc[manifest["split"] == "val", "image_id"])
     fixed = pd.read_csv(FIXED_YOLO_METRICS)
     budget_250 = pd.read_csv(BUDGET_250_METRICS)
+    full_train_pool = pd.read_csv(FULL_TRAIN_POOL_METRICS)
     zero_shot = pd.read_csv(ZERO_SHOT_METRICS)
 
     comparison = pd.concat(
@@ -119,6 +121,12 @@ def main() -> None:
                 "YOLO label-budget 250",
                 "same_held_out_val",
             ),
+            normalize_yolo(
+                full_train_pool,
+                "yolo_label_budget_full_train_pool",
+                "YOLO label-budget full train pool",
+                "same_held_out_val",
+            ),
             normalize_zero_shot(zero_shot, val_ids),
         ],
         ignore_index=True,
@@ -126,6 +134,7 @@ def main() -> None:
     expected = {
         "yolo_fixed_budget_100": len(val_ids),
         "yolo_label_budget_250": len(val_ids),
+        "yolo_label_budget_full_train_pool": len(val_ids),
         "otsu_watershed": len(val_ids),
         "cellpose_cpsam": len(val_ids),
     }

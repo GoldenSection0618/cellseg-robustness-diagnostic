@@ -110,3 +110,6 @@ proof-of-work benchmark.
 - [x] Fixed YOLO supervised baseline budget decided.
 - [x] Fixed-budget YOLO split and label conversion completed.
 - [x] Fixed-budget supervised baseline.
+- [x] YOLO threshold diagnostic.
+- [x] Nested YOLO label-budget conversion.
+- [x] YOLO label-budget diagnostic for 100, 250, and full train-pool budgets.

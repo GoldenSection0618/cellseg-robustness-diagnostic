@@ -461,8 +461,8 @@ Generated outputs:
 - `results/supervised/yolo_fixed_budget_val_comparison_summary.csv`
 - `figures/supervised_yolo_fixed_budget_eval_overlays.png`
 
-The run used `yolo11n-seg.pt`, 50 epochs, `imgsz=512`, `batch=4`, `workers=0`, AMP
-disabled, and `conf=0.25` for repository-metric evaluation. Training took 533.474
+The run used `yolo11n-seg.pt`, 50 epochs, `imgsz=512`, `batch=8`, `workers=2`, AMP
+disabled, and `conf=0.25` for repository-metric evaluation. Training took 351.421
 seconds on the local RTX 4060 Laptop GPU.
 
 Held-out validation comparison on the same 134 image ids:
@@ -470,7 +470,7 @@ Held-out validation comparison on the same 134 image ids:
 | Method | Protocol | Mean object F1 | Mean precision | Mean recall | Mean absolute count error |
 | --- | --- | ---: | ---: | ---: | ---: |
 | Cellpose-SAM | zero-shot | 0.9100 | 0.9420 | 0.8854 | 3.1194 |
-| YOLO fixed-budget supervised | supervised | 0.8571 | 0.8494 | 0.8734 | 6.7612 |
+| YOLO fixed-budget supervised | supervised | 0.8530 | 0.8419 | 0.8737 | 6.0896 |
 | Otsu + watershed | zero-shot | 0.6442 | 0.6103 | 0.7219 | 19.8806 |
 
 This result shows that 100-image supervised YOLO adaptation is useful and much
@@ -489,12 +489,8 @@ Cellpose-SAM, not to tune until a preferred ranking appears.
 
 The first YOLO follow-up diagnostic evaluated the frozen v1 checkpoint over
 confidence thresholds `0.05`, `0.10`, `0.25`, `0.40`, and `0.60` on the same 134
-held-out validation images. The best mean object F1 is 0.8676 at `conf=0.40`, only
-0.0105 above the v1 `conf=0.25` result and still below Cellpose-SAM's 0.9100 on the
-same image ids. Lower thresholds increase false positives and count error; the
-highest threshold trades recall away. This result does not introduce the training
-adaptation concern; it removes threshold choice as the main competing explanation,
-leaving label budget and model capacity as the next concrete tests.
+held-out validation images. The best mean object F1 is 0.8695 at `conf=0.40` and
+remains below Cellpose-SAM's 0.9100 on the same image ids.
 
 The label-budget diagnostic split/label conversion is prepared as a nested extension
 of the existing Protocol B v1 split. The 100-image v1 result remains the first budget
@@ -504,11 +500,16 @@ reuse the same 134 held-out validation images. Conversion produced 11533 train
 instances for `budget_250`, 23862 train instances for `full_train_pool`, 5599 shared
 validation instances, and 0 dropped instances.
 
-The `budget_250` run used the same YOLO11n-seg recipe as v1 and trained for 50
-epochs in 964.063 seconds. Repository-metric evaluation at `conf=0.25` gives mean
-object F1 0.8663, precision 0.8550, recall 0.8845, and mean absolute count error
-5.2612. This is only a modest gain over the 100-image v1 result at the same
-operating point (0.8571 F1) and remains below Cellpose-SAM's 0.9100 F1. The
-label-budget hypothesis is therefore only weakly supported by the 100-to-250 step;
-the remaining question is whether the full 536-image train pool changes that
-trajectory enough to matter.
+The label-budget diagnostic has now been trained for 100 images, `budget_250`, and
+`full_train_pool`, all evaluated on the same 134 held-out validation images.
+
+| Method | Train images | Mean object F1 | Mean precision | Mean recall | Mean absolute count error |
+| --- | ---: | ---: | ---: | ---: | ---: |
+| Cellpose-SAM | 0 | 0.9100 | 0.9420 | 0.8854 | 3.1194 |
+| YOLO label-budget full train pool | 536 | 0.8649 | 0.8440 | 0.8942 | 4.2090 |
+| YOLO label-budget 250 | 250 | 0.8576 | 0.8400 | 0.8845 | 6.2090 |
+| YOLO fixed-budget 100 | 100 | 0.8530 | 0.8419 | 0.8737 | 6.0896 |
+| Otsu + watershed | 0 | 0.6442 | 0.6103 | 0.7219 | 19.8806 |
+
+The full train-pool YOLO run improves over the smaller YOLO budgets but remains
+below Cellpose-SAM.

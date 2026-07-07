@@ -160,8 +160,8 @@ Fixed training budget:
 - task: segmentation;
 - epochs: 50;
 - image size: 512;
-- batch size: 4, reduced only if CUDA memory requires it;
-- workers: 0 for reproducibility in this environment;
+- batch size: 8;
+- workers: 2;
 - AMP: disabled, matching the smoke path and avoiding extra Ultralytics downloads;
 - optimizer and augmentation: Ultralytics defaults unless explicitly recorded;
 - early stopping: disabled for the first baseline by setting patience equal to the
@@ -218,21 +218,21 @@ Tracked outputs:
 - `figures/supervised_yolo_fixed_budget_eval_overlays.png`
 
 The completed run used `yolo11n-seg.pt`, 100 training images, 134 held-out
-validation images, 50 epochs, `imgsz=512`, `batch=4`, `workers=0`, AMP disabled,
-and `patience=50`. Training completed in 533.474 seconds on the local RTX 4060
-Laptop GPU, with peak allocated CUDA memory of 1706.18 MB.
+validation images, 50 epochs, `imgsz=512`, `batch=8`, `workers=2`, AMP disabled,
+and `patience=50`. Training completed in 351.421 seconds on the local RTX 4060
+Laptop GPU, with peak allocated CUDA memory of 2575.14 MB.
 
 The primary repository-metric evaluation uses `conf=0.25`, the conventional
 Ultralytics prediction operating point. On the held-out validation split, YOLO
-fixed-budget supervised reaches mean object F1 0.8571, precision 0.8494, recall
-0.8734, mean matched IoU 0.8230, mean matched Dice 0.8990, and mean absolute count
-error 6.7612.
+fixed-budget supervised reaches mean object F1 0.8530, precision 0.8419, recall
+0.8737, mean matched IoU 0.8182, mean matched Dice 0.8957, and mean absolute count
+error 6.0896.
 
 On the same 134 held-out validation image ids, the clean zero-shot comparison is:
 
 - Cellpose-SAM: mean object F1 0.9100, mean absolute count error 3.1194;
-- YOLO fixed-budget supervised: mean object F1 0.8571, mean absolute count error
-  6.7612;
+- YOLO fixed-budget supervised: mean object F1 0.8530, mean absolute count error
+  6.0896;
 - Otsu + watershed: mean object F1 0.6442, mean absolute count error 19.8806.
 
 This means the fixed-budget YOLO baseline is a strong supervised result relative to
@@ -241,25 +241,10 @@ current baseline under the repository object-level metrics.
 
 ## YOLO Follow-up Diagnostic Plan
 
-The fixed-budget YOLO result is a valid completed baseline and must remain frozen as
-Protocol B v1. It should not be replaced, renamed, or overwritten because it did not
-overtake Cellpose-SAM. A corrective rerun is justified only if a pre-result logic
-defect is found, such as data leakage, broken label conversion, an incorrect
-checkpoint, a mask-conversion bug, or a clearly inappropriate evaluation setting.
+The fixed-budget YOLO result is a valid completed baseline. Follow-up runs are
+reported as diagnostic extensions.
 
-The `conf=0.001` value inherited from the tiny smoke path was one such evaluation
-logic issue: it was useful for confirming that predictions could be produced, but it
-was not an appropriate primary operating point for a trained YOLO baseline. The
-recorded v1 result uses `conf=0.25`. Further changes should be treated as separately
-named follow-up diagnostics, not corrections to v1.
-
-The motivating hypothesis for follow-up work is broader than threshold choice:
-YOLO v1 underperformance is consistent with a training-side mismatch, such as direct
-YOLO-seg fine-tuning being under-adapted to dense cell instance masks or the
-100-image fixed budget being insufficient. The operating-point diagnostic is a
-low-cost exclusion step before retraining, not the origin of that hypothesis.
-
-Follow-up diagnostics should answer narrower questions:
+Follow-up diagnostics answer narrower questions:
 
 1. Is the gap explainable by a poor confidence operating point, without retraining?
 2. Is YOLO mainly limited by the 100-image label budget?
@@ -269,7 +254,7 @@ Follow-up diagnostics should answer narrower questions:
 Guardrails:
 
 - keep the 134-image held-out validation ids fixed for final comparison;
-- keep Protocol B v1 outputs unchanged and make follow-up output names explicit;
+- make follow-up output names explicit;
 - do not tune repeatedly on the held-out validation split and then report only the
   best run as if it were a new baseline;
 - report all attempted follow-up runs, including no-improvement results;
@@ -277,29 +262,14 @@ Guardrails:
   follow-up evaluation;
 - stop each diagnostic axis after the predeclared small set of runs.
 
-Recommended follow-up sequence:
+Follow-up sequence:
 
-1. Operating-point diagnostic. Train nothing new. Evaluate the frozen v1 checkpoint
-   on a small predeclared confidence grid, for example `0.05`, `0.10`, `0.25`,
-   `0.40`, and `0.60`. This should be reported as threshold sensitivity, not as a
-   replacement for v1. If a separate calibration split is created from the training
-   pool, the 134-image held-out validation split should be used only for final
-   readout.
+1. Operating-point diagnostic on `conf=0.05`, `0.10`, `0.25`, `0.40`, and `0.60`.
 2. Label-budget diagnostic. Keep model size and training recipe fixed, then train
-   predeclared budgets such as 100, 250, and the full 536-image training pool. This
-   answers whether the gap to Cellpose-SAM is mainly label-budget limited.
+   predeclared budgets: 100, 250, and full 536-image training pool.
 3. Model-capacity diagnostic. Keep the 100-image budget fixed and compare
-   `yolo11n-seg` against one larger model such as `yolo11s-seg`, using the same
-   training/evaluation contract. Larger models should be attempted only if GPU memory
-   and runtime remain practical.
-4. Post-processing diagnostic. Only after the previous diagnostics, test a small
-   predeclared mask filtering rule, such as minimum area or confidence filtering, and
-   record whether it mainly reduces false positives or also removes true cells.
-
-The intended outcome is not to make YOLO win by repeated tuning. The intended
-outcome is to test the pre-existing training-adaptation concern by first excluding
-operating point as a cheap alternative explanation, then checking budget, capacity,
-and method fit.
+   `yolo11n-seg` against one larger model such as `yolo11s-seg`.
+4. Optional post-processing diagnostic with a small predeclared mask filtering rule.
 
 Suggested output names:
 
@@ -340,18 +310,15 @@ Summary:
 
 | Confidence | Mean object F1 | Mean precision | Mean recall | Mean absolute count error |
 | ---: | ---: | ---: | ---: | ---: |
-| 0.05 | 0.7640 | 0.6860 | 0.8836 | 15.8806 |
-| 0.10 | 0.8097 | 0.7610 | 0.8810 | 10.2090 |
-| 0.25 | 0.8571 | 0.8494 | 0.8734 | 6.7612 |
-| 0.40 | 0.8676 | 0.8974 | 0.8502 | 6.7836 |
-| 0.60 | 0.8338 | 0.9382 | 0.7644 | 11.8657 |
+| 0.05 | 0.7607 | 0.6855 | 0.8826 | 16.5224 |
+| 0.10 | 0.8023 | 0.7509 | 0.8794 | 10.3134 |
+| 0.25 | 0.8530 | 0.8419 | 0.8737 | 6.0896 |
+| 0.40 | 0.8695 | 0.8911 | 0.8566 | 5.7090 |
+| 0.60 | 0.8412 | 0.9376 | 0.7774 | 10.6418 |
 
-The best threshold in this small diagnostic is `conf=0.40`, with mean object F1
-0.8676. This improves over the v1 `conf=0.25` result by 0.0105 F1 but remains below
-Cellpose-SAM's 0.9100 mean object F1 on the same held-out validation ids. This does
-not create a new training-side hypothesis; it supports the existing concern that the
-main gap is more likely tied to fine-tuning budget, capacity, or method fit than to a
-single inference threshold.
+The best threshold in this diagnostic is `conf=0.40`, with mean object F1 0.8695.
+It remains below Cellpose-SAM's 0.9100 mean object F1 on the same held-out
+validation ids.
 
 ## YOLO Label-Budget Diagnostic Conversion
 
@@ -383,11 +350,13 @@ Conversion summary:
 | budget_250 | 250 | 134 | 11533 | 5599 | 0 |
 | full_train_pool | 536 | 134 | 23862 | 5599 | 0 |
 
-## YOLO Label-Budget 250 Result
+## YOLO Label-Budget Diagnostic Result
 
-`budget_250` was trained with the same YOLO11n-seg recipe as the fixed-budget v1
-run: 50 epochs, `imgsz=512`, `batch=4`, workers 0, AMP disabled, and repository
-metric evaluation at `conf=0.25`.
+The label-budget diagnostic trains YOLO11n-seg on the fixed 100-image budget,
+`budget_250`, and `full_train_pool`, then evaluates each run on the same 134
+held-out validation images. The current diagnostic recipe is 50 epochs,
+`imgsz=512`, `batch=8`, `workers=2`, AMP disabled, and repository metric evaluation
+at `conf=0.25`.
 
 Outputs:
 
@@ -395,25 +364,30 @@ Outputs:
 - `results/supervised/yolo_label_budget_diagnostic_budget_250_train_summary.csv`
 - `results/supervised/yolo_label_budget_diagnostic_budget_250_metrics.csv`
 - `results/supervised/yolo_label_budget_diagnostic_budget_250_eval_summary.csv`
+- `results/supervised/yolo_label_budget_diagnostic_full_train_pool_train_metadata.csv`
+- `results/supervised/yolo_label_budget_diagnostic_full_train_pool_train_summary.csv`
+- `results/supervised/yolo_label_budget_diagnostic_full_train_pool_metrics.csv`
+- `results/supervised/yolo_label_budget_diagnostic_full_train_pool_eval_summary.csv`
 - `results/supervised/yolo_label_budget_diagnostic_val_comparison_metrics.csv`
 - `results/supervised/yolo_label_budget_diagnostic_val_comparison_summary.csv`
 - `figures/supervised_yolo_label_budget_diagnostic_budget_250_eval_overlays.png`
+- `figures/supervised_yolo_label_budget_diagnostic_full_train_pool_eval_overlays.png`
 
-Training took 964.063 seconds on the local RTX 4060 Laptop GPU. Ultralytics mask
-mAP50 peaked at 0.8333 on epoch 39, and mask mAP50-95 peaked at 0.4693 on epoch 39.
-The last 10 epochs were broadly plateaued, so this run does not look like a simple
-case where 50 epochs were obviously too short.
+Training took 351.421 seconds for the 100-image run, 571.402 seconds for
+`budget_250`, and 975.039 seconds for `full_train_pool`.
 
 Held-out validation comparison on the same 134 image ids:
 
 | Method | Train images | Mean object F1 | Mean precision | Mean recall | Mean absolute count error |
 | --- | ---: | ---: | ---: | ---: | ---: |
 | Cellpose-SAM | 0 | 0.9100 | 0.9420 | 0.8854 | 3.1194 |
-| YOLO label-budget 250 | 250 | 0.8663 | 0.8550 | 0.8845 | 5.2612 |
-| YOLO fixed-budget 100 | 100 | 0.8571 | 0.8494 | 0.8734 | 6.7612 |
+| YOLO label-budget full train pool | 536 | 0.8649 | 0.8440 | 0.8942 | 4.2090 |
+| YOLO label-budget 250 | 250 | 0.8576 | 0.8400 | 0.8845 | 6.2090 |
+| YOLO fixed-budget 100 | 100 | 0.8530 | 0.8419 | 0.8737 | 6.0896 |
 | Otsu + watershed | 0 | 0.6442 | 0.6103 | 0.7219 | 19.8806 |
 
-The 250-image label budget improves the 100-image v1 operating point by 0.0092 F1
-and reduces mean absolute count error by 1.5000, but it remains well below
-Cellpose-SAM. This suggests that increasing the label budget from 100 to 250 helps,
-but does not by itself explain the main YOLO-to-Cellpose-SAM gap.
+The full train-pool run improves over the smaller YOLO budgets, especially in mean
+absolute count error, but it remains below Cellpose-SAM on mean object F1 and count
+error. The label-budget diagnostic therefore supports supervised YOLO as a useful
+Protocol B line, but label budget alone does not explain the main gap to
+Cellpose-SAM.

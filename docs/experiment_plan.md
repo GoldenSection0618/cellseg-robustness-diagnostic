@@ -256,7 +256,7 @@ Fixed baseline decision:
   pool of `stage1_train`;
 - validate on the held-out 20% pool, expected 134 images;
 - use pretrained `model_assets/yolo/yolo11n-seg.pt`;
-- train for 50 epochs at `imgsz=512`, `batch=4`, `workers=0`, AMP disabled, and
+- train for 50 epochs at `imgsz=512`, `batch=8`, `workers=2`, AMP disabled, and
   patience set to the epoch budget;
 - evaluate with repository instance metrics on the same held-out validation ids;
 - compare supervised and zero-shot methods only on that same validation image set.
@@ -299,14 +299,26 @@ Fixed-budget supervised baseline outputs:
 - `results/supervised/yolo_label_budget_diagnostic_summary.csv`
 - `results/supervised/yolo_label_budget_diagnostic/budget_250/`
 - `results/supervised/yolo_label_budget_diagnostic/full_train_pool/`
+- `results/supervised/yolo_label_budget_diagnostic_budget_250_train_metadata.csv`
+- `results/supervised/yolo_label_budget_diagnostic_budget_250_train_summary.csv`
+- `results/supervised/yolo_label_budget_diagnostic_budget_250_metrics.csv`
+- `results/supervised/yolo_label_budget_diagnostic_budget_250_eval_summary.csv`
+- `results/supervised/yolo_label_budget_diagnostic_full_train_pool_train_metadata.csv`
+- `results/supervised/yolo_label_budget_diagnostic_full_train_pool_train_summary.csv`
+- `results/supervised/yolo_label_budget_diagnostic_full_train_pool_metrics.csv`
+- `results/supervised/yolo_label_budget_diagnostic_full_train_pool_eval_summary.csv`
+- `results/supervised/yolo_label_budget_diagnostic_val_comparison_metrics.csv`
+- `results/supervised/yolo_label_budget_diagnostic_val_comparison_summary.csv`
 - `figures/supervised_yolo_fixed_budget_eval_overlays.png`
 - `figures/supervised_yolo_threshold_diagnostic_f1.png`
 - `figures/supervised_yolo_threshold_diagnostic_count_error.png`
+- `figures/supervised_yolo_label_budget_diagnostic_budget_250_eval_overlays.png`
+- `figures/supervised_yolo_label_budget_diagnostic_full_train_pool_eval_overlays.png`
 
 Result: the fixed-budget YOLO run used 100 train images, 134 held-out validation
-images, 50 epochs, `imgsz=512`, `batch=4`, `workers=0`, AMP disabled, and
+images, 50 epochs, `imgsz=512`, `batch=8`, `workers=2`, AMP disabled, and
 `conf=0.25` for repository-metric evaluation. On the same held-out validation ids,
-mean object F1 is 0.9100 for Cellpose-SAM, 0.8571 for YOLO fixed-budget supervised,
+mean object F1 is 0.9100 for Cellpose-SAM, 0.8530 for YOLO fixed-budget supervised,
 and 0.6442 for Otsu + watershed. YOLO improves clearly over the classical lower
 bound but remains below Cellpose-SAM under the repository object-level metrics.
 
@@ -332,23 +344,28 @@ metrics, not to tune until YOLO wins.
 
 First follow-up result: the frozen v1 checkpoint was evaluated on the predeclared
 confidence grid `0.05`, `0.10`, `0.25`, `0.40`, and `0.60` over the same 134
-held-out validation images. The best mean object F1 is 0.8676 at `conf=0.40`,
-compared with 0.8571 for the v1 `conf=0.25` operating point and 0.9100 for
+held-out validation images. The best mean object F1 is 0.8695 at `conf=0.40`,
+compared with 0.8530 for the `conf=0.25` operating point and 0.9100 for
 Cellpose-SAM on the same image ids. This excludes a poor confidence threshold as the
 main explanation, so the next diagnostic should directly test the original
 training-side concern: label budget first, then model capacity if needed.
 
-Label-budget diagnostic split/label conversion is prepared but not yet trained.
-The 100-image fixed-budget v1 remains the first point on the budget curve. The new
-nested budgets add `budget_250` and `full_train_pool`: `budget_250` contains the
-original 100 training image ids plus 150 additional train-pool images, while
-`full_train_pool` contains all 536 train-pool images and therefore contains
-`budget_250`. Both budgets reuse the same 134 held-out validation image ids.
+The label-budget diagnostic is now trained and evaluated for the 100-image
+fixed-budget point, `budget_250`, and `full_train_pool`. The two larger budgets are
+nested: `budget_250` contains the original 100 training image ids plus 150
+additional train-pool images, while `full_train_pool` contains all 536 train-pool
+images and therefore contains `budget_250`. All budgets reuse the same 134 held-out
+validation image ids and repository evaluation at `conf=0.25`.
 
-`budget_250` has now been trained and evaluated with the same YOLO11n-seg recipe as
-v1: 50 epochs, `imgsz=512`, `batch=4`, workers 0, AMP disabled, and repository
-evaluation at `conf=0.25`. Training took 964.063 seconds. On the same 134 held-out
-validation images, mean object F1 is 0.8663, mean precision is 0.8550, mean recall
-is 0.8845, and mean absolute count error is 5.2612. This is a modest improvement
-over the 100-image v1 result at the same operating point (0.8571 F1), but it does
-not close the gap to Cellpose-SAM (0.9100 F1).
+Current held-out validation comparison:
+
+| Method | Train images | Mean object F1 | Mean precision | Mean recall | Mean absolute count error |
+| --- | ---: | ---: | ---: | ---: | ---: |
+| Cellpose-SAM | 0 | 0.9100 | 0.9420 | 0.8854 | 3.1194 |
+| YOLO label-budget full train pool | 536 | 0.8649 | 0.8440 | 0.8942 | 4.2090 |
+| YOLO label-budget 250 | 250 | 0.8576 | 0.8400 | 0.8845 | 6.2090 |
+| YOLO fixed-budget 100 | 100 | 0.8530 | 0.8419 | 0.8737 | 6.0896 |
+| Otsu + watershed | 0 | 0.6442 | 0.6103 | 0.7219 | 19.8806 |
+
+The full train-pool run improves the YOLO count error and F1 over the smaller
+budgets, but it still does not close the gap to Cellpose-SAM.
