@@ -86,6 +86,7 @@ proof-of-work benchmark.
 - [x] Robustness runner supports staged `full_train` runs with method selection and resume/overwrite protection.
 - [x] Otsu + watershed full-train robustness run completed on all 670 `stage1_train` images.
 - [x] Cellpose-SAM full-train robustness run added with `--resume`.
+- [x] Cellpose-SAM input/diameter protocol locked and full-train results refreshed.
 - [x] SAM2 AMG full-train robustness deferred pending parameter-sensitivity or post-processing work.
 - [x] Full-train per-image deltas, failure cases, and no-prediction cases written to `results/robustness/`.
 - [x] Full-train F1-drop distribution, worst-drop, and failure-hint figures written to `figures/`.
@@ -97,7 +98,6 @@ proof-of-work benchmark.
 
 - [ ] Optional Cellpose3 default cross-version protocol.
 - [ ] Optional Cellpose3 restoration cross-version protocol.
-- [ ] Optional Cellpose-SAM protocol refinements after the current full-train run.
 - [ ] Optional prompted SAM2 or SAM2 post-processing repair protocol.
 - [ ] Gemini output-validity protocol.
 
