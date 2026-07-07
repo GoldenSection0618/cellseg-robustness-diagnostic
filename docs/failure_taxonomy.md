@@ -61,9 +61,9 @@ Primary expected failure modes:
 
 Current clean-subset summary:
 
-- mean object F1: 0.8892
-- mean matched IoU: 0.8513
-- mean absolute count error: 7.15
+- mean object F1: 0.8982
+- mean matched IoU: 0.8507
+- mean absolute count error: 5.60
 
 Primary expected failure modes:
 

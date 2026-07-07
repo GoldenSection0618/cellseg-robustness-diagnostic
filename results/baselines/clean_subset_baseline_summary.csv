@@ -1,4 +1,4 @@
 method,images,mean_object_f1,mean_matched_iou,mean_matched_dice,mean_precision,mean_recall,mean_absolute_count_error,median_latency_ms,mean_latency_ms,method_label
 otsu_watershed,20,0.4685,0.7307,0.818,0.4274,0.5852,63.75,15.7235,48.1521,Otsu + watershed
-cellpose_cpsam,20,0.8892,0.8513,0.9155,0.9335,0.8564,7.15,687.1255,1118.7064,Cellpose-SAM
+cellpose_cpsam,20,0.8982,0.8507,0.915,0.9322,0.8732,5.6,1863.7675,3185.6706,Cellpose-SAM
 sam2_amg,20,0.3604,0.5424,0.5878,0.39,0.3456,31.55,1600.7395,1661.0071,SAM2 AMG

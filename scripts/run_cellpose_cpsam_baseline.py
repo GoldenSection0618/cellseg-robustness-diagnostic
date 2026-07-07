@@ -26,6 +26,7 @@ from cellseg_robustness.visualization import overlay_truth_prediction
 METHOD = "cellpose_cpsam"
 IOU_THRESHOLD = 0.5
 DEFAULT_LIMIT = 20
+CELLPOSE_DIAMETER = 15.0
 
 
 def selected_image_dirs(limit: int) -> list[Path]:
@@ -50,7 +51,7 @@ def predict_cellpose(model: models.CellposeModel, image: np.ndarray) -> np.ndarr
         cellpose_input(image),
         channel_axis=-1 if image.ndim == 3 else None,
         normalize=True,
-        diameter=None,
+        diameter=CELLPOSE_DIAMETER,
         flow_threshold=0.4,
         cellprob_threshold=0.0,
         min_size=15,

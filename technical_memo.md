@@ -74,10 +74,10 @@ Generated outputs:
 Current subset-level summary:
 
 - images: 20
-- mean object F1: 0.8892
-- mean matched IoU: 0.8513
-- mean absolute count error: 7.15
-- mean latency: 1118.71 ms/image
+- mean object F1: 0.8982
+- mean matched IoU: 0.8507
+- mean absolute count error: 5.60
+- mean latency: 3185.67 ms/image
 
 This is still a smoke test on a small subset. It establishes that the model-backed
 baseline path can produce the same metric and figure contract as the classical
@@ -185,7 +185,7 @@ Current comparison summary:
 
 | Method | Images | Mean object F1 | Mean matched IoU | Mean absolute count error | Median latency ms |
 | --- | ---: | ---: | ---: | ---: | ---: |
-| Cellpose-SAM | 20 | 0.8892 | 0.8513 | 7.15 | 687.13 |
+| Cellpose-SAM | 20 | 0.8982 | 0.8507 | 5.60 | 1863.77 |
 | Otsu + watershed | 20 | 0.4685 | 0.7307 | 63.75 | 15.72 |
 | SAM2 AMG | 20 | 0.3604 | 0.5424 | 31.55 | 1600.74 |
 

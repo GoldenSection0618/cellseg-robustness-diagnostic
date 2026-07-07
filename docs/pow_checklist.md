@@ -46,6 +46,8 @@ proof-of-work benchmark.
 - [x] Cellpose-SAM runs on the same small fixed subset.
 - [x] Cellpose-SAM metrics written to `results/baselines/`.
 - [x] Cellpose-SAM qualitative overlays written to `figures/`.
+- [x] Cellpose-SAM parameter diagnostic completed.
+- [x] Cellpose-SAM main predictor diameter set explicitly to 15 px.
 
 ## Third Baseline
 
