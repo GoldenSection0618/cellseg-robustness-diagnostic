@@ -62,7 +62,8 @@ heterogeneous DSB2018 images.
 ## Cellpose-SAM Smoke Test
 
 The Cellpose-family PoW baseline uses Cellpose 4.1.1 with the `cpsam` pretrained
-model on the same deterministic 20-image clean subset.
+model on the same deterministic 20-image clean subset. The current main
+configuration uses `gray_mean` input and `diameter=15`.
 
 Generated outputs:
 
@@ -74,10 +75,10 @@ Generated outputs:
 Current subset-level summary:
 
 - images: 20
-- mean object F1: 0.8982
-- mean matched IoU: 0.8507
-- mean absolute count error: 5.60
-- mean latency: 3185.67 ms/image
+- mean object F1: 0.9052
+- mean matched IoU: 0.8561
+- mean absolute count error: 5.50
+- mean latency: 3207.20 ms/image
 
 This is still a smoke test on a small subset. It establishes that the model-backed
 baseline path can produce the same metric and figure contract as the classical
@@ -185,7 +186,7 @@ Current comparison summary:
 
 | Method | Images | Mean object F1 | Mean matched IoU | Mean absolute count error | Median latency ms |
 | --- | ---: | ---: | ---: | ---: | ---: |
-| Cellpose-SAM | 20 | 0.8982 | 0.8507 | 5.60 | 1863.77 |
+| Cellpose-SAM | 20 | 0.9052 | 0.8561 | 5.50 | 1853.75 |
 | Otsu + watershed | 20 | 0.4685 | 0.7307 | 63.75 | 15.72 |
 | SAM2 AMG | 20 | 0.3604 | 0.5424 | 31.55 | 1600.74 |
 

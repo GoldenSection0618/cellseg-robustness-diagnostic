@@ -53,6 +53,7 @@ CONFIGS = [
     CellposeConfig("rgb_cellprob_-2", "rgb", True, False, None, 0.4, -2.0),
     CellposeConfig("rgb_flow_0", "rgb", True, False, None, 0.0, 0.0),
     CellposeConfig("rgb_diameter_15", "rgb", True, False, 15.0, 0.4, 0.0),
+    CellposeConfig("gray_diameter_15", "gray_mean", True, False, 15.0, 0.4, 0.0),
     CellposeConfig("rgb_diameter_30", "rgb", True, False, 30.0, 0.4, 0.0),
     CellposeConfig("rgb_diameter_60", "rgb", True, False, 60.0, 0.4, 0.0),
 ]

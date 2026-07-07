@@ -1,0 +1,3 @@
+config_id,images,mean_object_f1,median_object_f1,mean_precision,mean_recall,mean_matched_iou,mean_matched_dice,mean_absolute_count_error,median_absolute_count_error,mean_true_instances,mean_pred_instances,no_prediction_rate,median_latency_ms,mean_latency_ms,input_mode,normalize,invert,diameter,flow_threshold,cellprob_threshold,min_size
+gray_diameter_15,134,0.92,0.9479,0.9456,0.9007,0.8641,0.9202,2.9328,1.0,41.7836,39.9254,0.0075,1425.7475,2253.9279,gray_mean,True,False,15.0,0.4,0.0,15
+rgb_diameter_15,134,0.9155,0.9508,0.9438,0.8944,0.8638,0.9199,3.2463,1.0,41.7836,39.6866,0.0075,1421.054,2259.6851,rgb,True,False,15.0,0.4,0.0,15

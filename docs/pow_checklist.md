@@ -47,7 +47,7 @@ proof-of-work benchmark.
 - [x] Cellpose-SAM metrics written to `results/baselines/`.
 - [x] Cellpose-SAM qualitative overlays written to `figures/`.
 - [x] Cellpose-SAM parameter diagnostic completed.
-- [x] Cellpose-SAM main predictor diameter set explicitly to 15 px.
+- [x] Cellpose-SAM main predictor locked to `gray_mean` input and 15 px diameter.
 
 ## Third Baseline
 

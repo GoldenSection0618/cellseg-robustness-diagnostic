@@ -17,7 +17,7 @@ from cellpose import models
 REPO_ROOT = Path(__file__).resolve().parents[1]
 sys.path.insert(0, str(REPO_ROOT / "src"))
 
-from cellseg_robustness.data import load_train_example, stage1_train_image_dirs
+from cellseg_robustness.data import image_to_gray_float, load_train_example, stage1_train_image_dirs
 from cellseg_robustness.metrics import compute_instance_metrics, relabel_sequential
 from cellseg_robustness.paths import FIGURES_DIR, RESULT_SUBDIRS, ensure_output_dirs
 from cellseg_robustness.visualization import overlay_truth_prediction
@@ -26,6 +26,7 @@ from cellseg_robustness.visualization import overlay_truth_prediction
 METHOD = "cellpose_cpsam"
 IOU_THRESHOLD = 0.5
 DEFAULT_LIMIT = 20
+CELLPOSE_INPUT_MODE = "gray_mean"
 CELLPOSE_DIAMETER = 15.0
 
 
@@ -39,7 +40,9 @@ def selected_image_dirs(limit: int) -> list[Path]:
 
 
 def cellpose_input(image: np.ndarray) -> np.ndarray:
-    """Drop alpha channel while preserving RGB microscopy input."""
+    """Prepare DSB2018 image input for Cellpose-SAM."""
+    if CELLPOSE_INPUT_MODE == "gray_mean":
+        return (image_to_gray_float(image) * 255).astype(np.uint8)
     if image.ndim == 3 and image.shape[2] > 3:
         return image[..., :3]
     return image
@@ -47,9 +50,10 @@ def cellpose_input(image: np.ndarray) -> np.ndarray:
 
 def predict_cellpose(model: models.CellposeModel, image: np.ndarray) -> np.ndarray:
     """Predict instance masks with Cellpose-SAM."""
+    model_input = cellpose_input(image)
     prediction, *_ = model.eval(
-        cellpose_input(image),
-        channel_axis=-1 if image.ndim == 3 else None,
+        model_input,
+        channel_axis=-1 if model_input.ndim == 3 else None,
         normalize=True,
         diameter=CELLPOSE_DIAMETER,
         flow_threshold=0.4,
