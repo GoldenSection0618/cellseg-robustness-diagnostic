@@ -344,7 +344,7 @@ Near-term next steps:
 2. keep SAM2 AMG full-train robustness deferred because clean20 parameter sensitivity did not repair the failure pattern;
 3. treat any further SAM2 work as a different protocol, such as prompted SAM2 or post-processing repair;
 4. keep legacy Cellpose3 `cyto3` and one-click restoration as optional cross-version work;
-5. decide whether a YOLO model-capacity diagnostic is worth running, given that the completed label-budget curve improves with the full train pool but still remains below Cellpose-SAM.
+5. decide whether a YOLO model-capacity diagnostic is worth running, given that the completed supervised YOLO result remains below Cellpose-SAM.
 
 ## Reproducibility Principles
 

@@ -359,13 +359,11 @@ validation image ids and repository evaluation at `conf=0.25`.
 
 Current held-out validation comparison:
 
-| Method | Train images | Mean object F1 | Mean precision | Mean recall | Mean absolute count error |
-| --- | ---: | ---: | ---: | ---: | ---: |
-| Cellpose-SAM | 0 | 0.9200 | 0.9456 | 0.9007 | 2.9328 |
-| YOLO label-budget full train pool | 536 | 0.8649 | 0.8440 | 0.8942 | 4.2090 |
-| YOLO label-budget 250 | 250 | 0.8576 | 0.8400 | 0.8845 | 6.2090 |
-| YOLO fixed-budget 100 | 100 | 0.8530 | 0.8419 | 0.8737 | 6.0896 |
-| Otsu + watershed | 0 | 0.6442 | 0.6103 | 0.7219 | 19.8806 |
+| Method | Protocol | Mean object F1 | Mean precision | Mean recall | Mean absolute count error |
+| --- | --- | ---: | ---: | ---: | ---: |
+| Cellpose-SAM | zero-shot | 0.9200 | 0.9456 | 0.9007 | 2.9328 |
+| YOLO supervised | supervised | 0.8649 | 0.8440 | 0.8942 | 4.2090 |
+| Otsu + watershed | zero-shot | 0.6442 | 0.6103 | 0.7219 | 19.8806 |
 
-The full train-pool run improves the YOLO count error and F1 over the smaller
-budgets, but it still does not close the gap to Cellpose-SAM.
+The full YOLO label-budget curve is kept in `docs/supervised_protocol.md`; the main
+comparison reports the strongest completed YOLO supervised result.

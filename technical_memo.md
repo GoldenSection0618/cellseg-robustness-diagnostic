@@ -466,21 +466,9 @@ The run used `yolo11n-seg.pt`, 50 epochs, `imgsz=512`, `batch=8`, `workers=2`, A
 disabled, and `conf=0.25` for repository-metric evaluation. Training took 351.421
 seconds on the local RTX 4060 Laptop GPU.
 
-Held-out validation comparison on the same 134 image ids:
-
-| Method | Protocol | Mean object F1 | Mean precision | Mean recall | Mean absolute count error |
-| --- | --- | ---: | ---: | ---: | ---: |
-| Cellpose-SAM | zero-shot | 0.9200 | 0.9456 | 0.9007 | 2.9328 |
-| YOLO fixed-budget supervised | supervised | 0.8530 | 0.8419 | 0.8737 | 6.0896 |
-| Otsu + watershed | zero-shot | 0.6442 | 0.6103 | 0.7219 | 19.8806 |
-
-This result shows that 100-image supervised YOLO adaptation is useful and much
-stronger than the classical lower bound, but it does not overtake Cellpose-SAM under
-the repository object-level metrics. The main Protocol B concern is therefore on the
-training side: direct YOLO-seg fine-tuning may be under-adapted to dense cell
-instance segmentation, or the fixed 100-image label budget may be insufficient.
-Confidence-threshold calibration is a cheap diagnostic to exclude before retraining,
-not the main explanation being tested.
+The fixed-budget run is retained as the 100-image point in the YOLO label-budget
+diagnostic. The main cross-method comparison below reports the full supervised YOLO
+run; the full 100/250/536-image curve is documented in `docs/supervised_protocol.md`.
 
 The YOLO result should not be treated as a failed experiment to be replaced. It is a
 valid Protocol B v1 baseline. Any further YOLO work should be framed as a diagnostic
@@ -504,13 +492,10 @@ validation instances, and 0 dropped instances.
 The label-budget diagnostic has now been trained for 100 images, `budget_250`, and
 `full_train_pool`, all evaluated on the same 134 held-out validation images.
 
-| Method | Train images | Mean object F1 | Mean precision | Mean recall | Mean absolute count error |
-| --- | ---: | ---: | ---: | ---: | ---: |
-| Cellpose-SAM | 0 | 0.9200 | 0.9456 | 0.9007 | 2.9328 |
-| YOLO label-budget full train pool | 536 | 0.8649 | 0.8440 | 0.8942 | 4.2090 |
-| YOLO label-budget 250 | 250 | 0.8576 | 0.8400 | 0.8845 | 6.2090 |
-| YOLO fixed-budget 100 | 100 | 0.8530 | 0.8419 | 0.8737 | 6.0896 |
-| Otsu + watershed | 0 | 0.6442 | 0.6103 | 0.7219 | 19.8806 |
+| Method | Protocol | Mean object F1 | Mean precision | Mean recall | Mean absolute count error |
+| --- | --- | ---: | ---: | ---: | ---: |
+| Cellpose-SAM | zero-shot | 0.9200 | 0.9456 | 0.9007 | 2.9328 |
+| YOLO supervised | supervised | 0.8649 | 0.8440 | 0.8942 | 4.2090 |
+| Otsu + watershed | zero-shot | 0.6442 | 0.6103 | 0.7219 | 19.8806 |
 
-The full train-pool YOLO run improves over the smaller YOLO budgets but remains
-below Cellpose-SAM.
+YOLO supervised improves over Otsu but remains below Cellpose-SAM.
