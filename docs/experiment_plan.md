@@ -318,7 +318,7 @@ Fixed-budget supervised baseline outputs:
 Result: the fixed-budget YOLO run used 100 train images, 134 held-out validation
 images, 50 epochs, `imgsz=512`, `batch=8`, `workers=2`, AMP disabled, and
 `conf=0.25` for repository-metric evaluation. On the same held-out validation ids,
-mean object F1 is 0.9100 for Cellpose-SAM, 0.8530 for YOLO fixed-budget supervised,
+mean object F1 is 0.9200 for Cellpose-SAM, 0.8530 for YOLO fixed-budget supervised,
 and 0.6442 for Otsu + watershed. YOLO improves clearly over the classical lower
 bound but remains below Cellpose-SAM under the repository object-level metrics.
 
@@ -345,7 +345,7 @@ metrics, not to tune until YOLO wins.
 First follow-up result: the frozen v1 checkpoint was evaluated on the predeclared
 confidence grid `0.05`, `0.10`, `0.25`, `0.40`, and `0.60` over the same 134
 held-out validation images. The best mean object F1 is 0.8695 at `conf=0.40`,
-compared with 0.8530 for the `conf=0.25` operating point and 0.9100 for
+compared with 0.8530 for the `conf=0.25` operating point and 0.9200 for
 Cellpose-SAM on the same image ids. This excludes a poor confidence threshold as the
 main explanation, so the next diagnostic should directly test the original
 training-side concern: label budget first, then model capacity if needed.
@@ -361,7 +361,7 @@ Current held-out validation comparison:
 
 | Method | Train images | Mean object F1 | Mean precision | Mean recall | Mean absolute count error |
 | --- | ---: | ---: | ---: | ---: | ---: |
-| Cellpose-SAM | 0 | 0.9100 | 0.9420 | 0.8854 | 3.1194 |
+| Cellpose-SAM | 0 | 0.9200 | 0.9456 | 0.9007 | 2.9328 |
 | YOLO label-budget full train pool | 536 | 0.8649 | 0.8440 | 0.8942 | 4.2090 |
 | YOLO label-budget 250 | 250 | 0.8576 | 0.8400 | 0.8845 | 6.2090 |
 | YOLO fixed-budget 100 | 100 | 0.8530 | 0.8419 | 0.8737 | 6.0896 |

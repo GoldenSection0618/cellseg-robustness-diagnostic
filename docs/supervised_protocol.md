@@ -230,7 +230,7 @@ error 6.0896.
 
 On the same 134 held-out validation image ids, the clean zero-shot comparison is:
 
-- Cellpose-SAM: mean object F1 0.9100, mean absolute count error 3.1194;
+- Cellpose-SAM: mean object F1 0.9200, mean absolute count error 2.9328;
 - YOLO fixed-budget supervised: mean object F1 0.8530, mean absolute count error
   6.0896;
 - Otsu + watershed: mean object F1 0.6442, mean absolute count error 19.8806.
@@ -317,7 +317,7 @@ Summary:
 | 0.60 | 0.8412 | 0.9376 | 0.7774 | 10.6418 |
 
 The best threshold in this diagnostic is `conf=0.40`, with mean object F1 0.8695.
-It remains below Cellpose-SAM's 0.9100 mean object F1 on the same held-out
+It remains below Cellpose-SAM's 0.9200 mean object F1 on the same held-out
 validation ids.
 
 ## YOLO Label-Budget Diagnostic Conversion
@@ -380,7 +380,7 @@ Held-out validation comparison on the same 134 image ids:
 
 | Method | Train images | Mean object F1 | Mean precision | Mean recall | Mean absolute count error |
 | --- | ---: | ---: | ---: | ---: | ---: |
-| Cellpose-SAM | 0 | 0.9100 | 0.9420 | 0.8854 | 3.1194 |
+| Cellpose-SAM | 0 | 0.9200 | 0.9456 | 0.9007 | 2.9328 |
 | YOLO label-budget full train pool | 536 | 0.8649 | 0.8440 | 0.8942 | 4.2090 |
 | YOLO label-budget 250 | 250 | 0.8576 | 0.8400 | 0.8845 | 6.2090 |
 | YOLO fixed-budget 100 | 100 | 0.8530 | 0.8419 | 0.8737 | 6.0896 |

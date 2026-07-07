@@ -46,8 +46,8 @@ Primary figures:
 ## Method Conclusions
 
 Cellpose-SAM is the strongest current zero-shot baseline. On the full `stage1_train`
-robustness run, its mean object F1 is 0.9042 on clean images and remains between
-0.8780 and 0.8984 across the tested perturbations.
+robustness run, its mean object F1 is 0.9178 on clean images and remains between
+0.8740 and 0.9139 across the tested perturbations.
 
 Otsu + watershed remains useful as a classical lower bound. It is interpretable and
 fast, but its full-train clean F1 is 0.5736 and Gaussian noise drops it to 0.4298.
@@ -66,7 +66,7 @@ Full-train Otsu + watershed and Cellpose-SAM:
 
 | Method | Clean F1 | Noise F1 | Blur F1 | Downsample F1 | Inversion F1 |
 | --- | ---: | ---: | ---: | ---: | ---: |
-| Cellpose-SAM | 0.9042 | 0.8780 | 0.8845 | 0.8932 | 0.8984 |
+| Cellpose-SAM | 0.9178 | 0.8740 | 0.8898 | 0.9006 | 0.9139 |
 | Otsu + watershed | 0.5736 | 0.4298 | 0.5818 | 0.5825 | 0.5653 |
 
 SAM2 AMG clean20 sensitivity validation:
@@ -87,7 +87,7 @@ Otsu + watershed mainly fails through false positives, over-segmentation, and co
 inflation under Gaussian noise.
 
 Cellpose-SAM mainly has residual missed objects and a small number of no-prediction
-cases. The full-train diagnostics record 14 no-prediction image-condition rows out
+cases. The full-train diagnostics record 11 no-prediction image-condition rows out
 of 3350 Cellpose-SAM rows.
 
 SAM2 AMG mainly fails through poor automatic mask selection and poor cell-instance

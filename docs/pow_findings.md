@@ -36,7 +36,7 @@ it has the strongest clean object F1 and the smallest perturbation drops:
 
 | Method | Clean F1 | Gaussian noise F1 | Blur F1 | Downsample F1 | Inversion F1 |
 | --- | ---: | ---: | ---: | ---: | ---: |
-| Cellpose-SAM | 0.9042 | 0.8780 | 0.8845 | 0.8932 | 0.8984 |
+| Cellpose-SAM | 0.9178 | 0.8740 | 0.8898 | 0.9006 | 0.9139 |
 | Otsu + watershed | 0.5736 | 0.4298 | 0.5818 | 0.5825 | 0.5653 |
 
 Otsu + watershed remains useful as a classical lower bound. It is interpretable,
@@ -57,8 +57,8 @@ relative drop. Blur and downsample are slightly higher than clean on average, wh
 is consistent with mild smoothing reducing some oversegmentation.
 
 Cellpose-SAM stays stable at full-train scale. Its relative object-F1 drops are
-small across the tested perturbations: 2.9% for Gaussian noise, 2.2% for blur, 1.2%
-for downsample, and 0.6% for inversion.
+small across the tested perturbations: 4.8% for Gaussian noise, 3.1% for blur, 1.9%
+for downsample, and 0.4% for inversion.
 
 SAM2 AMG clean20 is already sufficient evidence for the current PoW decision, but it
 should not be described as a full-train result. Its object F1 falls from 0.3604 on
@@ -73,7 +73,7 @@ regions and drives count explosion.
 
 Cellpose-SAM failures are narrower. The main observed issues are missed objects,
 small recall drops, and a limited set of no-prediction cases. The full-train
-diagnostics record 14 no-prediction image-condition rows out of 3350 Cellpose-SAM
+diagnostics record 11 no-prediction image-condition rows out of 3350 Cellpose-SAM
 rows.
 
 SAM2 AMG failure is an automatic-mask-generation failure, not a text-prompt failure.

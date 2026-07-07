@@ -340,20 +340,20 @@ Current full-train summary:
 | Method | Clean F1 | Gaussian noise F1 | Blur F1 | Downsample F1 | Inversion F1 |
 | --- | ---: | ---: | ---: | ---: | ---: |
 | Otsu + watershed | 0.5736 | 0.4298 | 0.5818 | 0.5825 | 0.5653 |
-| Cellpose-SAM | 0.9042 | 0.8780 | 0.8845 | 0.8932 | 0.8984 |
+| Cellpose-SAM | 0.9178 | 0.8740 | 0.8898 | 0.9006 | 0.9139 |
 
 This confirms the clean20 trend at full-train scale. Gaussian noise is the main Otsu
 failure condition, with a 25.1% relative object-F1 drop from clean. Blur and
 downsample are slightly higher than clean on average, which is consistent with mild
 smoothing reducing some oversegmentation. Cellpose-SAM remains substantially stronger
-and more stable, with relative object-F1 drops of 2.9% for Gaussian noise, 2.2% for
-blur, 1.2% for downsample, and 0.6% for inversion.
+and more stable, with relative object-F1 drops of 4.8% for Gaussian noise, 3.1% for
+blur, 1.9% for downsample, and 0.4% for inversion.
 
 The full-train interpretation layer intentionally uses a small metric set: per-image
 object-F1 drop from clean, precision drop, recall drop, absolute count-error delta,
 and no-prediction rows. This keeps the analysis focused on robustness failure
 direction rather than duplicating every segmentation metric. Cellpose-SAM produced
-14 no-prediction rows out of 3350 image-condition rows; these are recorded in
+11 no-prediction rows out of 3350 image-condition rows; these are recorded in
 `pow_baseline_robustness_full_train_no_prediction_cases.csv` and are counted as
 ordinary failures in the aggregate metrics.
 
@@ -470,7 +470,7 @@ Held-out validation comparison on the same 134 image ids:
 
 | Method | Protocol | Mean object F1 | Mean precision | Mean recall | Mean absolute count error |
 | --- | --- | ---: | ---: | ---: | ---: |
-| Cellpose-SAM | zero-shot | 0.9100 | 0.9420 | 0.8854 | 3.1194 |
+| Cellpose-SAM | zero-shot | 0.9200 | 0.9456 | 0.9007 | 2.9328 |
 | YOLO fixed-budget supervised | supervised | 0.8530 | 0.8419 | 0.8737 | 6.0896 |
 | Otsu + watershed | zero-shot | 0.6442 | 0.6103 | 0.7219 | 19.8806 |
 
@@ -491,7 +491,7 @@ Cellpose-SAM, not to tune until a preferred ranking appears.
 The first YOLO follow-up diagnostic evaluated the frozen v1 checkpoint over
 confidence thresholds `0.05`, `0.10`, `0.25`, `0.40`, and `0.60` on the same 134
 held-out validation images. The best mean object F1 is 0.8695 at `conf=0.40` and
-remains below Cellpose-SAM's 0.9100 on the same image ids.
+remains below Cellpose-SAM's 0.9200 on the same image ids.
 
 The label-budget diagnostic split/label conversion is prepared as a nested extension
 of the existing Protocol B v1 split. The 100-image v1 result remains the first budget
@@ -506,7 +506,7 @@ The label-budget diagnostic has now been trained for 100 images, `budget_250`, a
 
 | Method | Train images | Mean object F1 | Mean precision | Mean recall | Mean absolute count error |
 | --- | ---: | ---: | ---: | ---: | ---: |
-| Cellpose-SAM | 0 | 0.9100 | 0.9420 | 0.8854 | 3.1194 |
+| Cellpose-SAM | 0 | 0.9200 | 0.9456 | 0.9007 | 2.9328 |
 | YOLO label-budget full train pool | 536 | 0.8649 | 0.8440 | 0.8942 | 4.2090 |
 | YOLO label-budget 250 | 250 | 0.8576 | 0.8400 | 0.8845 | 6.2090 |
 | YOLO fixed-budget 100 | 100 | 0.8530 | 0.8419 | 0.8737 | 6.0896 |
