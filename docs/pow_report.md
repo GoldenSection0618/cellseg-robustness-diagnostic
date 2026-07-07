@@ -5,9 +5,10 @@ segmentation robustness. It summarizes what was tested, what the evidence suppor
 and what should happen next.
 
 Status note: this is a zero-shot stage report. Its recommendation to run a separate
-supervised adaptation protocol has since been followed by Protocol B fixed-budget
-YOLO results; those results are documented in `docs/supervised_protocol.md` and are
-not part of the zero-shot ranking summarized here.
+supervised adaptation protocol has since been followed by Protocol B YOLO results,
+including fixed-budget, label-budget, threshold, and capacity diagnostics. Those
+results are documented in `docs/supervised_protocol.md` and are not part of the
+zero-shot ranking summarized here.
 
 ## Scope
 
@@ -103,6 +104,7 @@ a protocol change.
 
 The next experimental protocol should be separate from this PoW stage. In the
 subsequent work, that became Protocol B supervised adaptation with YOLO-seg
-fine-tuning, asking a new question: how much target-domain annotation improves
-performance over the zero-shot baselines. Further SAM2 work should be prompted SAM2
-or post-processing repair, not more current-AMG scaling.
+fine-tuning and capacity diagnostics, asking a new question: how much target-domain
+annotation and model capacity improve performance over the zero-shot baselines.
+Further SAM2 work should be prompted SAM2 or post-processing repair, not more
+current-AMG scaling.

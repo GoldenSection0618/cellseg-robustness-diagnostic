@@ -267,8 +267,8 @@ Follow-up sequence:
 1. Operating-point diagnostic on `conf=0.05`, `0.10`, `0.25`, `0.40`, and `0.60`.
 2. Label-budget diagnostic. Keep model size and training recipe fixed, then train
    predeclared budgets: 100, 250, and full 536-image training pool.
-3. Model-capacity diagnostic. Keep the 100-image budget fixed and compare
-   `yolo11n-seg` against one larger model such as `yolo11s-seg`.
+3. Model-capacity diagnostic. Use the full train pool and compare the completed
+   `yolo11n-seg` run against a larger upper-probe model, `yolo11m-seg`.
 4. Optional post-processing diagnostic with a small predeclared mask filtering rule.
 
 Suggested output names:
@@ -278,7 +278,7 @@ Suggested output names:
 - `figures/supervised_yolo_threshold_diagnostic_f1.png`
 - `figures/supervised_yolo_threshold_diagnostic_count_error.png`
 - `results/supervised/yolo_label_budget_diagnostic_summary.csv`
-- `results/supervised/yolo_model_capacity_diagnostic_summary.csv`
+- `results/supervised/yolo_capacity_diagnostic_val_comparison_summary.csv`
 - `results/supervised/yolo_postprocessing_diagnostic_summary.csv`
 
 Interpretation rules:
@@ -287,8 +287,9 @@ Interpretation rules:
   sensitive rather than claiming the v1 baseline was invalid.
 - If larger label budgets improve monotonically, report the v1 gap as label-budget
   limited.
-- If a larger YOLO model improves at the same 100-image budget, report a capacity
-  limitation.
+- If the larger YOLO model clearly improves over YOLO11n on the full train pool,
+  report a capacity limitation and consider filling in an intermediate `yolo11s-seg`
+  point.
 - If none of these axes closes the gap, report evidence that Cellpose-SAM's
   cell-specific prior remains stronger for this dataset under the tested budgets.
 - In all cases, keep the v1 result in comparison tables.
@@ -370,6 +371,7 @@ Outputs:
 - `results/supervised/yolo_label_budget_diagnostic_full_train_pool_eval_summary.csv`
 - `results/supervised/yolo_label_budget_diagnostic_val_comparison_metrics.csv`
 - `results/supervised/yolo_label_budget_diagnostic_val_comparison_summary.csv`
+- `figures/supervised_yolo_label_budget_diagnostic_comparison.png`
 - `figures/supervised_yolo_label_budget_diagnostic_budget_250_eval_overlays.png`
 - `figures/supervised_yolo_label_budget_diagnostic_full_train_pool_eval_overlays.png`
 
@@ -391,3 +393,38 @@ absolute count error, but it remains below Cellpose-SAM on mean object F1 and co
 error. The label-budget diagnostic therefore supports supervised YOLO as a useful
 Protocol B line, but label budget alone does not explain the main gap to
 Cellpose-SAM.
+
+## YOLO11m Capacity Diagnostic Result
+
+The capacity diagnostic trains `YOLO11m-seg` on the same `full_train_pool` dataset
+and evaluates on the same 134 held-out validation images. The purpose is to test
+whether a substantially larger YOLO-seg model changes the label-budget conclusion.
+
+Outputs:
+
+- `results/supervised/yolo_capacity_diagnostic_yolo11m_train_metadata.csv`
+- `results/supervised/yolo_capacity_diagnostic_yolo11m_train_summary.csv`
+- `results/supervised/yolo_capacity_diagnostic_yolo11m_metrics.csv`
+- `results/supervised/yolo_capacity_diagnostic_yolo11m_eval_summary.csv`
+- `results/supervised/yolo_capacity_diagnostic_val_comparison_metrics.csv`
+- `results/supervised/yolo_capacity_diagnostic_val_comparison_summary.csv`
+- `figures/supervised_yolo_capacity_diagnostic_yolo11m_eval_overlays.png`
+- `figures/supervised_yolo_capacity_diagnostic_comparison.png`
+
+The run used `yolo11m-seg.pt`, 50 epochs, `imgsz=512`, `batch=8`, `workers=3`,
+AMP disabled, and repository metric evaluation at `conf=0.25`. Training took
+2827.244 seconds.
+
+Held-out validation comparison on the same 134 image ids:
+
+| Method | Train images | Mean object F1 | Mean precision | Mean recall | Mean absolute count error |
+| --- | ---: | ---: | ---: | ---: | ---: |
+| Cellpose-SAM | 0 | 0.9200 | 0.9456 | 0.9007 | 2.9328 |
+| YOLO11m full train pool | 536 | 0.8680 | 0.8525 | 0.8921 | 4.8582 |
+| YOLO11n full train pool | 536 | 0.8649 | 0.8440 | 0.8942 | 4.2090 |
+| Otsu + watershed | 0 | 0.6442 | 0.6103 | 0.7219 | 19.8806 |
+
+YOLO11m gives only a small mean object-F1 increase over YOLO11n and does not improve
+mean absolute count error. This capacity probe does not close the gap to
+Cellpose-SAM, so there is no current need to add an intermediate YOLO11s run as a
+main PoW result.

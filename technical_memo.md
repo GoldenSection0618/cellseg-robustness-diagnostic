@@ -467,8 +467,9 @@ disabled, and `conf=0.25` for repository-metric evaluation. Training took 351.42
 seconds on the local RTX 4060 Laptop GPU.
 
 The fixed-budget run is retained as the 100-image point in the YOLO label-budget
-diagnostic. The main cross-method comparison below reports the full supervised YOLO
-run; the full 100/250/536-image curve is documented in `docs/supervised_protocol.md`.
+diagnostic. The main cross-method comparison below reports the strongest completed
+YOLO supervised result by mean object F1; the full YOLO diagnostic curves are
+documented in `docs/supervised_protocol.md`.
 
 The YOLO result should not be treated as a failed experiment to be replaced. It is a
 valid Protocol B v1 baseline. Any further YOLO work should be framed as a diagnostic
@@ -495,7 +496,14 @@ The label-budget diagnostic has now been trained for 100 images, `budget_250`, a
 | Method | Protocol | Mean object F1 | Mean precision | Mean recall | Mean absolute count error |
 | --- | --- | ---: | ---: | ---: | ---: |
 | Cellpose-SAM | zero-shot | 0.9200 | 0.9456 | 0.9007 | 2.9328 |
-| YOLO supervised | supervised | 0.8649 | 0.8440 | 0.8942 | 4.2090 |
+| YOLO supervised | supervised | 0.8680 | 0.8525 | 0.8921 | 4.8582 |
 | Otsu + watershed | zero-shot | 0.6442 | 0.6103 | 0.7219 | 19.8806 |
 
 YOLO supervised improves over Otsu but remains below Cellpose-SAM.
+
+The YOLO11m capacity probe was then run on the same full train-pool split. It reaches
+mean object F1 0.8680 and mean absolute count error 4.8582 on the same held-out
+validation ids, compared with YOLO11n full train-pool F1 0.8649 and count error
+4.2090. The larger model does not materially close the gap to Cellpose-SAM, so the
+current evidence does not justify adding an intermediate YOLO11s run to the main PoW
+record.

@@ -335,7 +335,7 @@ under the 100-image fixed budget. The recommended sequence is:
 
 - operating-point diagnostic on the frozen v1 checkpoint;
 - label-budget diagnostic with predeclared budgets;
-- model-capacity diagnostic with a larger YOLO-seg model if runtime permits;
+- model-capacity diagnostic with a larger YOLO-seg model;
 - optional predeclared post-processing diagnostic.
 
 The purpose is to identify why YOLO remains below Cellpose-SAM under repository
@@ -346,8 +346,8 @@ confidence grid `0.05`, `0.10`, `0.25`, `0.40`, and `0.60` over the same 134
 held-out validation images. The best mean object F1 is 0.8695 at `conf=0.40`,
 compared with 0.8530 for the `conf=0.25` operating point and 0.9200 for
 Cellpose-SAM on the same image ids. This excludes a poor confidence threshold as the
-main explanation, so the next diagnostic should directly test the original
-training-side concern: label budget first, then model capacity if needed.
+main explanation, so the next diagnostic directly tested the original training-side
+concern: label budget first, then model capacity.
 
 The label-budget diagnostic is now trained and evaluated for the 100-image
 fixed-budget point, `budget_250`, and `full_train_pool`. The two larger budgets are
@@ -361,8 +361,15 @@ Current held-out validation comparison:
 | Method | Protocol | Mean object F1 | Mean precision | Mean recall | Mean absolute count error |
 | --- | --- | ---: | ---: | ---: | ---: |
 | Cellpose-SAM | zero-shot | 0.9200 | 0.9456 | 0.9007 | 2.9328 |
-| YOLO supervised | supervised | 0.8649 | 0.8440 | 0.8942 | 4.2090 |
+| YOLO supervised | supervised | 0.8680 | 0.8525 | 0.8921 | 4.8582 |
 | Otsu + watershed | zero-shot | 0.6442 | 0.6103 | 0.7219 | 19.8806 |
 
-The full YOLO label-budget curve is kept in `docs/supervised_protocol.md`; the main
-comparison reports the strongest completed YOLO supervised result.
+The full YOLO diagnostic curves are kept in `docs/supervised_protocol.md`; the main
+comparison reports the strongest completed YOLO supervised result by mean object F1.
+
+The YOLO11m capacity probe has also been trained on the same 536-image full train
+pool and evaluated on the same 134 held-out validation images. YOLO11m reaches mean
+object F1 0.8680 and mean absolute count error 4.8582, compared with YOLO11n full
+train-pool F1 0.8649 and count error 4.2090. This does not close the gap to
+Cellpose-SAM. Detailed capacity outputs and figures are recorded in
+`docs/supervised_protocol.md`.

@@ -311,8 +311,8 @@ VLM-based segmentation is included as an exploratory protocol. The focus is not 
 
 YOLO-seg is tracked as a supervised real-time segmentation baseline, not as a
 zero-shot method. Protocol B has completed label-conversion, tiny training, and
-tiny evaluation smokes, plus a fixed-budget 100-image supervised training baseline
-evaluated on a 134-image held-out validation split.
+tiny evaluation smokes, plus fixed-budget, threshold, label-budget, and YOLO11m
+capacity diagnostics evaluated on the same 134-image held-out validation split.
 
 ### Classical Segmentation Baselines
 
@@ -334,7 +334,7 @@ Implemented PoW artifacts:
 3. clean-subset baselines for Otsu + watershed, Cellpose-SAM / `cpsam`, and SAM2 AMG;
 4. clean-subset comparison and failure-case tables in `results/baselines/`, with comparison figures in `figures/`;
 5. small Otsu-only and three-baseline perturbation smoke tests, a 20-image clean-subset robustness extension, staged Otsu/Cellpose-SAM full-train robustness runs, and SAM2 AMG clean20 parameter-sensitivity results in `results/robustness/`;
-6. YOLO supervised adaptation protocol, a 20-image label-conversion smoke test, fixed-budget YOLO split/label conversion, fixed-budget held-out validation results, threshold diagnostic results, and nested label-budget diagnostic results for 100, 250, and full train-pool budgets in `results/supervised/`;
+6. YOLO supervised adaptation protocol, a 20-image label-conversion smoke test, fixed-budget YOLO split/label conversion, fixed-budget held-out validation results, threshold diagnostic results, nested label-budget diagnostic results for 100, 250, and full train-pool budgets, and a YOLO11m capacity probe in `results/supervised/`;
 7. root-level `technical_memo.md` with current summaries and limitations;
 8. PoW support docs under `docs/`, including data, environment, supervised protocol, output contract, experiment plan, checklist, failure taxonomy, findings, and stage report.
 
@@ -344,7 +344,7 @@ Near-term next steps:
 2. keep SAM2 AMG full-train robustness deferred because clean20 parameter sensitivity did not repair the failure pattern;
 3. treat any further SAM2 work as a different protocol, such as prompted SAM2 or post-processing repair;
 4. keep legacy Cellpose3 `cyto3` and one-click restoration as optional cross-version work;
-5. decide whether a YOLO model-capacity diagnostic is worth running, given that the completed supervised YOLO result remains below Cellpose-SAM.
+5. treat further YOLO work as optional post-processing or architecture work, since the completed YOLO11m capacity probe does not close the gap to Cellpose-SAM.
 
 ## Reproducibility Principles
 

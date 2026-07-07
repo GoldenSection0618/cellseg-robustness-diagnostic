@@ -92,7 +92,8 @@ post-processing are separate future experiments.
 
 These zero-shot findings do not fold supervised adaptation methods into the main
 PoW ranking. YOLO-seg is now evaluated separately under Protocol B on the same
-held-out validation ids used for comparison; Cellpose fine-tuning and VLM-based
+held-out validation ids used for comparison. The completed YOLO11m capacity probe
+does not close the gap to Cellpose-SAM; Cellpose fine-tuning and VLM-based
 segmentation remain separate future protocols.
 
 ## Current Decision

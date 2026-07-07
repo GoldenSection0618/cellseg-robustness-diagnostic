@@ -115,3 +115,4 @@ proof-of-work benchmark.
 - [x] YOLO threshold diagnostic.
 - [x] Nested YOLO label-budget conversion.
 - [x] YOLO label-budget diagnostic for 100, 250, and full train-pool budgets.
+- [x] YOLO11m full train-pool capacity diagnostic.

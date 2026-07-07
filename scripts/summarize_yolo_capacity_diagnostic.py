@@ -1,5 +1,5 @@
 #!/usr/bin/env python
-"""Compare YOLO label-budget diagnostic results on the fixed held-out val split."""
+"""Compare YOLO capacity diagnostic results on the fixed held-out val split."""
 
 from __future__ import annotations
 
@@ -19,14 +19,13 @@ sys.path.insert(0, str(REPO_ROOT / "src"))
 from cellseg_robustness.paths import FIGURES_DIR, RESULT_SUBDIRS, ensure_output_dirs
 
 
-FIXED_YOLO_METRICS = RESULT_SUBDIRS["supervised"] / "yolo_fixed_budget_metrics.csv"
-BUDGET_250_METRICS = RESULT_SUBDIRS["supervised"] / "yolo_label_budget_diagnostic_budget_250_metrics.csv"
-FULL_TRAIN_POOL_METRICS = RESULT_SUBDIRS["supervised"] / "yolo_label_budget_diagnostic_full_train_pool_metrics.csv"
+YOLO11N_METRICS = RESULT_SUBDIRS["supervised"] / "yolo_label_budget_diagnostic_full_train_pool_metrics.csv"
+YOLO11M_METRICS = RESULT_SUBDIRS["supervised"] / "yolo_capacity_diagnostic_yolo11m_metrics.csv"
 VAL_MANIFEST = RESULT_SUBDIRS["supervised"] / "yolo_fixed_budget_manifest.csv"
 ZERO_SHOT_METRICS = RESULT_SUBDIRS["robustness"] / "pow_baseline_robustness_full_train_metrics.csv"
-COMPARISON_METRICS = RESULT_SUBDIRS["supervised"] / "yolo_label_budget_diagnostic_val_comparison_metrics.csv"
-COMPARISON_SUMMARY = RESULT_SUBDIRS["supervised"] / "yolo_label_budget_diagnostic_val_comparison_summary.csv"
-COMPARISON_FIGURE = FIGURES_DIR / "supervised_yolo_label_budget_diagnostic_comparison.png"
+COMPARISON_METRICS = RESULT_SUBDIRS["supervised"] / "yolo_capacity_diagnostic_val_comparison_metrics.csv"
+COMPARISON_SUMMARY = RESULT_SUBDIRS["supervised"] / "yolo_capacity_diagnostic_val_comparison_summary.csv"
+FIGURE_PATH = FIGURES_DIR / "supervised_yolo_capacity_diagnostic_comparison.png"
 
 METRIC_COLUMNS = [
     "true_instances",
@@ -46,9 +45,8 @@ METRIC_COLUMNS = [
 
 FIGURE_LABELS = {
     "Cellpose-SAM": "Cellpose-SAM",
-    "YOLO label-budget full train pool": "YOLO11n full",
-    "YOLO label-budget 250": "YOLO11n 250",
-    "YOLO fixed-budget 100": "YOLO11n 100",
+    "YOLO11m full train pool": "YOLO11m full",
+    "YOLO11n full train pool": "YOLO11n full",
     "Otsu + watershed": "Otsu",
 }
 
@@ -60,21 +58,21 @@ def parse_args() -> argparse.Namespace:
 
 
 def prepare_outputs(overwrite: bool) -> None:
-    existing = [path for path in [COMPARISON_METRICS, COMPARISON_SUMMARY, COMPARISON_FIGURE] if path.exists()]
+    existing = [path for path in [COMPARISON_METRICS, COMPARISON_SUMMARY, FIGURE_PATH] if path.exists()]
     if existing and not overwrite:
         joined = "\n".join(str(path) for path in existing)
-        raise FileExistsError(f"Existing label-budget comparison outputs found. Use --overwrite.\n{joined}")
+        raise FileExistsError(f"Existing capacity comparison outputs found. Use --overwrite.\n{joined}")
     if overwrite:
         for path in existing:
             path.unlink()
 
 
-def normalize_yolo(frame: pd.DataFrame, method: str, method_label: str, condition: str) -> pd.DataFrame:
+def normalize_yolo(frame: pd.DataFrame, method: str, method_label: str) -> pd.DataFrame:
     out = frame.copy()
     out["method"] = method
     out["method_label"] = method_label
     out["protocol"] = "supervised"
-    out["condition"] = condition
+    out["condition"] = "same_held_out_val"
     return out[["image_id", "method", "method_label", "protocol", "condition", *METRIC_COLUMNS]]
 
 
@@ -127,7 +125,7 @@ def save_comparison_figure(summary: pd.DataFrame) -> None:
     )
     ordered = summary.sort_values("mean_object_f1", ascending=True).copy()
     labels = ordered["method_label"].map(FIGURE_LABELS).fillna(ordered["method_label"])
-    fig, axes = plt.subplots(1, 2, figsize=(7.2, 3.2))
+    fig, axes = plt.subplots(1, 2, figsize=(7.2, 3.0))
     axes[0].barh(labels, ordered["mean_object_f1"], color="#4f8a8b")
     axes[0].set_xlabel("Mean object F1")
     axes[0].set_xlim(0, 1)
@@ -142,7 +140,7 @@ def save_comparison_figure(summary: pd.DataFrame) -> None:
     for value, y_pos in zip(ordered["mean_absolute_count_error"], range(len(ordered))):
         axes[1].text(value + x_max * 0.015, y_pos, f"{value:.2f}", va="center", fontsize=6)
     fig.tight_layout()
-    fig.savefig(COMPARISON_FIGURE, dpi=600, bbox_inches="tight")
+    fig.savefig(FIGURE_PATH, dpi=600, bbox_inches="tight")
     plt.close(fig)
 
 
@@ -153,34 +151,21 @@ def main() -> None:
 
     manifest = pd.read_csv(VAL_MANIFEST)
     val_ids = set(manifest.loc[manifest["split"] == "val", "image_id"])
-    fixed = pd.read_csv(FIXED_YOLO_METRICS)
-    budget_250 = pd.read_csv(BUDGET_250_METRICS)
-    full_train_pool = pd.read_csv(FULL_TRAIN_POOL_METRICS)
+    yolo11n = pd.read_csv(YOLO11N_METRICS)
+    yolo11m = pd.read_csv(YOLO11M_METRICS)
     zero_shot = pd.read_csv(ZERO_SHOT_METRICS)
 
     comparison = pd.concat(
         [
-            normalize_yolo(fixed, "yolo_fixed_budget_100", "YOLO fixed-budget 100", "held_out_val"),
-            normalize_yolo(
-                budget_250,
-                "yolo_label_budget_250",
-                "YOLO label-budget 250",
-                "same_held_out_val",
-            ),
-            normalize_yolo(
-                full_train_pool,
-                "yolo_label_budget_full_train_pool",
-                "YOLO label-budget full train pool",
-                "same_held_out_val",
-            ),
+            normalize_yolo(yolo11n, "yolo11n_full_train_pool", "YOLO11n full train pool"),
+            normalize_yolo(yolo11m, "yolo11m_full_train_pool", "YOLO11m full train pool"),
             normalize_zero_shot(zero_shot, val_ids),
         ],
         ignore_index=True,
     )
     expected = {
-        "yolo_fixed_budget_100": len(val_ids),
-        "yolo_label_budget_250": len(val_ids),
-        "yolo_label_budget_full_train_pool": len(val_ids),
+        "yolo11n_full_train_pool": len(val_ids),
+        "yolo11m_full_train_pool": len(val_ids),
         "otsu_watershed": len(val_ids),
         "cellpose_cpsam": len(val_ids),
     }
@@ -194,7 +179,7 @@ def main() -> None:
     save_comparison_figure(summary)
     print(f"Wrote {COMPARISON_METRICS}")
     print(f"Wrote {COMPARISON_SUMMARY}")
-    print(f"Wrote {COMPARISON_FIGURE}")
+    print(f"Wrote {FIGURE_PATH}")
 
 
 if __name__ == "__main__":
