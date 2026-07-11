@@ -23,7 +23,9 @@ sys.path.insert(0, str(REPO_ROOT / "scripts"))
 from cellseg_robustness.data import load_train_example, stage1_train_image_dirs
 from cellseg_robustness.metrics import compute_instance_metrics
 from cellseg_robustness.paths import FIGURES_DIR, RESULT_SUBDIRS, ensure_output_dirs
+from cellseg_robustness.plot_style import save_png
 from cellseg_robustness.perturbations import apply_perturbation, smoke_test_perturbations
+
 from cellseg_robustness.visualization import overlay_truth_prediction
 from run_otsu_watershed_baseline import otsu_watershed_predict
 
@@ -39,34 +41,6 @@ def selected_image_dirs(limit: int) -> list[Path]:
         return image_dirs
     indices = np.linspace(0, len(image_dirs) - 1, num=limit, dtype=int)
     return [image_dirs[int(index)] for index in indices]
-
-
-def save_drop_plot(summary: pd.DataFrame) -> None:
-    plot_frame = summary[summary["perturbation"] != "clean"].copy()
-    fig, ax = plt.subplots(figsize=(8, 4.5))
-    ax.bar(plot_frame["perturbation"], plot_frame["relative_object_f1_drop"], color="#ef4444")
-    ax.set_title("Otsu Watershed Robustness Smoke: Relative F1 Drop")
-    ax.set_xlabel("Perturbation")
-    ax.set_ylabel("Relative object F1 drop")
-    ax.tick_params(axis="x", rotation=20)
-    fig.tight_layout()
-    fig.savefig(FIGURES_DIR / "robustness_otsu_smoke_relative_f1_drop.png", dpi=160)
-    plt.close(fig)
-
-
-def save_metric_plot(summary: pd.DataFrame) -> None:
-    fig, ax = plt.subplots(figsize=(8, 4.5))
-    ax.plot(summary["perturbation"], summary["mean_object_f1"], marker="o", label="Object F1")
-    ax.plot(summary["perturbation"], summary["mean_matched_iou"], marker="o", label="Matched IoU")
-    ax.set_ylim(0, 1)
-    ax.set_title("Otsu Watershed Robustness Smoke: Mean Scores")
-    ax.set_xlabel("Perturbation")
-    ax.set_ylabel("Mean score")
-    ax.tick_params(axis="x", rotation=20)
-    ax.legend(frameon=False)
-    fig.tight_layout()
-    fig.savefig(FIGURES_DIR / "robustness_otsu_smoke_mean_scores.png", dpi=160)
-    plt.close(fig)
 
 
 def save_overlay_examples(
@@ -86,7 +60,7 @@ def save_overlay_examples(
         ax.axis("off")
 
     fig.tight_layout()
-    fig.savefig(FIGURES_DIR / "robustness_otsu_smoke_overlay_examples.png", dpi=160)
+    save_png(fig, FIGURES_DIR / "robustness_otsu_smoke_overlay_examples.png")
     plt.close(fig)
 
 
@@ -150,14 +124,10 @@ def main() -> None:
     metrics_df.to_csv(metrics_path, index=False)
     summary_df.to_csv(summary_path, index=False)
 
-    save_metric_plot(summary_df)
-    save_drop_plot(summary_df)
     save_overlay_examples(overlay_examples)
 
     print(f"Wrote {metrics_path}")
     print(f"Wrote {summary_path}")
-    print(f"Wrote {FIGURES_DIR / 'robustness_otsu_smoke_mean_scores.png'}")
-    print(f"Wrote {FIGURES_DIR / 'robustness_otsu_smoke_relative_f1_drop.png'}")
     print(f"Wrote {FIGURES_DIR / 'robustness_otsu_smoke_overlay_examples.png'}")
 
 

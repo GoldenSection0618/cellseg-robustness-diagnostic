@@ -4,19 +4,16 @@
 from __future__ import annotations
 
 import argparse
-import os
 import sys
 from pathlib import Path
 
-os.environ.setdefault("MPLCONFIGDIR", "/tmp/cellseg-matplotlib")
-
-import matplotlib.pyplot as plt
 import pandas as pd
 
 REPO_ROOT = Path(__file__).resolve().parents[1]
 sys.path.insert(0, str(REPO_ROOT / "src"))
 
-from cellseg_robustness.paths import FIGURES_DIR, RESULT_SUBDIRS, ensure_output_dirs
+from cellseg_robustness.paths import RESULT_SUBDIRS, ensure_output_dirs
+from cellseg_robustness.summary import FAILURE_RATE_AGGREGATIONS, add_failure_rate_columns
 
 
 YOLO11N_METRICS = RESULT_SUBDIRS["supervised"] / "yolo_label_budget_diagnostic_full_train_pool_metrics.csv"
@@ -25,7 +22,6 @@ VAL_MANIFEST = RESULT_SUBDIRS["supervised"] / "yolo_fixed_budget_manifest.csv"
 ZERO_SHOT_METRICS = RESULT_SUBDIRS["robustness"] / "pow_baseline_robustness_full_train_metrics.csv"
 COMPARISON_METRICS = RESULT_SUBDIRS["supervised"] / "yolo_capacity_diagnostic_val_comparison_metrics.csv"
 COMPARISON_SUMMARY = RESULT_SUBDIRS["supervised"] / "yolo_capacity_diagnostic_val_comparison_summary.csv"
-FIGURE_PATH = FIGURES_DIR / "supervised_yolo_capacity_diagnostic_comparison.png"
 
 METRIC_COLUMNS = [
     "true_instances",
@@ -43,14 +39,6 @@ METRIC_COLUMNS = [
     "latency_ms",
 ]
 
-FIGURE_LABELS = {
-    "Cellpose-SAM": "Cellpose-SAM",
-    "YOLO11m full train pool": "YOLO11m full",
-    "YOLO11n full train pool": "YOLO11n full",
-    "Otsu + watershed": "Otsu",
-}
-
-
 def parse_args() -> argparse.Namespace:
     parser = argparse.ArgumentParser(description=__doc__)
     parser.add_argument("--overwrite", action="store_true")
@@ -58,7 +46,7 @@ def parse_args() -> argparse.Namespace:
 
 
 def prepare_outputs(overwrite: bool) -> None:
-    existing = [path for path in [COMPARISON_METRICS, COMPARISON_SUMMARY, FIGURE_PATH] if path.exists()]
+    existing = [path for path in [COMPARISON_METRICS, COMPARISON_SUMMARY] if path.exists()]
     if existing and not overwrite:
         joined = "\n".join(str(path) for path in existing)
         raise FileExistsError(f"Existing capacity comparison outputs found. Use --overwrite.\n{joined}")
@@ -88,6 +76,7 @@ def normalize_zero_shot(zero_shot: pd.DataFrame, val_ids: set[str]) -> pd.DataFr
 
 
 def build_summary(metrics: pd.DataFrame) -> pd.DataFrame:
+    metrics = add_failure_rate_columns(metrics)
     summary = (
         metrics.groupby(["method", "method_label", "protocol", "condition"], as_index=False)
         .agg(
@@ -100,6 +89,7 @@ def build_summary(metrics: pd.DataFrame) -> pd.DataFrame:
             mean_matched_dice=("mean_matched_dice", "mean"),
             mean_absolute_count_error=("absolute_count_error", "mean"),
             median_absolute_count_error=("absolute_count_error", "median"),
+            **FAILURE_RATE_AGGREGATIONS,
             mean_true_instances=("true_instances", "mean"),
             mean_pred_instances=("pred_instances", "mean"),
             no_prediction_rate=("pred_instances", lambda values: float((values == 0).mean())),
@@ -109,39 +99,6 @@ def build_summary(metrics: pd.DataFrame) -> pd.DataFrame:
         .round(4)
     )
     return summary.sort_values(["mean_object_f1", "mean_precision"], ascending=False)
-
-
-def save_comparison_figure(summary: pd.DataFrame) -> None:
-    plt.rcParams.update(
-        {
-            "font.family": "sans-serif",
-            "font.sans-serif": ["Arial", "Helvetica", "DejaVu Sans", "sans-serif"],
-            "font.size": 7,
-            "axes.spines.right": False,
-            "axes.spines.top": False,
-            "axes.linewidth": 0.8,
-            "legend.frameon": False,
-        }
-    )
-    ordered = summary.sort_values("mean_object_f1", ascending=True).copy()
-    labels = ordered["method_label"].map(FIGURE_LABELS).fillna(ordered["method_label"])
-    fig, axes = plt.subplots(1, 2, figsize=(7.2, 3.0))
-    axes[0].barh(labels, ordered["mean_object_f1"], color="#4f8a8b")
-    axes[0].set_xlabel("Mean object F1")
-    axes[0].set_xlim(0, 1)
-    axes[0].set_title("Instance matching")
-    for value, y_pos in zip(ordered["mean_object_f1"], range(len(ordered))):
-        axes[0].text(min(value + 0.015, 0.98), y_pos, f"{value:.3f}", va="center", fontsize=6)
-    axes[1].barh(labels, ordered["mean_absolute_count_error"], color="#a46a32")
-    axes[1].set_xlabel("Mean absolute count error")
-    axes[1].set_title("Count accuracy")
-    x_max = max(ordered["mean_absolute_count_error"]) * 1.12
-    axes[1].set_xlim(0, x_max)
-    for value, y_pos in zip(ordered["mean_absolute_count_error"], range(len(ordered))):
-        axes[1].text(value + x_max * 0.015, y_pos, f"{value:.2f}", va="center", fontsize=6)
-    fig.tight_layout()
-    fig.savefig(FIGURE_PATH, dpi=600, bbox_inches="tight")
-    plt.close(fig)
 
 
 def main() -> None:
@@ -176,10 +133,8 @@ def main() -> None:
     summary = build_summary(comparison)
     comparison.to_csv(COMPARISON_METRICS, index=False)
     summary.to_csv(COMPARISON_SUMMARY, index=False)
-    save_comparison_figure(summary)
     print(f"Wrote {COMPARISON_METRICS}")
     print(f"Wrote {COMPARISON_SUMMARY}")
-    print(f"Wrote {FIGURE_PATH}")
 
 
 if __name__ == "__main__":

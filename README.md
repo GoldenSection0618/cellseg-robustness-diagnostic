@@ -148,9 +148,10 @@ The VLM protocol will report:
 
 ## Robustness Perturbations
 
-The benchmark will evaluate each method on clean images and controlled perturbations.
+The benchmark evaluates each method on clean images and a small controlled
+perturbation set.
 
-Candidate perturbations:
+Current PoW perturbations:
 
 | Perturbation              | Purpose                                          |
 | ------------------------- | ------------------------------------------------ |
@@ -159,10 +160,18 @@ Candidate perturbations:
 | Downsample then upsample  | Test robustness to undersampling                 |
 | Contrast inversion        | Test robustness to intensity convention changes  |
 | Intensity scaling         | Test robustness to underexposure or overexposure |
-| Channel swap              | Test robustness to channel-order assumptions     |
-| Object scale change       | Test robustness to object-size variation         |
 
-Most perturbations are chosen to stress-test documented robustness claims around noise, blur, undersampling, contrast inversion, channel order, and object scale. Intensity scaling is treated as an additional exposure or brightness stress test rather than a central claim-matching perturbation.
+Candidate future perturbations:
+
+| Perturbation        | Purpose                                      |
+| ------------------- | -------------------------------------------- |
+| Channel swap        | Test robustness to channel-order assumptions |
+| Object scale change | Test robustness to object-size variation     |
+
+Most completed perturbations are chosen to stress-test documented robustness claims
+around noise, blur, undersampling, contrast inversion, and exposure. Channel order
+and object-scale stress tests remain future work rather than part of the current PoW
+evidence.
 
 The final perturbation set will be kept small to avoid turning this proof-of-work project into a large benchmark paper.
 
@@ -177,9 +186,13 @@ The final perturbation set will be kept small to avoid turning this proof-of-wor
 | Dice score              | Mask overlap quality                  |
 | Count error             | Cell or nucleus counting reliability  |
 | Missed-object rate      | False negative behavior               |
-| False-positive rate     | Spurious instance behavior            |
-| Over-segmentation rate  | One object split into multiple masks  |
-| Under-segmentation rate | Multiple objects merged into one mask |
+| FP per true instance    | Spurious instance burden              |
+| Count bias              | Over-counting or under-counting trend |
+
+Over-segmentation and under-segmentation are tracked qualitatively through failure
+case hints and count-bias diagnostics in the current PoW. A stricter
+overlap-graph split/merge rate is left as a future diagnostic instead of being
+reported as a completed primary metric.
 
 ### Robustness Metrics
 

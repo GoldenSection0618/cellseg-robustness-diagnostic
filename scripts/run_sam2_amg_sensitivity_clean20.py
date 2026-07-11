@@ -11,9 +11,6 @@ from dataclasses import asdict, dataclass
 from pathlib import Path
 from typing import Any
 
-os.environ.setdefault("MPLCONFIGDIR", "/tmp/cellseg-matplotlib")
-
-import matplotlib.pyplot as plt
 import numpy as np
 import pandas as pd
 import torch
@@ -26,7 +23,7 @@ sys.path.insert(0, str(REPO_ROOT / "scripts"))
 
 from cellseg_robustness.data import load_train_example, stage1_train_image_dirs
 from cellseg_robustness.metrics import compute_instance_metrics
-from cellseg_robustness.paths import FIGURES_DIR, RESULT_SUBDIRS, ensure_output_dirs
+from cellseg_robustness.paths import RESULT_SUBDIRS, ensure_output_dirs
 from cellseg_robustness.perturbations import Perturbation, apply_perturbation, smoke_test_perturbations
 from run_sam2_amg_baseline import (
     IOU_THRESHOLD,
@@ -221,22 +218,9 @@ def failed_config_path(stage: str) -> Path:
     return RESULT_SUBDIRS["robustness"] / f"{OUTPUT_PREFIX}_{stage}_failed_configs.csv"
 
 
-def figure_paths(stage: str) -> list[Path]:
-    if stage == "clean_screen":
-        return [
-            FIGURES_DIR / f"robustness_{OUTPUT_PREFIX}_clean_screen_f1.png",
-            FIGURES_DIR / f"robustness_{OUTPUT_PREFIX}_clean_screen_counts.png",
-        ]
-    return [
-        FIGURES_DIR / f"robustness_{OUTPUT_PREFIX}_mean_f1.png",
-        FIGURES_DIR / f"robustness_{OUTPUT_PREFIX}_zero_pred_rate.png",
-        FIGURES_DIR / f"robustness_{OUTPUT_PREFIX}_count_error.png",
-    ]
-
-
 def prepare_outputs(stage: str, overwrite: bool, resume: bool) -> pd.DataFrame:
     metrics_path, summary_path = stage_paths(stage)
-    paths = [summary_path, *figure_paths(stage), failed_config_path(stage)]
+    paths = [summary_path, failed_config_path(stage)]
     if stage == "validation":
         paths.append(validation_failure_path())
     existing = [path for path in paths if path.exists()]
@@ -419,131 +403,6 @@ def stage_perturbations(stage: str) -> list[Perturbation]:
     return smoke_test_perturbations()
 
 
-def save_clean_screen_figures(summary: pd.DataFrame) -> None:
-    clean = summary[summary["perturbation"] == "clean"].sort_values("mean_object_f1")
-    colors = ["#111827" if config_id == DEFAULT_CONFIG_ID else "#6366f1" for config_id in clean["config_id"]]
-
-    fig, ax = plt.subplots(figsize=(9, 6))
-    ax.barh(clean["config_id"], clean["mean_object_f1"], color=colors)
-    ax.set_xlim(0, max(0.5, float(clean["mean_object_f1"].max()) * 1.12))
-    ax.set_title("SAM2 AMG Clean20 Sensitivity: Clean Object F1")
-    ax.set_xlabel("Mean object F1")
-    fig.tight_layout()
-    fig.savefig(FIGURES_DIR / f"robustness_{OUTPUT_PREFIX}_clean_screen_f1.png", dpi=160)
-    plt.close(fig)
-
-    fig, ax = plt.subplots(figsize=(9, 6))
-    ax.scatter(
-        clean["mean_pred_instances"],
-        clean["mean_object_f1"],
-        s=np.clip(clean["mean_raw_amg_masks"], 20, 180),
-        color="#6366f1",
-        alpha=0.75,
-    )
-    default = clean[clean["config_id"] == DEFAULT_CONFIG_ID]
-    if not default.empty:
-        ax.scatter(
-            default["mean_pred_instances"],
-            default["mean_object_f1"],
-            s=180,
-            color="#111827",
-            marker="x",
-            linewidth=2,
-            label="current default",
-        )
-        ax.legend(frameon=False)
-    ax.set_title("SAM2 AMG Clean20 Sensitivity: Count vs F1")
-    ax.set_xlabel("Mean predicted instances")
-    ax.set_ylabel("Mean object F1")
-    fig.tight_layout()
-    fig.savefig(FIGURES_DIR / f"robustness_{OUTPUT_PREFIX}_clean_screen_counts.png", dpi=160)
-    plt.close(fig)
-
-
-def save_validation_figures(summary: pd.DataFrame) -> None:
-    perturbation_order = [p.name for p in smoke_test_perturbations()]
-    configs = (
-        summary[summary["perturbation"] == "clean"]
-        .sort_values("mean_object_f1", ascending=False)["config_id"]
-        .astype(str)
-        .tolist()
-    )
-
-    fig, ax = plt.subplots(figsize=(10, 5.4))
-    for config_id in configs:
-        frame = summary[summary["config_id"] == config_id].copy()
-        frame["perturbation"] = pd.Categorical(frame["perturbation"], categories=perturbation_order, ordered=True)
-        frame = frame.sort_values("perturbation")
-        linewidth = 2.5 if config_id == DEFAULT_CONFIG_ID else 1.6
-        linestyle = "--" if config_id == DEFAULT_CONFIG_ID else "-"
-        ax.plot(
-            frame["perturbation"].astype(str),
-            frame["mean_object_f1"],
-            marker="o",
-            linewidth=linewidth,
-            linestyle=linestyle,
-            label=config_id,
-        )
-    ax.set_ylim(0, 1)
-    ax.set_title("SAM2 AMG Sensitivity Clean20: Mean Object F1")
-    ax.set_xlabel("Condition")
-    ax.set_ylabel("Mean object F1")
-    ax.tick_params(axis="x", rotation=20)
-    ax.legend(frameon=False, loc="upper left", bbox_to_anchor=(1.01, 1.0))
-    fig.tight_layout()
-    fig.savefig(FIGURES_DIR / f"robustness_{OUTPUT_PREFIX}_mean_f1.png", dpi=160)
-    plt.close(fig)
-
-    fig, ax = plt.subplots(figsize=(10, 5.4))
-    for config_id in configs:
-        frame = summary[summary["config_id"] == config_id].copy()
-        frame["perturbation"] = pd.Categorical(frame["perturbation"], categories=perturbation_order, ordered=True)
-        frame = frame.sort_values("perturbation")
-        linewidth = 2.5 if config_id == DEFAULT_CONFIG_ID else 1.6
-        linestyle = "--" if config_id == DEFAULT_CONFIG_ID else "-"
-        ax.plot(
-            frame["perturbation"].astype(str),
-            frame["zero_prediction_rate"],
-            marker="o",
-            linewidth=linewidth,
-            linestyle=linestyle,
-            label=config_id,
-        )
-    ax.set_ylim(0, 1)
-    ax.set_title("SAM2 AMG Sensitivity Clean20: Zero-Prediction Rate")
-    ax.set_xlabel("Condition")
-    ax.set_ylabel("Zero-prediction rate")
-    ax.tick_params(axis="x", rotation=20)
-    ax.legend(frameon=False, loc="upper left", bbox_to_anchor=(1.01, 1.0))
-    fig.tight_layout()
-    fig.savefig(FIGURES_DIR / f"robustness_{OUTPUT_PREFIX}_zero_pred_rate.png", dpi=160)
-    plt.close(fig)
-
-    fig, ax = plt.subplots(figsize=(10, 5.4))
-    for config_id in configs:
-        frame = summary[summary["config_id"] == config_id].copy()
-        frame["perturbation"] = pd.Categorical(frame["perturbation"], categories=perturbation_order, ordered=True)
-        frame = frame.sort_values("perturbation")
-        linewidth = 2.5 if config_id == DEFAULT_CONFIG_ID else 1.6
-        linestyle = "--" if config_id == DEFAULT_CONFIG_ID else "-"
-        ax.plot(
-            frame["perturbation"].astype(str),
-            frame["mean_absolute_count_error"],
-            marker="o",
-            linewidth=linewidth,
-            linestyle=linestyle,
-            label=config_id,
-        )
-    ax.set_title("SAM2 AMG Sensitivity Clean20: Mean Absolute Count Error")
-    ax.set_xlabel("Condition")
-    ax.set_ylabel("Mean absolute count error")
-    ax.tick_params(axis="x", rotation=20)
-    ax.legend(frameon=False, loc="upper left", bbox_to_anchor=(1.01, 1.0))
-    fig.tight_layout()
-    fig.savefig(FIGURES_DIR / f"robustness_{OUTPUT_PREFIX}_count_error.png", dpi=160)
-    plt.close(fig)
-
-
 def save_failure_cases(metrics: pd.DataFrame, summary: pd.DataFrame) -> pd.DataFrame:
     clean = metrics[metrics["perturbation"] == "clean"][
         ["config_id", "image_id", "object_f1", "pred_instances", "absolute_count_error"]
@@ -686,17 +545,12 @@ def main() -> None:
     metrics.to_csv(metrics_path, index=False)
     summary.to_csv(summary_path, index=False)
 
-    if args.stage == "clean_screen":
-        save_clean_screen_figures(summary)
-    else:
-        save_validation_figures(summary)
+    if args.stage == "validation":
         cases = save_failure_cases(metrics, summary)
         print(f"Wrote {validation_failure_path()} ({len(cases)} rows)")
 
     print(f"Wrote {metrics_path} ({len(metrics)} rows)")
     print(f"Wrote {summary_path} ({len(summary)} rows)")
-    for path in figure_paths(args.stage):
-        print(f"Wrote {path}")
 
 
 if __name__ == "__main__":

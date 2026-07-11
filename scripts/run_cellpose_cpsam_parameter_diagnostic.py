@@ -4,15 +4,11 @@
 from __future__ import annotations
 
 import argparse
-import os
 import sys
 import time
 from dataclasses import asdict, dataclass
 from pathlib import Path
 
-os.environ.setdefault("MPLCONFIGDIR", "/tmp/cellseg-matplotlib")
-
-import matplotlib.pyplot as plt
 import numpy as np
 import pandas as pd
 import torch
@@ -23,7 +19,7 @@ sys.path.insert(0, str(REPO_ROOT / "src"))
 
 from cellseg_robustness.data import image_to_gray_float, load_train_example, stage1_train_image_dirs
 from cellseg_robustness.metrics import compute_instance_metrics, relabel_sequential
-from cellseg_robustness.paths import FIGURES_DIR, RESULT_SUBDIRS, ensure_output_dirs
+from cellseg_robustness.paths import RESULT_SUBDIRS, ensure_output_dirs
 
 
 METHOD = "cellpose_cpsam"
@@ -77,14 +73,13 @@ def parse_args() -> argparse.Namespace:
     return args
 
 
-def output_paths(prefix: str) -> tuple[Path, Path, Path]:
+def output_paths(prefix: str) -> tuple[Path, Path]:
     metrics_path = RESULT_SUBDIRS["baselines"] / f"{prefix}_metrics.csv"
     summary_path = RESULT_SUBDIRS["baselines"] / f"{prefix}_summary.csv"
-    figure_path = FIGURES_DIR / f"{prefix}_f1.png"
-    return metrics_path, summary_path, figure_path
+    return metrics_path, summary_path
 
 
-def prepare_outputs(overwrite: bool, paths: tuple[Path, Path, Path]) -> None:
+def prepare_outputs(overwrite: bool, paths: tuple[Path, Path]) -> None:
     existing = [path for path in paths if path.exists()]
     if existing and not overwrite:
         joined = "\n".join(str(path) for path in existing)
@@ -203,24 +198,11 @@ def summarize(metrics: pd.DataFrame) -> pd.DataFrame:
     return summary.sort_values("mean_object_f1", ascending=False).round(4)
 
 
-def save_figure(summary: pd.DataFrame, figure_path: Path) -> None:
-    ordered = summary.sort_values("mean_object_f1", ascending=True)
-    fig, ax = plt.subplots(figsize=(8.0, 4.8))
-    ax.barh(ordered["config_id"], ordered["mean_object_f1"], color="#0891b2")
-    ax.set_xlim(0, 1)
-    ax.set_xlabel("Mean object F1")
-    ax.set_title("Cellpose-SAM Parameter Diagnostic")
-    ax.grid(axis="x", alpha=0.25)
-    fig.tight_layout()
-    fig.savefig(figure_path, dpi=160)
-    plt.close(fig)
-
-
 def main() -> None:
     args = parse_args()
     ensure_output_dirs()
-    metrics_path, summary_path, figure_path = output_paths(args.output_prefix)
-    prepare_outputs(args.overwrite, (metrics_path, summary_path, figure_path))
+    metrics_path, summary_path = output_paths(args.output_prefix)
+    prepare_outputs(args.overwrite, (metrics_path, summary_path))
 
     use_gpu = torch.cuda.is_available()
     model = models.CellposeModel(gpu=use_gpu, pretrained_model="cpsam")
@@ -254,11 +236,9 @@ def main() -> None:
     summary = summarize(metrics)
     metrics.to_csv(metrics_path, index=False)
     summary.to_csv(summary_path, index=False)
-    save_figure(summary, figure_path)
 
     print(f"Wrote {metrics_path}")
     print(f"Wrote {summary_path}")
-    print(f"Wrote {figure_path}")
 
 
 if __name__ == "__main__":

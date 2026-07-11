@@ -4,16 +4,12 @@
 from __future__ import annotations
 
 import argparse
-import os
 import sys
 import time
 from dataclasses import asdict
 from pathlib import Path
 
-os.environ.setdefault("MPLCONFIGDIR", "/tmp/cellseg-matplotlib")
-
 import imageio.v3 as iio
-import matplotlib.pyplot as plt
 import numpy as np
 import pandas as pd
 import torch
@@ -25,7 +21,7 @@ sys.path.insert(0, str(REPO_ROOT / "scripts"))
 
 from cellseg_robustness.data import load_instance_mask, mask_dir_from_dir
 from cellseg_robustness.metrics import compute_instance_metrics
-from cellseg_robustness.paths import FIGURES_DIR, RESULT_SUBDIRS, ensure_output_dirs
+from cellseg_robustness.paths import RESULT_SUBDIRS, ensure_output_dirs
 
 from evaluate_yolo_tiny_train_smoke import image_dir_from_source_image, yolo_result_to_instances
 
@@ -35,8 +31,6 @@ DEFAULT_IMGSZ = 512
 DEFAULT_CONFS = (0.05, 0.10, 0.25, 0.40, 0.60)
 METRICS_PATH = RESULT_SUBDIRS["supervised"] / "yolo_threshold_diagnostic_metrics.csv"
 SUMMARY_PATH = RESULT_SUBDIRS["supervised"] / "yolo_threshold_diagnostic_summary.csv"
-F1_FIGURE_PATH = FIGURES_DIR / "supervised_yolo_threshold_diagnostic_f1.png"
-COUNT_FIGURE_PATH = FIGURES_DIR / "supervised_yolo_threshold_diagnostic_count_error.png"
 
 
 def parse_args() -> argparse.Namespace:
@@ -66,11 +60,7 @@ def parse_args() -> argparse.Namespace:
 
 
 def prepare_outputs(overwrite: bool) -> None:
-    existing = [
-        path
-        for path in [METRICS_PATH, SUMMARY_PATH, F1_FIGURE_PATH, COUNT_FIGURE_PATH]
-        if path.exists()
-    ]
+    existing = [path for path in [METRICS_PATH, SUMMARY_PATH] if path.exists()]
     if existing and not overwrite:
         joined = "\n".join(str(path) for path in existing)
         raise FileExistsError(f"Existing YOLO threshold diagnostic outputs found. Use --overwrite.\n{joined}")
@@ -110,37 +100,6 @@ def summarize(metrics: pd.DataFrame, metadata: pd.Series, imgsz: int) -> pd.Data
     summary.insert(8, "eval_imgsz", imgsz)
     summary["is_v1_conf"] = np.isclose(summary["conf"], 0.25)
     return summary.round(4)
-
-
-def save_f1_figure(summary: pd.DataFrame) -> None:
-    fig, ax = plt.subplots(figsize=(7.2, 4.2))
-    ax.plot(summary["conf"], summary["mean_object_f1"], marker="o", label="Object F1")
-    ax.plot(summary["conf"], summary["mean_precision"], marker="o", label="Precision")
-    ax.plot(summary["conf"], summary["mean_recall"], marker="o", label="Recall")
-    ax.axvline(0.25, color="#6b7280", linestyle="--", linewidth=1.2, label="v1 conf=0.25")
-    ax.set_xlabel("Confidence threshold")
-    ax.set_ylabel("Mean score")
-    ax.set_ylim(0, 1)
-    ax.set_title("YOLO Threshold Diagnostic: Held-out Val Scores")
-    ax.grid(alpha=0.25)
-    ax.legend()
-    fig.tight_layout()
-    fig.savefig(F1_FIGURE_PATH, dpi=160)
-    plt.close(fig)
-
-
-def save_count_figure(summary: pd.DataFrame) -> None:
-    fig, ax = plt.subplots(figsize=(7.2, 4.2))
-    ax.plot(summary["conf"], summary["mean_absolute_count_error"], marker="o", color="#dc2626")
-    ax.axvline(0.25, color="#6b7280", linestyle="--", linewidth=1.2, label="v1 conf=0.25")
-    ax.set_xlabel("Confidence threshold")
-    ax.set_ylabel("Mean absolute count error")
-    ax.set_title("YOLO Threshold Diagnostic: Count Error")
-    ax.grid(alpha=0.25)
-    ax.legend()
-    fig.tight_layout()
-    fig.savefig(COUNT_FIGURE_PATH, dpi=160)
-    plt.close(fig)
 
 
 def main() -> None:
@@ -196,13 +155,9 @@ def main() -> None:
     summary_df = summarize(metrics_df, metadata, imgsz=args.imgsz)
     metrics_df.to_csv(METRICS_PATH, index=False)
     summary_df.to_csv(SUMMARY_PATH, index=False)
-    save_f1_figure(summary_df)
-    save_count_figure(summary_df)
 
     print(f"Wrote {METRICS_PATH}")
     print(f"Wrote {SUMMARY_PATH}")
-    print(f"Wrote {F1_FIGURE_PATH}")
-    print(f"Wrote {COUNT_FIGURE_PATH}")
 
 
 if __name__ == "__main__":

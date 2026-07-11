@@ -20,6 +20,7 @@ sys.path.insert(0, str(REPO_ROOT / "src"))
 from cellseg_robustness.data import image_to_gray_float, load_train_example, stage1_train_image_dirs
 from cellseg_robustness.metrics import compute_instance_metrics, relabel_sequential
 from cellseg_robustness.paths import FIGURES_DIR, RESULT_SUBDIRS, ensure_output_dirs
+from cellseg_robustness.plot_style import save_png
 from cellseg_robustness.visualization import overlay_truth_prediction
 
 
@@ -78,33 +79,7 @@ def save_overlay_grid(examples: list[tuple[str, np.ndarray, np.ndarray, np.ndarr
         ax.axis("off")
 
     fig.tight_layout()
-    fig.savefig(FIGURES_DIR / "cellpose_cpsam_subset_overlay_examples.png", dpi=160)
-    plt.close(fig)
-
-
-def save_metric_bars(metrics: pd.DataFrame) -> None:
-    summary = metrics[["object_f1", "mean_matched_iou", "mean_matched_dice"]].mean()
-    fig, ax = plt.subplots(figsize=(6, 4))
-    ax.bar(summary.index, summary.values, color=["#2563eb", "#16a34a", "#dc2626"])
-    ax.set_ylim(0, 1)
-    ax.set_title("Cellpose-SAM Subset Mean Metrics")
-    ax.set_ylabel("Score")
-    ax.tick_params(axis="x", rotation=20)
-    fig.tight_layout()
-    fig.savefig(FIGURES_DIR / "cellpose_cpsam_subset_metric_means.png", dpi=160)
-    plt.close(fig)
-
-
-def save_count_scatter(metrics: pd.DataFrame) -> None:
-    fig, ax = plt.subplots(figsize=(5, 5))
-    ax.scatter(metrics["true_instances"], metrics["pred_instances"], alpha=0.75, color="#0891b2")
-    max_count = int(max(metrics["true_instances"].max(), metrics["pred_instances"].max()))
-    ax.plot([0, max_count], [0, max_count], color="#111827", linewidth=1, linestyle="--")
-    ax.set_title("Cellpose-SAM Count Agreement")
-    ax.set_xlabel("Ground-truth instances")
-    ax.set_ylabel("Predicted instances")
-    fig.tight_layout()
-    fig.savefig(FIGURES_DIR / "cellpose_cpsam_subset_count_scatter.png", dpi=160)
+    save_png(fig, FIGURES_DIR / "cellpose_cpsam_subset_overlay_examples.png")
     plt.close(fig)
 
 
@@ -143,13 +118,9 @@ def main() -> None:
     metrics_df.to_csv(output_path, index=False)
 
     save_overlay_grid(overlay_examples)
-    save_metric_bars(metrics_df)
-    save_count_scatter(metrics_df)
 
     print(f"Wrote {output_path}")
     print(f"Wrote {FIGURES_DIR / 'cellpose_cpsam_subset_overlay_examples.png'}")
-    print(f"Wrote {FIGURES_DIR / 'cellpose_cpsam_subset_metric_means.png'}")
-    print(f"Wrote {FIGURES_DIR / 'cellpose_cpsam_subset_count_scatter.png'}")
 
 
 if __name__ == "__main__":

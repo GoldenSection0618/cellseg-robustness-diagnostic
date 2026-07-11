@@ -7,13 +7,12 @@ import sys
 from pathlib import Path
 
 import imageio.v3 as iio
-import matplotlib.pyplot as plt
 import pandas as pd
 
 REPO_ROOT = Path(__file__).resolve().parents[1]
 sys.path.insert(0, str(REPO_ROOT / "src"))
 
-from cellseg_robustness.paths import DATA_ROOT, FIGURES_DIR, RESULT_SUBDIRS, ensure_output_dirs
+from cellseg_robustness.paths import DATA_ROOT, RESULT_SUBDIRS, ensure_output_dirs
 
 
 def image_metadata(image_path: Path) -> dict[str, object]:
@@ -112,43 +111,6 @@ def make_summary(inventory: pd.DataFrame) -> pd.DataFrame:
     return summary.reset_index()
 
 
-def save_split_counts(summary: pd.DataFrame) -> None:
-    fig, ax = plt.subplots(figsize=(7, 4))
-    ax.bar(summary["split"], summary["image_count"], color="#3b82f6")
-    ax.set_title("DSB2018 Image Counts by Split")
-    ax.set_xlabel("Split")
-    ax.set_ylabel("Images")
-    ax.tick_params(axis="x", rotation=20)
-    fig.tight_layout()
-    fig.savefig(FIGURES_DIR / "dataset_split_counts.png", dpi=160)
-    plt.close(fig)
-
-
-def save_instance_hist(inventory: pd.DataFrame) -> None:
-    train = inventory[inventory["split"] == "stage1_train"]
-    fig, ax = plt.subplots(figsize=(7, 4))
-    ax.hist(train["mask_count"], bins=30, color="#10b981", edgecolor="white")
-    ax.set_title("DSB2018 Stage 1 Train Instance Counts")
-    ax.set_xlabel("PNG instance masks per image")
-    ax.set_ylabel("Images")
-    fig.tight_layout()
-    fig.savefig(FIGURES_DIR / "dataset_train_instance_count_hist.png", dpi=160)
-    plt.close(fig)
-
-
-def save_size_scatter(inventory: pd.DataFrame) -> None:
-    fig, ax = plt.subplots(figsize=(6, 5))
-    for split, frame in inventory.groupby("split"):
-        ax.scatter(frame["width"], frame["height"], s=18, alpha=0.65, label=split)
-    ax.set_title("DSB2018 Image Size Distribution")
-    ax.set_xlabel("Width")
-    ax.set_ylabel("Height")
-    ax.legend(frameon=False)
-    fig.tight_layout()
-    fig.savefig(FIGURES_DIR / "dataset_image_size_scatter.png", dpi=160)
-    plt.close(fig)
-
-
 def main() -> None:
     ensure_output_dirs()
     rows = stage1_train_rows()
@@ -178,15 +140,8 @@ def main() -> None:
     inventory.to_csv(dataset_dir / "dataset_inventory.csv", index=False)
     summary.to_csv(dataset_dir / "dataset_summary.csv", index=False)
 
-    save_split_counts(summary)
-    save_instance_hist(inventory)
-    save_size_scatter(inventory)
-
     print(f"Wrote {dataset_dir / 'dataset_inventory.csv'}")
     print(f"Wrote {dataset_dir / 'dataset_summary.csv'}")
-    print(f"Wrote {FIGURES_DIR / 'dataset_split_counts.png'}")
-    print(f"Wrote {FIGURES_DIR / 'dataset_train_instance_count_hist.png'}")
-    print(f"Wrote {FIGURES_DIR / 'dataset_image_size_scatter.png'}")
 
 
 if __name__ == "__main__":

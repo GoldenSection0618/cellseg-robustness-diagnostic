@@ -9,8 +9,8 @@ not overstate what has actually been run.
 The current evidence has two levels:
 
 - full-train robustness for Otsu + watershed and Cellpose-SAM on all 670
-  `stage1_train` images across clean, Gaussian noise, blur, downsample, and
-  inversion conditions;
+  `stage1_train` images across clean, Gaussian noise, Poisson noise, blur,
+  downsample, intensity scaling, and inversion conditions;
 - clean20 robustness for Otsu + watershed, Cellpose-SAM, and SAM2 AMG on the fixed
   20-image subset used by the clean baselines.
 
@@ -34,10 +34,10 @@ Primary evidence files:
 Cellpose-SAM is the current main baseline. Among the completed full-train methods,
 it has the strongest clean object F1 and the smallest perturbation drops:
 
-| Method | Clean F1 | Gaussian noise F1 | Blur F1 | Downsample F1 | Inversion F1 |
-| --- | ---: | ---: | ---: | ---: | ---: |
-| Cellpose-SAM | 0.9178 | 0.8740 | 0.8898 | 0.9006 | 0.9139 |
-| Otsu + watershed | 0.5736 | 0.4298 | 0.5818 | 0.5825 | 0.5653 |
+| Method | Clean F1 | Gaussian F1 | Poisson F1 | Blur F1 | Downsample F1 | Intensity F1 | Inversion F1 |
+| --- | ---: | ---: | ---: | ---: | ---: | ---: | ---: |
+| Cellpose-SAM | 0.9178 | 0.8740 | 0.8806 | 0.8898 | 0.9006 | 0.9155 | 0.9139 |
+| Otsu + watershed | 0.5736 | 0.4298 | 0.4606 | 0.5818 | 0.5825 | 0.5744 | 0.5653 |
 
 Otsu + watershed remains useful as a classical lower bound. It is interpretable,
 cheap to run, and exposes segmentation failure modes that a stronger method should
@@ -51,29 +51,33 @@ scale a known failure pattern rather than answer a new question.
 
 ## Robustness Conclusions
 
-Otsu + watershed is mainly vulnerable to Gaussian noise. In the full-train run its
-object F1 drops from 0.5736 on clean images to 0.4298 under Gaussian noise, a 25.1%
-relative drop. Blur and downsample are slightly higher than clean on average, which
-is consistent with mild smoothing reducing some oversegmentation.
+Otsu + watershed is mainly vulnerable to noise. In the full-train run its object F1
+drops from 0.5736 on clean images to 0.4298 under Gaussian noise, a 25.1% relative
+drop, and to 0.4606 under Poisson noise, a 19.7% relative drop. Blur, downsample,
+and intensity scaling are close to clean on average, which is consistent with mild
+smoothing or exposure scaling not being the main stressor for this classical
+pipeline.
 
 Cellpose-SAM stays stable at full-train scale. Its relative object-F1 drops are
-small across the tested perturbations: 4.8% for Gaussian noise, 3.1% for blur, 1.9%
-for downsample, and 0.4% for inversion.
+small across the tested perturbations: 4.8% for Gaussian noise, 4.1% for Poisson
+noise, 3.1% for blur, 1.9% for downsample, 0.3% for intensity scaling, and 0.4% for
+inversion.
 
 SAM2 AMG clean20 is already sufficient evidence for the current PoW decision, but it
 should not be described as a full-train result. Its object F1 falls from 0.3604 on
-clean images to 0.0043 under Gaussian noise, 0.0020 under blur, 0.0016 under
-downsample, and 0.0000 under inversion.
+clean images to 0.0043 under Gaussian noise, 0.2503 under Poisson noise, 0.0020
+under blur, 0.0016 under downsample, 0.1109 under intensity scaling, and 0.0000
+under inversion.
 
 ## Failure Modes
 
-Otsu + watershed fails mainly through false positives, over-segmentation, and noisy
-count inflation. Gaussian noise is the key stressor because it creates many spurious
-regions and drives count explosion.
+Otsu + watershed fails mainly through false positives, coarse over-segmentation
+hints, and noisy count inflation. Gaussian and Poisson noise are the key stressors
+because they create spurious regions and drive count explosion.
 
 Cellpose-SAM failures are narrower. The main observed issues are missed objects,
 small recall drops, and a limited set of no-prediction cases. The full-train
-diagnostics record 11 no-prediction image-condition rows out of 3350 Cellpose-SAM
+diagnostics record 14 no-prediction image-condition rows out of 4690 Cellpose-SAM
 rows.
 
 SAM2 AMG failure is an automatic-mask-generation failure, not a text-prompt failure.

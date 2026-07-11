@@ -7,15 +7,12 @@ import os
 import sys
 from pathlib import Path
 
-os.environ.setdefault("MPLCONFIGDIR", "/tmp/cellseg-matplotlib")
-
-import matplotlib.pyplot as plt
 import pandas as pd
 
 REPO_ROOT = Path(__file__).resolve().parents[1]
 sys.path.insert(0, str(REPO_ROOT / "src"))
 
-from cellseg_robustness.paths import FIGURES_DIR, RESULT_SUBDIRS, ensure_output_dirs
+from cellseg_robustness.paths import RESULT_SUBDIRS, ensure_output_dirs
 
 
 def audit_segmentation_models() -> list[dict[str, object]]:
@@ -109,33 +106,14 @@ def audit_restoration_models() -> list[dict[str, object]]:
     return rows
 
 
-def save_availability_figure(audit: pd.DataFrame) -> None:
-    plot_frame = audit.copy()
-    plot_frame["available"] = plot_frame["runnable_as_distinct_method"].astype(int)
-
-    fig, ax = plt.subplots(figsize=(9, 4.8))
-    colors = plot_frame["available"].map({1: "#16a34a", 0: "#dc2626"}).tolist()
-    ax.bar(plot_frame["method"], plot_frame["available"], color=colors)
-    ax.set_ylim(0, 1.15)
-    ax.set_ylabel("Runnable as distinct method")
-    ax.set_title("Cellpose-family Method Availability in Current Environment")
-    ax.tick_params(axis="x", rotation=25)
-    ax.set_yticks([0, 1], labels=["no", "yes"])
-    fig.tight_layout()
-    fig.savefig(FIGURES_DIR / "cellpose_method_availability.png", dpi=160)
-    plt.close(fig)
-
-
 def main() -> None:
     ensure_output_dirs()
     rows = audit_segmentation_models() + audit_restoration_models()
     audit = pd.DataFrame(rows)
     output_path = RESULT_SUBDIRS["baselines"] / "cellpose_method_availability.csv"
     audit.to_csv(output_path, index=False)
-    save_availability_figure(audit)
 
     print(f"Wrote {output_path}")
-    print(f"Wrote {FIGURES_DIR / 'cellpose_method_availability.png'}")
 
 
 if __name__ == "__main__":

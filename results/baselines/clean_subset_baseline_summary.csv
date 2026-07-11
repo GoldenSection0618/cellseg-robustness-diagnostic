@@ -1,4 +1,4 @@
-method,images,mean_object_f1,mean_matched_iou,mean_matched_dice,mean_precision,mean_recall,mean_absolute_count_error,median_latency_ms,mean_latency_ms,method_label
-otsu_watershed,20,0.4685,0.7307,0.818,0.4274,0.5852,63.75,15.7235,48.1521,Otsu + watershed
-cellpose_cpsam,20,0.9052,0.8561,0.9188,0.9406,0.8777,5.5,1853.752,3207.1973,Cellpose-SAM
-sam2_amg,20,0.3604,0.5424,0.5878,0.39,0.3456,31.55,1600.7395,1661.0071,SAM2 AMG
+method,images,mean_object_f1,mean_matched_iou,mean_matched_dice,mean_precision,mean_recall,mean_absolute_count_error,mean_missed_object_rate,mean_fp_per_true_instance,mean_count_bias,median_latency_ms,mean_latency_ms,method_label
+otsu_watershed,20,0.4685,0.7307,0.818,0.4274,0.5852,63.75,0.4148,1.7417,62.65,15.7235,48.1521,Otsu + watershed
+cellpose_cpsam,20,0.9052,0.8561,0.9188,0.9406,0.8777,5.5,0.1223,0.054,-4.0,1853.752,3207.1973,Cellpose-SAM
+sam2_amg,20,0.3604,0.5424,0.5878,0.39,0.3456,31.55,0.6544,0.2104,-30.75,1600.7395,1661.0071,SAM2 AMG

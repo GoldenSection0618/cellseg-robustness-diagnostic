@@ -13,6 +13,7 @@ REPO_ROOT = Path(__file__).resolve().parents[1]
 sys.path.insert(0, str(REPO_ROOT / "src"))
 
 from cellseg_robustness.paths import RESULT_SUBDIRS, ensure_output_dirs
+from cellseg_robustness.summary import FAILURE_RATE_AGGREGATIONS, add_failure_rate_columns
 
 
 YOLO_METRICS = RESULT_SUBDIRS["supervised"] / "yolo_fixed_budget_metrics.csv"
@@ -76,6 +77,7 @@ def normalize_zero_shot_metrics(zero_shot: pd.DataFrame, val_ids: set[str]) -> p
 
 
 def build_summary(metrics: pd.DataFrame) -> pd.DataFrame:
+    metrics = add_failure_rate_columns(metrics)
     summary = (
         metrics.groupby(["method", "method_label", "protocol", "condition"], as_index=False)
         .agg(
@@ -88,6 +90,7 @@ def build_summary(metrics: pd.DataFrame) -> pd.DataFrame:
             mean_matched_dice=("mean_matched_dice", "mean"),
             mean_absolute_count_error=("absolute_count_error", "mean"),
             median_absolute_count_error=("absolute_count_error", "median"),
+            **FAILURE_RATE_AGGREGATIONS,
             mean_true_instances=("true_instances", "mean"),
             mean_pred_instances=("pred_instances", "mean"),
             no_prediction_rate=("pred_instances", lambda values: float((values == 0).mean())),

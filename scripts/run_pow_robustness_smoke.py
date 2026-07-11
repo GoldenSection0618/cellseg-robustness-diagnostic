@@ -28,7 +28,9 @@ sys.path.insert(0, str(REPO_ROOT / "scripts"))
 from cellseg_robustness.data import load_train_example, stage1_train_image_dirs
 from cellseg_robustness.metrics import compute_instance_metrics
 from cellseg_robustness.paths import FIGURES_DIR, RESULT_SUBDIRS, ensure_output_dirs
+from cellseg_robustness.plot_style import save_png
 from cellseg_robustness.perturbations import Perturbation, apply_perturbation, smoke_test_perturbations
+from cellseg_robustness.summary import FAILURE_RATE_AGGREGATIONS, add_failure_rate_columns
 from cellseg_robustness.visualization import overlay_truth_prediction
 from run_cellpose_cpsam_baseline import predict_cellpose
 from run_otsu_watershed_baseline import otsu_watershed_predict
@@ -154,6 +156,7 @@ def build_predictors(methods: list[str]) -> dict[str, Callable[[np.ndarray], np.
 
 
 def summarize(metrics: pd.DataFrame, perturbations: list[Perturbation]) -> pd.DataFrame:
+    metrics = add_failure_rate_columns(metrics)
     summary = (
         metrics.groupby(["method", "perturbation"], as_index=False)
         .agg(
@@ -164,6 +167,7 @@ def summarize(metrics: pd.DataFrame, perturbations: list[Perturbation]) -> pd.Da
             mean_precision=("precision", "mean"),
             mean_recall=("recall", "mean"),
             mean_absolute_count_error=("absolute_count_error", "mean"),
+            **FAILURE_RATE_AGGREGATIONS,
             median_latency_ms=("latency_ms", "median"),
             mean_latency_ms=("latency_ms", "mean"),
         )
@@ -223,81 +227,6 @@ def split_label(output_tag: str) -> str:
     return "stage1_train_tiny_subset"
 
 
-def save_mean_f1_plot(summary: pd.DataFrame, output_tag: str) -> None:
-    fig, ax = plt.subplots(figsize=(9, 4.8))
-    for method in present_methods(summary):
-        method_summary = summary[summary["method"] == method]
-        ax.plot(
-            method_summary["perturbation"].astype(str),
-            method_summary["mean_object_f1"],
-            marker="o",
-            linewidth=2,
-            color=METHOD_COLORS[method],
-            label=METHOD_LABELS[method],
-        )
-    ax.set_ylim(0, 1)
-    ax.set_title(f"{display_title(output_tag)}: Mean Object F1")
-    ax.set_xlabel("Condition")
-    ax.set_ylabel("Mean object F1")
-    ax.tick_params(axis="x", rotation=20)
-    ax.legend(frameon=False, loc="upper left", bbox_to_anchor=(1.01, 1.0))
-    fig.tight_layout()
-    fig.savefig(FIGURES_DIR / f"{figure_stem(output_tag)}_mean_f1.png", dpi=160)
-    plt.close(fig)
-
-
-def save_relative_drop_plot(summary: pd.DataFrame, output_tag: str) -> None:
-    plot_frame = summary[summary["perturbation"] != "clean"].copy()
-    perturbations = plot_frame["perturbation"].astype(str).drop_duplicates().tolist()
-    x = np.arange(len(perturbations))
-    methods = present_methods(plot_frame)
-    width = min(0.8 / max(len(methods), 1), 0.24)
-
-    fig, ax = plt.subplots(figsize=(10, 4.8))
-    offsets = np.linspace(-(len(methods) - 1) / 2, (len(methods) - 1) / 2, len(methods))
-    for offset, method in zip(offsets, methods):
-        method_summary = plot_frame[plot_frame["method"] == method]
-        ax.bar(
-            x + offset * width,
-            method_summary["relative_object_f1_drop"],
-            width=width,
-            color=METHOD_COLORS[method],
-            label=METHOD_LABELS[method],
-        )
-    ax.axhline(0, color="#111827", linewidth=1)
-    ax.set_title(f"{display_title(output_tag)}: Relative Object F1 Drop")
-    ax.set_xlabel("Perturbation")
-    ax.set_ylabel("Relative F1 drop from clean")
-    ax.set_xticks(x, labels=perturbations, rotation=20)
-    ax.legend(frameon=False, loc="upper left", bbox_to_anchor=(1.01, 1.0))
-    fig.tight_layout()
-    fig.savefig(FIGURES_DIR / f"{figure_stem(output_tag)}_relative_f1_drop.png", dpi=160)
-    plt.close(fig)
-
-
-def save_method_condition_heatmap(summary: pd.DataFrame, output_tag: str) -> None:
-    pivot = summary.pivot(index="method_label", columns="perturbation", values="mean_object_f1")
-    pivot = pivot.loc[[METHOD_LABELS[method] for method in present_methods(summary)]]
-
-    fig, ax = plt.subplots(figsize=(8, 4.5))
-    image = ax.imshow(pivot.to_numpy(), aspect="auto", vmin=0, vmax=1, cmap="viridis")
-    ax.set_xticks(range(pivot.shape[1]), labels=[str(column) for column in pivot.columns], rotation=20)
-    ax.set_yticks(range(pivot.shape[0]), labels=pivot.index)
-    ax.set_title(f"{display_title(output_tag)}: Mean Object F1 Heatmap")
-
-    for row_index in range(pivot.shape[0]):
-        for column_index in range(pivot.shape[1]):
-            value = pivot.iat[row_index, column_index]
-            text_color = "white" if value < 0.55 else "black"
-            ax.text(column_index, row_index, f"{value:.2f}", ha="center", va="center", color=text_color)
-
-    colorbar = fig.colorbar(image, ax=ax, fraction=0.046, pad=0.04)
-    colorbar.set_label("Mean object F1")
-    fig.tight_layout()
-    fig.savefig(FIGURES_DIR / f"{figure_stem(output_tag)}_method_condition_heatmap.png", dpi=160)
-    plt.close(fig)
-
-
 def save_overlay_examples(
     examples: list[tuple[str, str, str, np.ndarray, np.ndarray, np.ndarray]],
     output_tag: str,
@@ -316,7 +245,7 @@ def save_overlay_examples(
         ax.axis("off")
 
     fig.tight_layout()
-    fig.savefig(FIGURES_DIR / f"{figure_stem(output_tag)}_overlay_examples.png", dpi=160)
+    save_png(fig, FIGURES_DIR / f"{figure_stem(output_tag)}_overlay_examples.png")
     plt.close(fig)
 
 
@@ -329,12 +258,7 @@ def output_paths(output_tag: str) -> tuple[Path, Path]:
 
 def figure_paths(output_tag: str) -> list[Path]:
     stem = figure_stem(output_tag)
-    return [
-        FIGURES_DIR / f"{stem}_mean_f1.png",
-        FIGURES_DIR / f"{stem}_relative_f1_drop.png",
-        FIGURES_DIR / f"{stem}_method_condition_heatmap.png",
-        FIGURES_DIR / f"{stem}_overlay_examples.png",
-    ]
+    return [FIGURES_DIR / f"{stem}_overlay_examples.png"]
 
 
 def prepare_existing_outputs(args: argparse.Namespace) -> pd.DataFrame:
@@ -424,16 +348,10 @@ def main() -> None:
     metrics_df.to_csv(metrics_path, index=False)
     summary_df.to_csv(summary_path, index=False)
 
-    save_mean_f1_plot(summary_df, args.output_tag)
-    save_relative_drop_plot(summary_df, args.output_tag)
-    save_method_condition_heatmap(summary_df, args.output_tag)
     save_overlay_examples(overlay_examples, args.output_tag)
 
     print(f"Wrote {metrics_path}")
     print(f"Wrote {summary_path}")
-    print(f"Wrote {FIGURES_DIR / f'{figure_stem(args.output_tag)}_mean_f1.png'}")
-    print(f"Wrote {FIGURES_DIR / f'{figure_stem(args.output_tag)}_relative_f1_drop.png'}")
-    print(f"Wrote {FIGURES_DIR / f'{figure_stem(args.output_tag)}_method_condition_heatmap.png'}")
     print(f"Wrote {FIGURES_DIR / f'{figure_stem(args.output_tag)}_overlay_examples.png'}")
 
 

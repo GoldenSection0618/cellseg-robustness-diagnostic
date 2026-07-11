@@ -1,4 +1,4 @@
-method,method_label,protocol,condition,images,mean_object_f1,median_object_f1,mean_precision,mean_recall,mean_matched_iou,mean_matched_dice,mean_absolute_count_error,median_absolute_count_error,mean_true_instances,mean_pred_instances,no_prediction_rate,median_latency_ms,mean_latency_ms
-cellpose_cpsam,Cellpose-SAM,zero_shot,same_held_out_val_clean,134,0.92,0.9479,0.9456,0.9007,0.8642,0.9202,2.9328,1.0,41.7836,39.9254,0.0075,1725.6225,2596.062
-yolo_fixed_budget,YOLO fixed-budget supervised,supervised,held_out_val,134,0.853,0.9029,0.8419,0.8737,0.8182,0.8957,6.0896,2.0,41.7836,41.9776,0.0,33.4265,65.6996
-otsu_watershed,Otsu + watershed,zero_shot,same_held_out_val_clean,134,0.6442,0.7059,0.6103,0.7219,0.7946,0.8772,19.8806,6.0,41.7836,59.5299,0.0,8.183,16.2954
+method,method_label,protocol,condition,images,mean_object_f1,median_object_f1,mean_precision,mean_recall,mean_matched_iou,mean_matched_dice,mean_absolute_count_error,median_absolute_count_error,mean_missed_object_rate,mean_fp_per_true_instance,mean_count_bias,mean_true_instances,mean_pred_instances,no_prediction_rate,median_latency_ms,mean_latency_ms
+cellpose_cpsam,Cellpose-SAM,zero_shot,same_held_out_val_clean,134,0.92,0.9479,0.9456,0.9007,0.8642,0.9202,2.9328,1.0,0.0993,0.0449,-1.8582,41.7836,39.9254,0.0075,1725.6225,2596.062
+yolo_fixed_budget,YOLO fixed-budget supervised,supervised,held_out_val,134,0.853,0.9029,0.8419,0.8737,0.8182,0.8957,6.0896,2.0,0.1263,0.1723,0.194,41.7836,41.9776,0.0,33.4265,65.6996
+otsu_watershed,Otsu + watershed,zero_shot,same_held_out_val_clean,134,0.6442,0.7059,0.6103,0.7219,0.7946,0.8772,19.8806,6.0,0.2781,0.7193,17.7463,41.7836,59.5299,0.0,8.183,16.2954

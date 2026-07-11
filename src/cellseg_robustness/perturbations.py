@@ -26,6 +26,8 @@ def apply_perturbation(image: np.ndarray, perturbation: Perturbation) -> np.ndar
         return image.copy()
     if perturbation.name == "gaussian_noise":
         return gaussian_noise(image, sigma=float(perturbation.params["sigma"]))
+    if perturbation.name == "poisson_noise":
+        return poisson_noise(image, peak=float(perturbation.params["peak"]))
     if perturbation.name == "gaussian_blur":
         return gaussian_blur(image, sigma=float(perturbation.params["sigma"]))
     if perturbation.name == "downsample_upsample":
@@ -41,6 +43,13 @@ def gaussian_noise(image: np.ndarray, sigma: float) -> np.ndarray:
     rng = np.random.default_rng(0)
     image_float = clip_like_float(image)
     noisy = image_float + rng.normal(0.0, sigma, size=image_float.shape)
+    return np.clip(noisy, 0.0, 1.0).astype(np.float32)
+
+
+def poisson_noise(image: np.ndarray, peak: float) -> np.ndarray:
+    rng = np.random.default_rng(0)
+    image_float = clip_like_float(image)
+    noisy = rng.poisson(image_float * peak) / peak
     return np.clip(noisy, 0.0, 1.0).astype(np.float32)
 
 
@@ -91,7 +100,9 @@ def smoke_test_perturbations() -> list[Perturbation]:
     return [
         Perturbation("clean", {}),
         Perturbation("gaussian_noise", {"sigma": 0.08}),
+        Perturbation("poisson_noise", {"peak": 30.0}),
         Perturbation("gaussian_blur", {"sigma": 1.5}),
         Perturbation("downsample_upsample", {"scale": 0.5}),
+        Perturbation("intensity_scale", {"scale": 0.6}),
         Perturbation("contrast_inversion", {}),
     ]

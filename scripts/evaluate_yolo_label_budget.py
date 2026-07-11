@@ -26,6 +26,7 @@ sys.path.insert(0, str(REPO_ROOT / "scripts"))
 from cellseg_robustness.data import load_instance_mask, mask_dir_from_dir
 from cellseg_robustness.metrics import compute_instance_metrics
 from cellseg_robustness.paths import FIGURES_DIR, RESULT_SUBDIRS, ensure_output_dirs
+from cellseg_robustness.plot_style import apply_figure_style, save_png
 from cellseg_robustness.visualization import overlay_truth_prediction
 
 from evaluate_yolo_tiny_train_smoke import image_dir_from_source_image, yolo_result_to_instances
@@ -100,7 +101,7 @@ def save_overlay_figure(budget: str, examples: list[tuple[str, np.ndarray, np.nd
     for ax in axes_array[len(examples) :]:
         ax.axis("off")
     fig.tight_layout()
-    fig.savefig(figure_path(budget), dpi=160)
+    save_png(fig, figure_path(budget))
     plt.close(fig)
 
 
