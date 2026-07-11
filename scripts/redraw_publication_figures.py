@@ -23,6 +23,11 @@ def draw_failure_hint_counts(ax, failure_cases: pd.DataFrame, methods: list[str]
         .fillna(0)
         .astype(int)
     )
+    counts = counts.loc[:, counts.sum(axis=0) > 0]
+    if counts.empty:
+        ax.axis("off")
+        return
+
     preferred_order = ["NO_PRED", "COLLAPSE", "FN+FP", "FN", "FP/OVER", "COUNT", "MIXED", "NO_DROP"]
     available = [hint for hint in preferred_order if hint in counts.columns]
     available.extend(hint for hint in counts.columns if hint not in available)
@@ -66,8 +71,24 @@ def draw_failure_hint_counts(ax, failure_cases: pd.DataFrame, methods: list[str]
         ticks = np.concatenate((-positive_ticks[:0:-1], positive_ticks))
         ax.set_xlim(-tick_max, tick_max)
         ax.set_xticks(ticks, labels=[str(abs(int(value))) for value in ticks])
-        ax.text(0.25, 1.02, METHOD_LABELS.get(left_method, left_method), transform=ax.transAxes, ha="center", va="bottom", fontsize=9)
-        ax.text(0.75, 1.02, METHOD_LABELS.get(right_method, right_method), transform=ax.transAxes, ha="center", va="bottom", fontsize=9)
+        ax.text(
+            0.25,
+            1.02,
+            METHOD_LABELS.get(left_method, left_method),
+            transform=ax.transAxes,
+            ha="center",
+            va="bottom",
+            fontsize=9,
+        )
+        ax.text(
+            0.75,
+            1.02,
+            METHOD_LABELS.get(right_method, right_method),
+            transform=ax.transAxes,
+            ha="center",
+            va="bottom",
+            fontsize=9,
+        )
     else:
         group_height = 0.78
         bar_height = group_height / max(len(methods), 1)
@@ -98,13 +119,108 @@ def draw_failure_hint_counts(ax, failure_cases: pd.DataFrame, methods: list[str]
     ax.tick_params(axis="y", length=0)
 
 
+def draw_sam2_failure_strip(
+    ax,
+    failure_cases: pd.DataFrame,
+    method: str = "sam2_amg",
+) -> None:
+    """Summarize the collapse-dominated SAM2 AMG failure regime."""
+    counts = (
+        failure_cases.loc[failure_cases["method"] == method, "failure_hint"]
+        .value_counts()
+        .astype(int)
+    )
+    if counts.empty:
+        ax.axis("off")
+        return
+
+    preferred_order = ["COLLAPSE", "FN+FP", "NO_PRED", "FN", "FP/OVER", "COUNT", "MIXED", "NO_DROP"]
+    hint_order = [hint for hint in preferred_order if counts.get(hint, 0) > 0]
+    hint_order.extend(hint for hint in counts.index if hint not in hint_order)
+    total = int(counts.sum())
+    color = method_color(method)
+    left = 0.0
+
+    for index, hint in enumerate(hint_order):
+        count = int(counts[hint])
+        share = 100.0 * count / total
+        is_collapse = hint == "COLLAPSE"
+        ax.barh(
+            [0],
+            [share],
+            left=left,
+            height=0.52,
+            color=color,
+            alpha=0.92 if is_collapse else 0.28,
+            edgecolor=color,
+            linewidth=0.9,
+            hatch=None if is_collapse else "///",
+        )
+        label = f"{hint} {count} ({share:.0f}%)"
+        center = left + share / 2
+        if share >= 24:
+            ax.text(
+                center,
+                0,
+                label,
+                ha="center",
+                va="center",
+                fontsize=8,
+                color="white" if is_collapse else "#111827",
+                fontweight="bold" if is_collapse else "normal",
+            )
+        else:
+            ax.annotate(
+                label,
+                xy=(center, 0.26),
+                xytext=(0, 7),
+                textcoords="offset points",
+                ha="center",
+                va="bottom",
+                fontsize=7.5,
+                color="#374151",
+                arrowprops={"arrowstyle": "-", "color": "#6b7280", "lw": 0.7},
+            )
+        left += share
+
+    ax.set_xlim(0, 100)
+    ax.set_ylim(-0.48, 0.78)
+    ax.set_yticks([])
+    ax.set_xticks([0, 50, 100], labels=["0", "50", "100"])
+    ax.set_xlabel("Share of SAM2 AMG worst-case rows (%)", fontsize=8)
+    ax.set_title("SAM2 AMG failure regime", loc="left", fontsize=9.5, pad=4)
+    ax.grid(False)
+    ax.spines["left"].set_visible(False)
+    ax.spines["top"].set_visible(False)
+    ax.spines["right"].set_visible(False)
+    ax.spines["bottom"].set_color("#111827")
+    ax.tick_params(axis="x", labelsize=8, colors="#111827")
+
+
 def redraw_clean20_diagnostics() -> None:
     deltas = pd.read_csv(RESULT_SUBDIRS["robustness"] / "pow_baseline_robustness_clean20_image_deltas.csv")
     failure_cases = pd.read_csv(RESULT_SUBDIRS["robustness"] / "pow_baseline_robustness_clean20_failure_cases.csv")
     non_clean = deltas[deltas["perturbation"] != "clean"].copy()
     methods = [method for method in METHOD_ORDER if method in set(non_clean["method"])]
+    pair_methods = [method for method in ["otsu_watershed", "cellpose_cpsam"] if method in methods]
+    sam2_method = "sam2_amg" if "sam2_amg" in methods else None
 
-    fig, axes = plt.subplots(1, 2, figsize=(12.0, 4.5), gridspec_kw={"width_ratios": [1.0, 1.25]})
+    fig = plt.figure(figsize=(12.0, 5.0), constrained_layout=True)
+    outer_grid = fig.add_gridspec(1, 2, width_ratios=[1.0, 1.28])
+    heatmap_ax = fig.add_subplot(outer_grid[0])
+
+    if sam2_method is not None:
+        right_grid = outer_grid[1].subgridspec(
+            2,
+            1,
+            height_ratios=[4.6, 1.15],
+            hspace=0.34,
+        )
+        pair_ax = fig.add_subplot(right_grid[0])
+        sam2_ax = fig.add_subplot(right_grid[1])
+    else:
+        pair_ax = fig.add_subplot(outer_grid[1])
+        sam2_ax = None
 
     worst_by_image = (
         non_clean.groupby(["method", "image_id"], as_index=False)["absolute_object_f1_drop"]
@@ -114,19 +230,20 @@ def redraw_clean20_diagnostics() -> None:
     )
     image_order = worst_by_image.max(axis=0).sort_values(ascending=False).index
     worst_by_image = worst_by_image[image_order]
-    image = axes[0].imshow(worst_by_image.to_numpy(), aspect="auto", vmin=-0.1, vmax=1.0, cmap=DROP_CMAP)
-    axes[0].set_yticks(range(len(worst_by_image.index)), labels=[METHOD_LABELS[method] for method in worst_by_image.index])
-    axes[0].set_xticks(range(len(worst_by_image.columns)), labels=[str(index) for index in range(1, len(worst_by_image.columns) + 1)])
-    axes[0].set_xlabel("Image rank by worst drop")
-    axes[0].set_title("Worst per-image F1 drop")
-    axes[0].grid(False)
-    colorbar = fig.colorbar(image, ax=axes[0], fraction=0.046, pad=0.04)
+    image = heatmap_ax.imshow(worst_by_image.to_numpy(), aspect="auto", vmin=-0.1, vmax=1.0, cmap=DROP_CMAP)
+    heatmap_ax.set_yticks(range(len(worst_by_image.index)), labels=[METHOD_LABELS[method] for method in worst_by_image.index])
+    heatmap_ax.set_xticks(range(len(worst_by_image.columns)), labels=[str(index) for index in range(1, len(worst_by_image.columns) + 1)])
+    heatmap_ax.set_xlabel("Image rank by worst drop")
+    heatmap_ax.set_title("Worst per-image F1 drop")
+    heatmap_ax.grid(False)
+    colorbar = fig.colorbar(image, ax=heatmap_ax, fraction=0.046, pad=0.04)
     colorbar.set_label("Absolute F1 drop")
 
-    draw_failure_hint_counts(axes[1], failure_cases, methods)
+    draw_failure_hint_counts(pair_ax, failure_cases, pair_methods)
+    if sam2_ax is not None and sam2_method is not None:
+        draw_sam2_failure_strip(sam2_ax, failure_cases, sam2_method)
 
-    fig.suptitle("Clean20 robustness failure diagnostics", y=1.08)
-    fig.tight_layout()
+    fig.suptitle("Clean20 robustness failure diagnostics", y=1.04)
     save_png(fig, FIGURES_DIR / "robustness_pow_clean20_failure_diagnostics.png")
     plt.close(fig)
 
