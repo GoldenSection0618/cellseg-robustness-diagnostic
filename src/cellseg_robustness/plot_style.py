@@ -10,15 +10,15 @@ import numpy as np
 
 
 METHOD_PALETTE = {
-    "otsu_watershed": "#6b7280",      # neutral: baseline thresholding
-    "cellpose_cpsam": "#2563eb",      # signal: primary deep-learning method
-    "sam2_amg": "#7c3aed",             # accent: alternative DL method
-    "yolo": "#059669",                 # accent: supervised detector family
-    "yolo11m": "#059669",
-    "yolo11n": "#10b981",
-    "warning": "#dc2626",              # directional: loss / error / bad
+    "otsu_watershed": "#e69f00",      # orange: classical baseline
+    "cellpose_cpsam": "#7eb26d",      # green: main cell-specific model
+    "sam2_amg": "#6f8fc9",            # blue: general foundation baseline
+    "yolo": "#009e73",                # teal: supervised detector family
+    "yolo11m": "#009e73",
+    "yolo11n": "#56b4a9",
+    "warning": "#d55e00",             # directional: loss / error / bad
     "neutral": "#6b7280",
-    "positive": "#16a34a",             # directional: gain / good
+    "positive": "#7eb26d",            # directional: gain / good
 }
 
 METRIC_PALETTE = {
@@ -35,17 +35,17 @@ METRIC_PALETTE = {
 # Sequential blue for score heatmaps (no red-blue diverging semantic)
 SCORE_CMAP = LinearSegmentedColormap.from_list(
     "cellseg_score",
-    ["#eff6ff", "#bfdbfe", "#60a5fa", "#3b82f6", "#1e40af"],
+    ["#f7fbff", "#dbeafe", "#93c5fd", "#4f83cc", "#1f4e8c"],
 )
 # Sequential warm for drops (drop is a loss, so red-family is justified)
 DROP_CMAP = LinearSegmentedColormap.from_list(
     "cellseg_drop",
-    ["#fff1f2", "#fecdd3", "#f87171", "#dc2626", "#991b1b"],
+    ["#fff7ed", "#fed7aa", "#fb923c", "#d55e00", "#7f1d1d"],
 )
 # Neutral gradient for generic categorical bars
 BAR_CMAP = LinearSegmentedColormap.from_list(
     "cellseg_bar",
-    ["#2563eb", "#7c3aed", "#f59e0b", "#dc2626"],
+    ["#6f8fc9", "#7eb26d", "#e69f00", "#d55e00"],
 )
 
 
@@ -64,16 +64,16 @@ def apply_figure_style() -> None:
         {
             "font.family": "sans-serif",
             "font.sans-serif": ["Arial", "Helvetica", "DejaVu Sans", "sans-serif"],
-            "font.size": 8,
-            "axes.titlesize": 9,
-            "axes.labelsize": 8,
-            "xtick.labelsize": 7,
-            "ytick.labelsize": 7,
-            "legend.fontsize": 7,
-            "figure.titlesize": 10,
+            "font.size": 9,
+            "axes.titlesize": 11,
+            "axes.labelsize": 10,
+            "xtick.labelsize": 9,
+            "ytick.labelsize": 9,
+            "legend.fontsize": 9,
+            "figure.titlesize": 12,
             "axes.spines.right": False,
             "axes.spines.top": False,
-            "axes.linewidth": 0.8,
+            "axes.linewidth": 1.0,
             "xtick.major.width": 0.8,
             "ytick.major.width": 0.8,
             "legend.frameon": False,
@@ -82,7 +82,10 @@ def apply_figure_style() -> None:
             "savefig.facecolor": "white",
             "savefig.dpi": 600,
             "grid.color": "#e5e7eb",
-            "grid.linewidth": 0.45,
+            "grid.linestyle": "--",
+            "grid.linewidth": 0.65,
+            "axes.grid": True,
+            "axes.axisbelow": True,
         }
     )
 

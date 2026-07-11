@@ -36,8 +36,7 @@ Outputs:
 
 - `results/baselines/otsu_watershed_clean_subset_metrics.csv`
 - `figures/otsu_watershed_subset_overlay_examples.png`
-- `figures/otsu_watershed_subset_metric_means.png`
-- `figures/otsu_watershed_subset_count_scatter.png`
+- `figures/baseline_clean_subset_count_agreement.png`
 
 ## Phase 4: Second Baseline
 
@@ -47,8 +46,7 @@ Completed outputs:
 
 - `results/baselines/cellpose_cpsam_clean_subset_metrics.csv`
 - `figures/cellpose_cpsam_subset_overlay_examples.png`
-- `figures/cellpose_cpsam_subset_metric_means.png`
-- `figures/cellpose_cpsam_subset_count_scatter.png`
+- `figures/baseline_clean_subset_count_agreement.png`
 
 ## Phase 5: Third Baseline
 
@@ -62,8 +60,7 @@ Completed outputs:
 
 - `results/baselines/sam2_amg_clean_subset_metrics.csv`
 - `figures/sam2_amg_subset_overlay_examples.png`
-- `figures/sam2_amg_subset_metric_means.png`
-- `figures/sam2_amg_subset_count_scatter.png`
+- `figures/baseline_clean_subset_count_agreement.png`
 
 ## Phase 6: Clean Baseline Comparison
 
@@ -138,12 +135,8 @@ Current Otsu + watershed and Cellpose-SAM outputs:
 - `results/robustness/pow_baseline_robustness_full_train_image_deltas.csv`
 - `results/robustness/pow_baseline_robustness_full_train_failure_cases.csv`
 - `results/robustness/pow_baseline_robustness_full_train_no_prediction_cases.csv`
-- `figures/robustness_pow_full_train_mean_f1.png`
-- `figures/robustness_pow_full_train_relative_f1_drop.png`
-- `figures/robustness_pow_full_train_method_condition_heatmap.png`
-- `figures/robustness_pow_full_train_f1_drop_distributions.png`
-- `figures/robustness_pow_full_train_worst_f1_drops.png`
-- `figures/robustness_pow_full_train_failure_hint_counts.png`
+- `figures/robustness_pow_full_train_summary.png`
+- `figures/robustness_pow_full_train_failure_diagnostics.png`
 - `figures/robustness_pow_full_train_overlay_examples.png`
 
 The full-train output currently contains `otsu_watershed` and `cellpose_cpsam`.
@@ -168,7 +161,6 @@ Generated outputs:
 - `figures/robustness_sam2_amg_sensitivity_clean20_clean_screen_f1.png`
 - `figures/robustness_sam2_amg_sensitivity_clean20_clean_screen_counts.png`
 - `figures/robustness_sam2_amg_sensitivity_clean20_mean_f1.png`
-- `figures/robustness_sam2_amg_sensitivity_clean20_zero_pred_rate.png`
 - `figures/robustness_sam2_amg_sensitivity_clean20_count_error.png`
 
 Result: the sensitivity run does not justify expanding SAM2 AMG to full_train.
