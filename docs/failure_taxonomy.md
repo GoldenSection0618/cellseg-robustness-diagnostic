@@ -23,8 +23,7 @@ failures consistently.
 - `figures/robustness_otsu_smoke_overlay_examples.png`
 - `figures/robustness_pow_smoke_overlay_examples.png`
 - `figures/robustness_pow_clean20_overlay_examples.png`
-- `figures/robustness_pow_clean20_image_f1_drop_heatmap.png`
-- `figures/robustness_pow_clean20_worst_f1_drops.png`
+- `figures/robustness_pow_clean20_failure_diagnostics.png`
 - `figures/robustness_pow_full_train_failure_diagnostics.png`
 
 ## Instance-Level Failure Modes

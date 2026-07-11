@@ -37,7 +37,8 @@ Primary result files:
 Primary figures:
 
 - `figures/baseline_clean_subset_metric_comparison.png`
-- `figures/robustness_pow_clean20_method_condition_heatmap.png`
+- `figures/robustness_pow_clean20_summary.png`
+- `figures/robustness_pow_clean20_failure_diagnostics.png`
 - `figures/robustness_pow_full_train_summary.png`
 - `figures/robustness_pow_full_train_failure_diagnostics.png`
 - `figures/robustness_sam2_amg_sensitivity_clean20_mean_f1.png`

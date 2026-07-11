@@ -226,7 +226,7 @@ def redraw_robustness_summary(summary_path: Path, figure_prefix: str) -> None:
     labels = [PERTURBATION_LABELS[item] for item in pivot.index]
     x = np.arange(len(pivot))
 
-    if figure_prefix == "robustness_pow_full_train":
+    if figure_prefix in {"robustness_pow_clean20", "robustness_pow_full_train"}:
         drop = (
             summary[summary["perturbation"] != "clean"]
             .pivot(index="perturbation", columns="method", values="relative_object_f1_drop")
@@ -234,7 +234,7 @@ def redraw_robustness_summary(summary_path: Path, figure_prefix: str) -> None:
         )
         drop = drop[[method for method in methods if method in drop.columns]].dropna(how="all")
 
-        fig, axes = plt.subplots(1, 2, figsize=(10.6, 3.8))
+        fig, axes = plt.subplots(1, 2, figsize=(10.8, 3.8))
         for method in pivot.columns:
             axes[0].plot(
                 x,
@@ -277,10 +277,11 @@ def redraw_robustness_summary(summary_path: Path, figure_prefix: str) -> None:
         style_axis(axes[1], grid_axis="y")
 
         handles, legend_labels = axes[0].get_legend_handles_labels()
+        title = "Clean20 robustness summary" if figure_prefix == "robustness_pow_clean20" else "Full-train robustness summary"
         fig.legend(handles, legend_labels, loc="upper center", ncols=len(handles), bbox_to_anchor=(0.5, 1.04), frameon=False)
-        fig.suptitle("Full-train robustness summary", y=1.14)
+        fig.suptitle(title, y=1.14)
         fig.tight_layout()
-        save_png(fig, FIGURES_DIR / "robustness_pow_full_train_summary.png")
+        save_png(fig, FIGURES_DIR / f"{figure_prefix}_summary.png")
         plt.close(fig)
         return
 
@@ -1308,43 +1309,44 @@ def redraw_clean20_diagnostics() -> None:
     non_clean = deltas[deltas["perturbation"] != "clean"].copy()
     methods = [method for method in METHOD_ORDER if method in set(non_clean["method"])]
 
-    fig, axes = plt.subplots(len(methods), 1, figsize=(12, 2.8 * len(methods)), sharex=False, constrained_layout=True)
-    axes_array = np.atleast_1d(axes)
-    image = None
-    for ax, method in zip(axes_array, methods):
-        frame = non_clean[non_clean["method"] == method]
-        pivot = frame.pivot(index="perturbation", columns="image_id", values="absolute_object_f1_drop")
-        pivot = pivot.reindex([name for name in PERTURBATION_ORDER if name != "clean"])
-        image_order = pivot.max(axis=0).sort_values(ascending=False).index
-        pivot = pivot[image_order]
-        image = ax.imshow(pivot.to_numpy(), aspect="auto", vmin=-0.1, vmax=1.0, cmap=DROP_CMAP)
-        ax.set_title(f"{METHOD_LABELS[method]}: object F1 drop from clean")
-        ax.set_yticks(range(len(pivot.index)), labels=[PERTURBATION_LABELS[value] for value in pivot.index])
-        ax.set_xticks(range(len(pivot.columns)), labels=[str(index) for index in range(1, len(pivot.columns) + 1)])
-        ax.grid(False)
-    if image is not None:
-        colorbar = fig.colorbar(image, ax=axes_array.ravel().tolist(), shrink=0.82, pad=0.015)
-        colorbar.set_label("Absolute object F1 drop")
-    save_png(fig, FIGURES_DIR / "robustness_pow_clean20_image_f1_drop_heatmap.png")
-    plt.close(fig)
+    fig, axes = plt.subplots(1, 2, figsize=(11.0, 4.1))
 
-    fig, axes = plt.subplots(1, len(methods), figsize=(4.6 * len(methods), 4.6), sharey=True)
-    axes_array = np.atleast_1d(axes)
-    for ax, method in zip(axes_array, methods):
-        top_cases = (
-            failure_cases[failure_cases["method"] == method]
-            .sort_values("absolute_object_f1_drop", ascending=False)
-            .head(5)
-            .copy()
-        )
-        labels = [f"Case {index}" for index in range(1, len(top_cases) + 1)]
-        ax.bar(labels, top_cases["absolute_object_f1_drop"], color=gradient_colors(len(top_cases)), edgecolor="white")
-        ax.set_title(METHOD_LABELS[method])
-        ax.set_ylim(0, 1.05)
-    axes_array[0].set_ylabel("Absolute object F1 drop from clean")
-    fig.suptitle("Clean20 robustness: largest per-method F1 drops", y=1.02)
+    worst_by_image = (
+        non_clean.groupby(["method", "image_id"], as_index=False)["absolute_object_f1_drop"]
+        .max()
+        .pivot(index="method", columns="image_id", values="absolute_object_f1_drop")
+        .reindex(methods)
+    )
+    image_order = worst_by_image.max(axis=0).sort_values(ascending=False).index
+    worst_by_image = worst_by_image[image_order]
+    image = axes[0].imshow(worst_by_image.to_numpy(), aspect="auto", vmin=-0.1, vmax=1.0, cmap=DROP_CMAP)
+    axes[0].set_yticks(range(len(worst_by_image.index)), labels=[METHOD_LABELS[method] for method in worst_by_image.index])
+    axes[0].set_xticks(range(len(worst_by_image.columns)), labels=[str(index) for index in range(1, len(worst_by_image.columns) + 1)])
+    axes[0].set_xlabel("Image rank by worst drop")
+    axes[0].set_title("Worst per-image F1 drop")
+    axes[0].grid(False)
+    colorbar = fig.colorbar(image, ax=axes[0], fraction=0.046, pad=0.04)
+    colorbar.set_label("Absolute F1 drop")
+
+    counts = failure_cases.groupby(["method", "failure_hint"], observed=True).size().unstack(fill_value=0)
+    counts = counts.reindex(methods).dropna(how="all").fillna(0)
+    hint_order = [column for column in ["NO_PRED", "COLLAPSE", "FN+FP", "FN", "FP/OVER", "COUNT", "MIXED", "NO_DROP"] if column in counts.columns]
+    counts = counts[hint_order]
+    bottom = np.zeros(len(counts))
+    x = np.arange(len(counts))
+    colors = gradient_colors(len(hint_order))
+    for hint, color in zip(hint_order, colors):
+        values = counts[hint].to_numpy()
+        axes[1].bar(x, values, bottom=bottom, label=hint, color=color, edgecolor="white")
+        bottom += values
+    axes[1].set_xticks(x, labels=[METHOD_LABELS[method] for method in counts.index])
+    axes[1].set_ylabel("Worst-case rows")
+    axes[1].set_title("Worst-case failure hints")
+    axes[1].legend(frameon=False, loc="upper left", bbox_to_anchor=(1.01, 1.0))
+    style_axis(axes[1], grid_axis="y")
+    fig.suptitle("Clean20 robustness failure diagnostics", y=1.08)
     fig.tight_layout()
-    save_png(fig, FIGURES_DIR / "robustness_pow_clean20_worst_f1_drops.png")
+    save_png(fig, FIGURES_DIR / "robustness_pow_clean20_failure_diagnostics.png")
     plt.close(fig)
 
 

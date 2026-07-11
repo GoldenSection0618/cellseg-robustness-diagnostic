@@ -283,11 +283,8 @@ Generated outputs:
 - `results/robustness/pow_baseline_robustness_clean20_summary.csv`
 - `results/robustness/pow_baseline_robustness_clean20_image_deltas.csv`
 - `results/robustness/pow_baseline_robustness_clean20_failure_cases.csv`
-- `figures/robustness_pow_clean20_mean_f1.png`
-- `figures/robustness_pow_clean20_relative_f1_drop.png`
-- `figures/robustness_pow_clean20_method_condition_heatmap.png`
-- `figures/robustness_pow_clean20_image_f1_drop_heatmap.png`
-- `figures/robustness_pow_clean20_worst_f1_drops.png`
+- `figures/robustness_pow_clean20_summary.png`
+- `figures/robustness_pow_clean20_failure_diagnostics.png`
 - `figures/robustness_pow_clean20_overlay_examples.png`
 
 Current clean20 robustness summary:
