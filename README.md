@@ -70,21 +70,25 @@ Interpretation:
 
 *Figure 2. Full-train robustness summary for Cellpose-SAM and Otsu + watershed across tested perturbations.*
 
+![Cellpose-SAM qualitative robustness example](figures/robustness_pow_full_train_overlay_examples.png)
+
+*Figure 3. One qualitative Cellpose-SAM example across clean and perturbed inputs; green contours are ground truth and red contours are predictions. This illustration complements, rather than estimates, the aggregate results above.*
+
 ### Failure Diagnostics
 
 ![Full-train failure diagnostics](figures/robustness_pow_full_train_failure_diagnostics.png)
 
-*Figure 3. Failure diagnostics for the full-train robustness run.*
+*Figure 4. Failure diagnostics for the full-train robustness run.*
 
 ### Clean-subset Baseline Behavior
 
 ![Clean-subset precision recall](figures/baseline_clean_subset_precision_recall.png)
 
-*Figure 4. Clean-subset precision-recall behavior across baseline methods.*
+*Figure 5. Clean-subset precision-recall behavior across baseline methods.*
 
 ![Clean-subset count agreement](figures/baseline_clean_subset_count_agreement.png)
 
-*Figure 5. Clean-subset count agreement between true and predicted instance counts.*
+*Figure 6. Clean-subset count agreement between true and predicted instance counts.*
 
 ## Benchmark Design
 

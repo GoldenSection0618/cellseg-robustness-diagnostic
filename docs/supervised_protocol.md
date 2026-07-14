@@ -87,6 +87,12 @@ The machine-readable comparisons are the
 and [capacity held-out summary](../results/supervised/yolo_capacity_diagnostic_val_comparison_summary.csv).
 The visual summary is [the held-out Protocol A/B comparison](../figures/protocol_ab_heldout_val_comparison.png).
 
+![YOLO label-budget diagnostic](../figures/supervised_yolo_label_budget_diagnostic_comparison.png)
+
+*YOLO11n label-budget diagnostic on the shared held-out validation split. Increasing
+the training pool improves count error more clearly than object F1, while
+Cellpose-SAM and Otsu + watershed provide fixed zero-shot references.*
+
 ## Operating-point Diagnostic
 
 The frozen 100-image YOLO11n checkpoint was evaluated at a predeclared confidence

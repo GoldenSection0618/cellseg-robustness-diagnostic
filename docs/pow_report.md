@@ -57,6 +57,11 @@ generated masks were poorly aligned with cell instances under Gaussian noise, bl
 and downsampling. The test uses automatic grid prompts, so this is not evidence about
 language prompting.
 
+![SAM2 AMG configuration sensitivity](../figures/robustness_sam2_amg_sensitivity_clean20_mean_f1.png)
+
+*SAM2 AMG object F1 on the fixed 20-image sensitivity evaluation. The matrix makes
+the shared blur and downsampling failure pattern visible across the tested settings.*
+
 ## Failure Evidence
 
 Otsu + watershed shows false positives, over-segmentation hints, and positive count
