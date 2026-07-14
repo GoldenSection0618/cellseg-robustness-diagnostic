@@ -196,6 +196,7 @@ These protocols should stay separate from the clean zero-shot baseline track:
 - optional Cellpose3 default cross-version protocol;
 - optional Cellpose3 restoration cross-version protocol;
 - optional prompted SAM2 or SAM2 post-processing repair protocol;
+- optional SAM3 prompted-concept screening with predeclared text or exemplar prompts;
 - YOLO-seg small-label supervised adaptation;
 - Gemini segmentation output-validity checks.
 

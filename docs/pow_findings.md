@@ -30,10 +30,34 @@ The SAM2 conclusion is narrower: the current AMG pipeline uses automatic grid
 prompts and a 20-image sensitivity evaluation. Its limitation is mask quality and
 instance alignment, not a text-prompt failure or consistently empty output.
 
+## SAM-family Interpretation
+
+The current SAM2 result evaluates automatic mask generation, not object-directed
+prompting. Its grid prompts produce candidate regions that are then converted into
+non-overlapping cell instances. The sensitivity validation records zero
+no-prediction rows across 600 image-condition rows, so the main observed limitation
+is candidate-mask quality and cell-instance alignment rather than an absence of
+masks. Adjusting the tested AMG settings improves clean F1 only modestly and does
+not repair the blur, downsampling, or noise pattern.
+
+This is not a language-prompt failure. It may still reflect a prompt-protocol
+mismatch: automatic grid prompts do not specify which image regions are cells or
+nuclei. Interactive point or box prompting would be a separate protocol and must not
+use ground-truth-derived prompts in a zero-shot comparison.
+
+SAM3 is an optional follow-up direction because its prompted concept segmentation
+can use text or exemplar prompts to identify all instances of a requested concept.
+It is not an upgrade or replacement for the reported SAM2 AMG result. A valid SAM3
+screen would predeclare a small set of concept prompts, use the fixed clean20 subset,
+avoid ground-truth-derived prompts, and report the same instance metrics before any
+robustness expansion. See [SAM 3: Segment Anything with Concepts](https://ai.meta.com/research/publications/sam-3-segment-anything-with-concepts/).
+
 ## What the Evidence Does Not Support
 
 - It does not show that prompted SAM2, alternate SAM2 checkpoints, or repaired SAM2
   post-processing cannot work on this dataset.
+- It does not establish that SAM3 will improve cell segmentation; a SAM3
+  prompted-concept screen would be a separate optional protocol.
 - It does not establish robustness beyond the six tested perturbations or beyond
   DSB2018 `stage1_train`.
 - It does not rank supervised YOLO-seg as a zero-shot method. The held-out supervised
