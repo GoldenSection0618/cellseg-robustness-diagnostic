@@ -1,109 +1,73 @@
-# PoW Stage Report
-
-This report closes the current zero-shot proof-of-work stage for DSB2018 instance
-segmentation robustness. It summarizes what was tested, what the evidence supports,
-and what should happen next.
-
-Status note: this is a zero-shot stage report. Its recommendation to run a separate
-supervised adaptation protocol has since been followed by Protocol B YOLO results,
-including fixed-budget, label-budget, threshold, and capacity diagnostics. Those
-results are documented in `docs/supervised_protocol.md` and are not part of the
-zero-shot ranking summarized here.
+# Zero-shot Results Report
 
 ## Scope
 
-The current PoW stage covers zero-shot or out-of-the-box methods only:
+This report is the auditable record for the completed zero-shot comparison on the
+Kaggle 2018 Data Science Bowl dataset. It covers Otsu + watershed and Cellpose-SAM
+on all 670 `stage1_train` images, plus SAM2 automatic mask generation (AMG) on the
+fixed 20-image screening subset. Supervised YOLO-seg results are reported separately
+in [supervised_protocol.md](supervised_protocol.md).
 
-- Otsu + watershed as the classical lower-bound reference;
-- Cellpose-SAM / `cpsam` as the current bio-adapted foundation-model baseline;
-- SAM2 automatic mask generation as a general segmentation foundation-model screen.
+The reported perturbations are Gaussian noise, Poisson noise, Gaussian blur,
+downsample/upsample, intensity scaling, and contrast inversion. This report does not
+evaluate prompted SAM2, legacy Cellpose3, Cellpose restoration, or VLM mask output.
 
-The PoW stage does not include supervised fine-tuning, VLM mask generation, prompted
-SAM2, legacy Cellpose3 `cyto3`, or Cellpose3 restoration.
+## Primary Evidence
 
-## Evidence
+| Artifact | Role |
+| --- | --- |
+| [Full-train summary](../results/robustness/pow_baseline_robustness_full_train_summary.csv) | Aggregate metric evidence for Otsu and Cellpose-SAM |
+| [Full-train per-image deltas](../results/robustness/pow_baseline_robustness_full_train_image_deltas.csv) | Clean-to-perturbation change by image |
+| [Full-train failure cases](../results/robustness/pow_baseline_robustness_full_train_failure_cases.csv) | Largest observed degradations |
+| [No-prediction cases](../results/robustness/pow_baseline_robustness_full_train_no_prediction_cases.csv) | Cellpose-SAM empty-prediction events |
+| [SAM2 sensitivity validation](../results/robustness/sam2_amg_sensitivity_clean20_validation_summary.csv) | AMG configuration comparison on 20 images |
 
-Primary result files:
+The accompanying figures are the [full-train summary](../figures/robustness_pow_full_train_summary.png),
+[failure diagnostics](../figures/robustness_pow_full_train_failure_diagnostics.png),
+and [SAM2 AMG sensitivity view](../figures/robustness_sam2_amg_sensitivity_clean20_mean_f1.png).
 
-- `results/baselines/clean_subset_baseline_summary.csv`
-- `results/robustness/pow_baseline_robustness_clean20_summary.csv`
-- `results/robustness/pow_baseline_robustness_full_train_summary.csv`
-- `results/robustness/pow_baseline_robustness_full_train_failure_cases.csv`
-- `results/robustness/pow_baseline_robustness_full_train_no_prediction_cases.csv`
-- `results/robustness/sam2_amg_sensitivity_clean20_clean_screen_summary.csv`
-- `results/robustness/sam2_amg_sensitivity_clean20_validation_summary.csv`
-- `results/robustness/sam2_amg_sensitivity_clean20_failure_cases.csv`
+## Full-train Robustness
 
-Primary figures:
-
-- `figures/baseline_clean_subset_metric_comparison.png`
-- `figures/robustness_pow_clean20_summary.png`
-- `figures/robustness_pow_clean20_failure_diagnostics.png`
-- `figures/robustness_pow_full_train_summary.png`
-- `figures/robustness_pow_full_train_failure_diagnostics.png`
-- `figures/robustness_sam2_amg_sensitivity_clean20_mean_f1.png`
-
-## Method Conclusions
-
-Cellpose-SAM is the strongest current zero-shot baseline. On the full `stage1_train`
-robustness run, its mean object F1 is 0.9178 on clean images and remains between
-0.8740 and 0.9155 across the tested perturbations.
-
-Otsu + watershed remains useful as a classical lower bound. It is interpretable and
-fast, but its full-train clean F1 is 0.5736 and Gaussian noise drops it to 0.4298.
-Its main value is diagnostic contrast, not competitive segmentation quality.
-
-SAM2 AMG is not a good current mainline robustness baseline. The clean20 robustness
-run showed collapse under perturbations, and the later parameter-sensitivity run did
-not repair that pattern. The issue is not primarily empty output: the sensitivity
-validation recorded zero no-prediction rows across 600 image-condition rows, but the
-returned AMG masks match cell instances poorly under blur, downsample, and Gaussian
-noise.
-
-## Robustness Summary
-
-Full-train Otsu + watershed and Cellpose-SAM:
-
-| Method | Clean F1 | Gaussian F1 | Poisson F1 | Blur F1 | Downsample F1 | Intensity F1 | Inversion F1 |
+| Method | Clean | Gaussian | Poisson | Blur | Downsample | Intensity | Inversion |
 | --- | ---: | ---: | ---: | ---: | ---: | ---: | ---: |
 | Cellpose-SAM | 0.9178 | 0.8740 | 0.8806 | 0.8898 | 0.9006 | 0.9155 | 0.9139 |
 | Otsu + watershed | 0.5736 | 0.4298 | 0.4606 | 0.5818 | 0.5825 | 0.5744 | 0.5653 |
 
-SAM2 AMG clean20 sensitivity validation:
+*Mean object-level F1 across all 670 images for each condition.*
 
-| Config | Clean F1 | Noise F1 | Blur F1 | Downsample F1 | Inversion F1 |
+Cellpose-SAM has the highest clean score and the smallest degradation under every
+tested perturbation. Its largest relative F1 decrease is 4.8% under Gaussian noise.
+Otsu + watershed is most sensitive to noise: Gaussian noise decreases F1 by 25.1%
+and Poisson noise by 19.7% relative to its clean score.
+
+## SAM2 AMG Screening
+
+| Configuration | Clean | Gaussian | Blur | Downsample | Inversion |
 | --- | ---: | ---: | ---: | ---: | ---: |
 | `stability_score_thresh_0.95` | 0.4190 | 0.1252 | 0.0286 | 0.0313 | 0.5676 |
 | `points_per_side_32` | 0.3894 | 0.1700 | 0.0145 | 0.0272 | 0.5021 |
 | `default_current` | 0.3683 | 0.1799 | 0.0213 | 0.0310 | 0.4996 |
 
-These results support keeping Cellpose-SAM as the main zero-shot baseline, keeping
-Otsu + watershed as the classical lower bound, and stopping SAM2 AMG full-train
-expansion under the current AMG protocol.
+*Mean object-level F1 on the fixed 20-image subset. The detailed validation table
+also includes Poisson noise and intensity scaling.*
 
-## Failure Interpretation
+AMG did not fail mainly by returning no masks: the sensitivity validation had zero
+no-prediction rows across 600 image-condition rows. Instead, its automatically
+generated masks were poorly aligned with cell instances under Gaussian noise, blur,
+and downsampling. The test uses automatic grid prompts, so this is not evidence about
+language prompting.
 
-Otsu + watershed mainly fails through false positives, coarse over-segmentation
-hints, and count inflation under Gaussian and Poisson noise.
+## Failure Evidence
 
-Cellpose-SAM mainly has residual missed objects and a small number of no-prediction
-cases. The full-train diagnostics record 14 no-prediction image-condition rows out
-of 4690 Cellpose-SAM rows.
+Otsu + watershed shows false positives, over-segmentation hints, and positive count
+bias under noise. Cellpose-SAM's remaining failures are predominantly missed
+instances and 14 empty-prediction rows out of 4,690 image-condition rows. The
+[failure taxonomy](failure_taxonomy.md) defines these diagnostic labels.
 
-SAM2 AMG mainly fails through poor automatic mask selection and poor cell-instance
-alignment under perturbation. It is not a text-prompt failure because the current
-SAM2 baseline uses automatic grid prompts, not language prompts.
+## Conclusion
 
-## Decision
-
-The current zero-shot PoW stage is sufficient for the main diagnostic question:
-Cellpose-SAM is the practical zero-shot baseline to carry forward, Otsu + watershed
-is the lower-bound reference, and SAM2 AMG should not be scaled to full_train without
-a protocol change.
-
-The next experimental protocol should be separate from this PoW stage. In the
-subsequent work, that became Protocol B supervised adaptation with YOLO-seg
-fine-tuning and capacity diagnostics, asking a new question: how much target-domain
-annotation and model capacity improve performance over the zero-shot baselines.
-Further SAM2 work should be prompted SAM2 or post-processing repair, not more
-current-AMG scaling.
+Within this dataset and perturbation suite, Cellpose-SAM is the strongest completed
+zero-shot baseline. Otsu + watershed is retained as an interpretable lower bound.
+SAM2 AMG is not included in the full-train comparison because its 20-image screen and
+parameter check already show that the current automatic-mask-generation protocol is
+not suitable for this task.

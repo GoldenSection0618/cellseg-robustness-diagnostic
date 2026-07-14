@@ -1,108 +1,50 @@
-# PoW Findings
+# Zero-shot Findings
 
-This document summarizes the current proof-of-work conclusion layer. It separates
-full-train conclusions from clean20 screening conclusions so the method ranking does
-not overstate what has actually been run.
+## Headline Results
 
-## Evidence Scope
+- **Cellpose-SAM / `cpsam` is the strongest completed zero-shot baseline.** Its
+  full-train mean object F1 is 0.9178 on clean images and remains 0.8740 or higher
+  across all tested perturbations.
+- **Otsu + watershed is the classical lower bound.** It is fast and interpretable,
+  but noise causes false-positive growth and count inflation; its clean F1 is 0.5736.
+- **SAM2 AMG is unsuitable under the tested no-manual-prompt configuration.** Its
+  masks are poorly matched to cell instances under key perturbations even when masks
+  are returned.
 
-The current evidence has two levels:
+The complete numeric record is in the [zero-shot results report](pow_report.md).
+The reader-facing comparison, including supervised YOLO-seg, is in the
+[README](../README.md).
 
-- full-train robustness for Otsu + watershed and Cellpose-SAM on all 670
-  `stage1_train` images across clean, Gaussian noise, Poisson noise, blur,
-  downsample, intensity scaling, and inversion conditions;
-- clean20 robustness for Otsu + watershed, Cellpose-SAM, and SAM2 AMG on the fixed
-  20-image subset used by the clean baselines.
+## What the Evidence Supports
 
-Primary evidence files:
+The full-train evaluation supports Cellpose-SAM as the preferred zero-shot method for
+this DSB2018 benchmark and perturbation suite. The relative F1 loss is 4.8% under
+Gaussian noise, 4.1% under Poisson noise, 3.1% under blur, 1.9% under downsampling,
+0.3% under intensity scaling, and 0.4% under inversion.
 
-- `results/robustness/pow_baseline_robustness_full_train_summary.csv`
-- `results/robustness/pow_baseline_robustness_full_train_image_deltas.csv`
-- `results/robustness/pow_baseline_robustness_full_train_failure_cases.csv`
-- `results/robustness/pow_baseline_robustness_full_train_no_prediction_cases.csv`
-- `results/robustness/pow_baseline_robustness_clean20_summary.csv`
-- `results/robustness/pow_baseline_robustness_clean20_failure_cases.csv`
+Otsu + watershed is most vulnerable to Gaussian and Poisson noise, where F1 falls
+by 25.1% and 19.7%, respectively. Its main diagnostic value is making false-positive
+and count-bias failure patterns visible.
 
-## Method Roles
+The SAM2 conclusion is narrower: the current AMG pipeline uses automatic grid
+prompts and a 20-image sensitivity evaluation. Its limitation is mask quality and
+instance alignment, not a text-prompt failure or consistently empty output.
 
-| Method | Current role | Decision |
-| --- | --- | --- |
-| Cellpose-SAM / `cpsam` | Main zero-shot baseline | Keep as the primary PoW baseline |
-| Otsu + watershed | Classical lower bound | Keep as the interpretable reference |
-| SAM2 AMG | Screened general foundation-model baseline | Do not expand current AMG settings to full_train |
+## What the Evidence Does Not Support
 
-Cellpose-SAM is the current main baseline. Among the completed full-train methods,
-it has the strongest clean object F1 and the smallest perturbation drops:
+- It does not show that prompted SAM2, alternate SAM2 checkpoints, or repaired SAM2
+  post-processing cannot work on this dataset.
+- It does not establish robustness beyond the six tested perturbations or beyond
+  DSB2018 `stage1_train`.
+- It does not rank supervised YOLO-seg as a zero-shot method. The held-out supervised
+  comparison is a separate protocol described in
+  [supervised_protocol.md](supervised_protocol.md).
+- It does not include legacy Cellpose3 or restoration as missing comparisons; they
+  require a separate cross-version setup.
 
-| Method | Clean F1 | Gaussian F1 | Poisson F1 | Blur F1 | Downsample F1 | Intensity F1 | Inversion F1 |
-| --- | ---: | ---: | ---: | ---: | ---: | ---: | ---: |
-| Cellpose-SAM | 0.9178 | 0.8740 | 0.8806 | 0.8898 | 0.9006 | 0.9155 | 0.9139 |
-| Otsu + watershed | 0.5736 | 0.4298 | 0.4606 | 0.5818 | 0.5825 | 0.5744 | 0.5653 |
+## Evidence Links
 
-Otsu + watershed remains useful as a classical lower bound. It is interpretable,
-cheap to run, and exposes segmentation failure modes that a stronger method should
-avoid, but it is not competitive with Cellpose-SAM as the main cell instance
-segmentation baseline.
-
-SAM2 AMG is not suitable for direct mainline full-train robustness with the current
-configuration. The clean20 robustness run already shows near-total collapse under
-the tested perturbations, so a full-train run with the same AMG settings would mostly
-scale a known failure pattern rather than answer a new question.
-
-## Robustness Conclusions
-
-Otsu + watershed is mainly vulnerable to noise. In the full-train run its object F1
-drops from 0.5736 on clean images to 0.4298 under Gaussian noise, a 25.1% relative
-drop, and to 0.4606 under Poisson noise, a 19.7% relative drop. Blur, downsample,
-and intensity scaling are close to clean on average, which is consistent with mild
-smoothing or exposure scaling not being the main stressor for this classical
-pipeline.
-
-Cellpose-SAM stays stable at full-train scale. Its relative object-F1 drops are
-small across the tested perturbations: 4.8% for Gaussian noise, 4.1% for Poisson
-noise, 3.1% for blur, 1.9% for downsample, 0.3% for intensity scaling, and 0.4% for
-inversion.
-
-SAM2 AMG clean20 is already sufficient evidence for the current PoW decision, but it
-should not be described as a full-train result. Its object F1 falls from 0.3604 on
-clean images to 0.0043 under Gaussian noise, 0.2503 under Poisson noise, 0.0020
-under blur, 0.0016 under downsample, 0.1109 under intensity scaling, and 0.0000
-under inversion.
-
-## Failure Modes
-
-Otsu + watershed fails mainly through false positives, coarse over-segmentation
-hints, and noisy count inflation. Gaussian and Poisson noise are the key stressors
-because they create spurious regions and drive count explosion.
-
-Cellpose-SAM failures are narrower. The main observed issues are missed objects,
-small recall drops, and a limited set of no-prediction cases. The full-train
-diagnostics record 14 no-prediction image-condition rows out of 4690 Cellpose-SAM
-rows.
-
-SAM2 AMG failure is an automatic-mask-generation failure, not a text-prompt failure.
-The current SAM2 baseline uses grid prompts generated by AMG rather than manual
-language prompts. The clean20 parameter-sensitivity run confirms this is not mainly
-a zero-output problem: the validation stage records zero no-prediction rows across
-600 image-condition rows. AMG usually returns masks, but they do not match cell
-instances well under blur, downsample, and Gaussian noise.
-
-## What This Does Not Claim
-
-These findings do not claim that SAM2 cannot work for this task. They only show that
-the current automatic mask generator settings are not a good mainline robustness
-baseline. Prompted SAM2, smaller/larger checkpoints, and fixed optional
-post-processing are separate future experiments.
-
-These zero-shot findings do not fold supervised adaptation methods into the main
-PoW ranking. YOLO-seg is now evaluated separately under Protocol B on the same
-held-out validation ids used for comparison. The completed YOLO11m capacity probe
-does not close the gap to Cellpose-SAM; Cellpose fine-tuning and VLM-based
-segmentation remain separate future protocols.
-
-## Current Decision
-
-Keep the current PoW mainline centered on Cellpose-SAM as the main zero-shot
-baseline and Otsu + watershed as the classical lower bound. Defer SAM2 AMG
-full-train robustness. The completed clean20 parameter-sensitivity check did not
-change the failure pattern enough to justify scaling current AMG settings.
+- [Full-train aggregate metrics](../results/robustness/pow_baseline_robustness_full_train_summary.csv)
+- [Full-train failure cases](../results/robustness/pow_baseline_robustness_full_train_failure_cases.csv)
+- [SAM2 AMG sensitivity validation](../results/robustness/sam2_amg_sensitivity_clean20_validation_summary.csv)
+- [Failure taxonomy](failure_taxonomy.md)
