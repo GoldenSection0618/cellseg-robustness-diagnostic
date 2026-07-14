@@ -1,7 +1,15 @@
-# Proof-of-Work Checklist
+# Historical Build Checklist
 
-This checklist tracks the minimum evidence needed for the project to be a credible
-proof-of-work benchmark.
+> **Status: historical record.** This checklist records the implementation and
+> verification milestones used to establish the reported benchmark. Checked items are
+> completed historical work. Unchecked items are deliberately separate optional
+> protocols, not outstanding requirements for the current repository results. For the
+> current conclusions, see the [README](../README.md),
+> [zero-shot results report](pow_report.md), and
+> [supervised adaptation protocol](supervised_protocol.md).
+
+The checklist tracks the minimum evidence that established the benchmark. It is kept
+for auditability rather than as an active task board.
 
 ## Repository Structure
 
@@ -64,14 +72,14 @@ proof-of-work benchmark.
 - [x] Clean subset failure cases written to `results/baselines/`.
 - [x] Clean subset comparison figures written to `figures/`.
 
-## Optional Cross-Version Cellpose Baselines
+## Archived Optional Cross-Version Cellpose Baselines
 
 - [x] Legacy Cellpose default availability audited in the current `cell` environment.
 - [x] Cellpose restoration availability audited in the current `cell` environment.
 - [ ] Decide whether to add a separate Cellpose3 environment for legacy `cyto3`.
 - [ ] Decide whether to add a separate Cellpose3 restoration baseline.
 
-## Deferred Robustness Record
+## Historical Robustness Record
 
 - [x] Controlled perturbation utilities implemented.
 - [x] Otsu-only perturbation smoke test runs on a small fixed subset.
@@ -94,7 +102,7 @@ proof-of-work benchmark.
 - [x] SAM2 AMG clean20 parameter-sensitivity validation run completed.
 - [x] SAM2 AMG sensitivity metrics, failed-config record, failure cases, and figures written.
 
-## Later Protocols After PoW Clean Baselines
+## Separate Optional Protocols
 
 - [ ] Optional Cellpose3 default cross-version protocol.
 - [ ] Optional Cellpose3 restoration cross-version protocol.

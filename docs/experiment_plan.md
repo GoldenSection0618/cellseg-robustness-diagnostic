@@ -1,7 +1,16 @@
-# Experiment Plan
+# Historical Experiment Plan and Execution Record
 
-The benchmark is built in small increments. Each small stage should leave verifiable
-outputs and be committed before starting the next stage.
+> **Status: historical record.** This document records the incremental plan and the
+> evidence produced as the benchmark was built. It is not the current project task
+> list. The reader-facing results are in the [README](../README.md); the completed
+> zero-shot and supervised protocols are documented in
+> [pow_report.md](pow_report.md) and [supervised_protocol.md](supervised_protocol.md).
+
+The benchmark was built in small increments. Each stage was intended to leave
+verifiable outputs and a commit before the next stage. Phases 1--11 and the completed
+YOLO entries below describe finished work. Unchecked cross-version, prompted-SAM2,
+and VLM entries are deliberately separate follow-up protocols, not missing
+requirements for the reported results.
 
 ## Phase 1: Data Audit
 
@@ -165,7 +174,7 @@ Result: the sensitivity run does not justify expanding SAM2 AMG to full_train.
 remain near collapse and Gaussian noise remains weak. The future SAM2 path should
 change protocol, not scale the current AMG settings.
 
-## Optional Cross-Version Cellpose Work
+## Archived Optional Cross-Version Cellpose Work
 
 Legacy Cellpose3 `cyto3` and one-click restoration are not required for the current
 PoW mainline. They may be added later as optional cross-version baselines using a
@@ -178,7 +187,7 @@ Current environment status:
 - The same audit records that the current restoration API fails during initialization
   with `NameError: name 'CPnet' is not defined`.
 
-## Later Protocols
+## Separate Follow-up Protocols
 
 These protocols should stay separate from the clean zero-shot baseline track:
 
