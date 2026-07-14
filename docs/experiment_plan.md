@@ -130,8 +130,10 @@ full-train robustness run for Otsu + watershed and Cellpose-SAM.
 
 ## Phase 10: Staged Full-Train Robustness
 
-Goal: extend the same five-condition robustness protocol to all 670 `stage1_train`
-images, one method at a time.
+Goal: extend the initial five-condition robustness protocol to all 670
+`stage1_train` images, one method at a time. The completed full-train report later
+adds Poisson noise and intensity scaling, for six perturbations plus the clean
+condition.
 
 Current Otsu + watershed and Cellpose-SAM outputs:
 

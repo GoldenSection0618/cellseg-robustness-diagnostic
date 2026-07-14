@@ -1,9 +1,10 @@
 # Failure-Case Taxonomy
 
-This taxonomy is a lightweight PoW artifact. It names failure modes visible in the
-current clean-subset baselines, robustness smoke tests, clean20 robustness extension,
-and staged full-train robustness diagnostics, so later experiments can annotate
-failures consistently.
+This document defines the diagnostic labels used for visible segmentation failures.
+It is an evidence guide, not a complete ground-truth annotation set. The labels are
+based on the clean-subset baselines, 20-image screening runs, and completed full-train
+robustness diagnostics. The reader-facing method conclusions are in the
+[README](../README.md) and [zero-shot results report](pow_report.md).
 
 ## Evidence Used
 
@@ -47,12 +48,11 @@ Current clean-subset summary:
 - mean matched IoU: 0.7307
 - mean absolute count error: 63.75
 
-Primary expected failure modes:
+Current diagnostic indicators:
 
 - `FP` and `OVER`, because the mean absolute count error is large and precision is
   lower than recall in the clean-subset summary.
-- `FN` on low-contrast nuclei and heterogeneous images where fixed thresholding picks
-  the wrong foreground.
+- `FN` on difficult images where fixed thresholding selects the wrong foreground.
 - Perturbation sensitivity to `gaussian_noise`, where the 5-image smoke test shows a
   relative object-F1 drop of 0.3415.
 
@@ -64,13 +64,12 @@ Current clean-subset summary:
 - mean matched IoU: 0.8561
 - mean absolute count error: 5.50
 
-Primary expected failure modes:
+Current diagnostic indicators:
 
 - Residual `FN` or `FP` on difficult images rather than a systematic count failure.
 - Boundary errors on crowded or irregular nuclei.
-- This is the strongest current clean-subset baseline, so later robustness analysis
-  should focus on whether its failures appear under perturbation rather than clean
-  input.
+- The full-train diagnostics show that these residual failures become more visible
+  under perturbation, particularly under noise.
 
 ### SAM2 AMG
 
@@ -80,7 +79,7 @@ Current clean-subset summary:
 - mean matched IoU: 0.5424
 - mean absolute count error: 31.55
 
-Primary expected failure modes:
+Current diagnostic indicators:
 
 - `FN`, because recall is low in the clean-subset summary.
 - `BG`, because AMG can capture borders, elongated background structures, or
@@ -89,12 +88,15 @@ Primary expected failure modes:
   generator is not nucleus-specific.
 
 This is not a text-prompt failure: the current SAM2 baseline uses automatic mask
-generation with grid-based point prompts and no language prompt. Parameter sensitivity
-and optional SAM2 post-processing repair are future work, not current PoW blockers.
+generation with grid-based point prompts and no language prompt. The 20-image
+parameter-sensitivity run improves clean F1 only modestly and does not repair the
+blur, downsampling, or noise pattern. Prompted SAM2 and repaired post-processing are
+separate protocols outside the reported comparison.
 
 ## Annotation Guidance
 
-When adding qualitative failure examples later, annotate each image with:
+When adding qualitative failure examples in a separate protocol, annotate each image
+with:
 
 - method;
 - split and image id;
@@ -104,6 +106,5 @@ When adding qualitative failure examples later, annotate each image with:
 - short free-text note;
 - figure filename that shows the failure.
 
-Do not mix oracle prompts, manual prompts, or target-derived prompts into the main
-failure taxonomy. If those are evaluated later, record them as a separate optional
-protocol.
+Do not mix oracle prompts, manual prompts, or target-derived prompts into this
+taxonomy. Record any such evaluation as a separate protocol.

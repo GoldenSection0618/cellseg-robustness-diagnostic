@@ -172,7 +172,9 @@ the reported results.
 - [results/supervised/](results/supervised/): YOLO conversion, metadata, evaluation, and comparisons.
 - [figures/](figures/): flat PNG figure outputs.
 - [docs/](docs/): protocol, environment, data, output, and findings documentation.
-- [model_assets/](model_assets/): local model weights, ignored by git.
+- [model_assets/](model_assets/): local YOLO weights, ignored by git; the SAM2
+  checkpoint is kept under ignored `data/checkpoints/` as described in
+  [docs/data.md](docs/data.md).
 - [data/](data/): local DSB2018 data, ignored by git.
 
 ## Reproduce
