@@ -31,9 +31,9 @@ perturbations. Otsu + watershed remains useful as an interpretable classical low
 bound. SAM2 automatic mask generation is not reliable enough under the current
 no-prompt AMG protocol to justify full-train expansion.
 
-Full `stage1_train` zero-shot robustness:
+Full `stage1_train` zero-shot F1:
 
-| Method | Clean F1 | Gaussian noise | Poisson noise | Blur | Downsample | Intensity scale | Inversion |
+| Method | Clean | Noise | Poisson | Blur | Down | Scale | Invert |
 | --- | ---: | ---: | ---: | ---: | ---: | ---: | ---: |
 | Cellpose-SAM | 0.9178 | 0.8740 | 0.8806 | 0.8898 | 0.9006 | 0.9155 | 0.9139 |
 | Otsu + watershed | 0.5736 | 0.4298 | 0.4606 | 0.5818 | 0.5825 | 0.5744 | 0.5653 |
@@ -41,12 +41,12 @@ Full `stage1_train` zero-shot robustness:
 Same 134-image held-out validation split, including the supervised YOLO capacity
 probe:
 
-| Method | Protocol | Train images | Mean object F1 | Precision | Recall | Abs. count error |
-| --- | --- | ---: | ---: | ---: | ---: | ---: |
-| Cellpose-SAM | zero-shot | 0 | 0.9200 | 0.9456 | 0.9007 | 2.9328 |
-| YOLO11m full train pool | supervised | 536 | 0.8680 | 0.8525 | 0.8921 | 4.8582 |
-| YOLO11n full train pool | supervised | 536 | 0.8649 | 0.8440 | 0.8942 | 4.2090 |
-| Otsu + watershed | zero-shot | 0 | 0.6442 | 0.6103 | 0.7219 | 19.8806 |
+| Method | Protocol | Train | F1 | Count error |
+| --- | --- | ---: | ---: | ---: |
+| Cellpose-SAM | zero-shot | 0 | 0.9200 | 2.9328 |
+| YOLO11m | supervised | 536 | 0.8680 | 4.8582 |
+| YOLO11n | supervised | 536 | 0.8649 | 4.2090 |
+| Otsu + watershed | zero-shot | 0 | 0.6442 | 19.8806 |
 
 Interpretation:
 
@@ -90,11 +90,15 @@ Interpretation:
 
 ## Benchmark Design
 
-| Protocol | Question | Methods | Status |
-| --- | --- | --- | --- |
-| A. Zero-shot / out-of-the-box robustness | Which methods produce usable masks without target-domain labels or manual prompts? | Otsu + watershed; Cellpose-SAM; SAM2 AMG | Main PoW complete |
-| B. Supervised adaptation | How much does target-domain supervised training help? | YOLO-seg fine-tuning | Diagnostic complete through YOLO11m |
-| C. Exploratory VLM output validity | Can a mask-output VLM produce parseable and useful masks? | Gemini-style JSON mask prompting | Future optional protocol |
+| Protocol | Status |
+| --- | --- |
+| A. Zero-shot robustness | Main PoW complete |
+| B. Supervised adaptation | Complete through YOLO11m |
+| C. VLM output validity | Future optional protocol |
+
+Protocol A asks which methods work without target labels or manual prompts.
+Protocol B asks how much YOLO fine-tuning helps. Protocol C is reserved for
+parseable mask-output VLM experiments.
 
 The project keeps zero-shot, supervised, and VLM-style segmentation separate. Their
 assumptions differ, so the README reports them as related protocols rather than a
@@ -104,11 +108,11 @@ single undifferentiated ranking.
 
 ### Protocol A
 
-| Method | Role | Main assumption |
+| Method | Role | Assumption |
 | --- | --- | --- |
-| Otsu + watershed | Classical lower bound | No training, fixed image-processing pipeline |
-| Cellpose-SAM / `cpsam` | Bio-adapted foundation baseline | Current Cellpose 4.x Cellpose-SAM workflow |
-| SAM2 AMG | General segmentation foundation-model screen | Automatic grid-point prompting, no manual prompt |
+| Otsu + watershed | Classical lower bound | Fixed image-processing pipeline |
+| Cellpose-SAM / `cpsam` | Bio-adapted baseline | Cellpose 4.x Cellpose-SAM workflow |
+| SAM2 AMG | General foundation-model screen | Automatic grid prompts only |
 
 Legacy Cellpose3 `cyto3` and one-click restoration are kept as optional
 cross-version work. The current `cell` environment uses `cellpose==4.1.1`, where
@@ -161,18 +165,16 @@ and count-bias diagnostics. A stricter split/merge graph metric is future work.
 
 ## Repository Layout
 
-| Path | Contents |
-| --- | --- |
-| [src/](src/) | Shared loading, evaluation, perturbation, plotting, and visualization code |
-| [scripts/](scripts/) | Reproducible experiment, evaluation, analysis, and redraw entrypoints |
-| [results/dataset/](results/dataset/) | Dataset audit outputs |
-| [results/baselines/](results/baselines/) | Clean-subset baseline metrics and comparisons |
-| [results/robustness/](results/robustness/) | Robustness metrics, summaries, image deltas, and failure cases |
-| [results/supervised/](results/supervised/) | YOLO label conversion, training metadata, evaluation, and comparisons |
-| [figures/](figures/) | Flat PNG figure outputs |
-| [docs/](docs/) | Protocol, environment, data, output, and findings documentation |
-| [model_assets/](model_assets/) | Local model weights, ignored by git |
-| [data/](data/) | Local DSB2018 data, ignored by git |
+- [src/](src/): shared loading, evaluation, perturbation, plotting, and visualization code.
+- [scripts/](scripts/): experiment, evaluation, analysis, and redraw entrypoints.
+- [results/dataset/](results/dataset/): dataset audit outputs.
+- [results/baselines/](results/baselines/): clean-subset baseline metrics and comparisons.
+- [results/robustness/](results/robustness/): robustness summaries, image deltas, and failure cases.
+- [results/supervised/](results/supervised/): YOLO conversion, metadata, evaluation, and comparisons.
+- [figures/](figures/): flat PNG figure outputs.
+- [docs/](docs/): protocol, environment, data, output, and findings documentation.
+- [model_assets/](model_assets/): local model weights, ignored by git.
+- [data/](data/): local DSB2018 data, ignored by git.
 
 ## Reproduce
 
@@ -197,29 +199,45 @@ notes are in [docs/](docs/) rather than repeated in the README.
 
 ## Documentation
 
-| Document | Purpose |
-| --- | --- |
-| [technical_memo.md](technical_memo.md) | Current result memo and interpretation |
-| [docs/pow_report.md](docs/pow_report.md) | Zero-shot PoW stage report |
-| [docs/pow_findings.md](docs/pow_findings.md) | Method ranking, robustness, and failure-mode summary |
-| [docs/supervised_protocol.md](docs/supervised_protocol.md) | YOLO supervised adaptation protocol and results |
-| [docs/failure_taxonomy.md](docs/failure_taxonomy.md) | Failure-case taxonomy |
-| [docs/output_contract.md](docs/output_contract.md) | Expected result and figure organization |
-| [docs/experiment_plan.md](docs/experiment_plan.md) | Historical protocol plan and execution record |
-| [docs/environment.md](docs/environment.md) | Environment setup |
-| [docs/data.md](docs/data.md) | Dataset source and local structure |
+- [technical_memo.md](technical_memo.md): current result memo and interpretation.
+- [docs/pow_report.md](docs/pow_report.md): zero-shot PoW stage report.
+- [docs/pow_findings.md](docs/pow_findings.md): method ranking, robustness, and failure modes.
+- [docs/supervised_protocol.md](docs/supervised_protocol.md): YOLO supervised protocol and results.
+- [docs/failure_taxonomy.md](docs/failure_taxonomy.md): failure-case taxonomy.
+- [docs/output_contract.md](docs/output_contract.md): expected result and figure organization.
+- [docs/experiment_plan.md](docs/experiment_plan.md): protocol plan and execution record.
+- [docs/environment.md](docs/environment.md): environment setup.
+- [docs/data.md](docs/data.md): dataset source and local structure.
 
 ## Related Work
 
-| Area | References |
-| --- | --- |
-| Cellpose and Cellpose3 | [Cellpose GitHub repository](https://github.com/MouseLand/cellpose); [Cellpose3: one-click image restoration for improved cellular segmentation](https://www.nature.com/articles/s41592-025-02595-5); [Cellpose image restoration documentation](https://cellpose.readthedocs.io/en/latest/restore.html) |
-| Cellpose-SAM | [Cellpose-SAM: superhuman generalization for cellular segmentation](https://www.biorxiv.org/content/10.1101/2025.04.28.651001v1); [Cellpose documentation](https://cellpose.readthedocs.io/) |
-| SAM and SAM2 | [Segment Anything](https://segment-anything.com/); [Segment Anything paper](https://arxiv.org/abs/2304.02643); [SAM 2 paper](https://arxiv.org/abs/2408.00714); [SAM2 GitHub repository](https://github.com/facebookresearch/sam2); [SAM2 automatic mask generator example](https://github.com/facebookresearch/sam2/blob/main/notebooks/automatic_mask_generator_example.ipynb) |
-| Microscopy foundation models | [Revisiting foundation models for cell instance segmentation](https://openreview.net/forum?id=xFO3DFZN45); [Segment Anything for Microscopy](https://www.nature.com/articles/s41592-024-02580-4); [CellSAM: a foundation model for cell segmentation](https://www.nature.com/articles/s41592-025-02879-w) |
-| VLM segmentation | [Conversational image segmentation with Gemini 2.5](https://developers.googleblog.com/conversational-image-segmentation-gemini-2-5/); [Gemini image understanding documentation](https://ai.google.dev/gemini-api/docs/image-understanding) |
-| YOLO segmentation | [Ultralytics YOLO segmentation documentation](https://docs.ultralytics.com/tasks/segment/); [Ultralytics YOLO11 documentation](https://docs.ultralytics.com/models/yolo11/) |
-| Classical segmentation | [scikit-image watershed example](https://scikit-image.org/docs/stable/auto_examples/segmentation/plot_watershed.html); [CellProfiler IdentifyPrimaryObjects documentation](https://cellprofiler-manual.s3.amazonaws.com/CPmanual/IdentifyPrimaryObjects.html) |
+Cellpose and Cellpose-SAM:
+
+- [Cellpose GitHub repository](https://github.com/MouseLand/cellpose)
+- [Cellpose3: one-click image restoration for improved cellular segmentation](https://www.nature.com/articles/s41592-025-02595-5)
+- [Cellpose image restoration documentation](https://cellpose.readthedocs.io/en/latest/restore.html)
+- [Cellpose-SAM: superhuman generalization for cellular segmentation](https://www.biorxiv.org/content/10.1101/2025.04.28.651001v1)
+- [Cellpose documentation](https://cellpose.readthedocs.io/)
+
+SAM, SAM2, and microscopy foundation models:
+
+- [Segment Anything](https://segment-anything.com/)
+- [Segment Anything paper](https://arxiv.org/abs/2304.02643)
+- [SAM 2 paper](https://arxiv.org/abs/2408.00714)
+- [SAM2 GitHub repository](https://github.com/facebookresearch/sam2)
+- [SAM2 automatic mask generator example](https://github.com/facebookresearch/sam2/blob/main/notebooks/automatic_mask_generator_example.ipynb)
+- [Revisiting foundation models for cell instance segmentation](https://openreview.net/forum?id=xFO3DFZN45)
+- [Segment Anything for Microscopy](https://www.nature.com/articles/s41592-024-02580-4)
+- [CellSAM: a foundation model for cell segmentation](https://www.nature.com/articles/s41592-025-02879-w)
+
+Supervised, VLM, and classical references:
+
+- [Ultralytics YOLO segmentation documentation](https://docs.ultralytics.com/tasks/segment/)
+- [Ultralytics YOLO11 documentation](https://docs.ultralytics.com/models/yolo11/)
+- [Conversational image segmentation with Gemini 2.5](https://developers.googleblog.com/conversational-image-segmentation-gemini-2-5/)
+- [Gemini image understanding documentation](https://ai.google.dev/gemini-api/docs/image-understanding)
+- [scikit-image watershed example](https://scikit-image.org/docs/stable/auto_examples/segmentation/plot_watershed.html)
+- [CellProfiler IdentifyPrimaryObjects documentation](https://cellprofiler-manual.s3.amazonaws.com/CPmanual/IdentifyPrimaryObjects.html)
 
 ## Limitations and Follow-up Work
 
