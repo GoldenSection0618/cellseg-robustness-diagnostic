@@ -20,6 +20,7 @@ metrics.
 - [Repository Layout](#repository-layout)
 - [Reproduce](#reproduce)
 - [Documentation](#documentation)
+- [Related Work](#related-work)
 - [Limitations and Follow-up Work](#limitations-and-follow-up-work)
 
 ## Key Results
@@ -207,6 +208,18 @@ notes are in [docs/](docs/) rather than repeated in the README.
 | [docs/experiment_plan.md](docs/experiment_plan.md) | Historical protocol plan and execution record |
 | [docs/environment.md](docs/environment.md) | Environment setup |
 | [docs/data.md](docs/data.md) | Dataset source and local structure |
+
+## Related Work
+
+| Area | References |
+| --- | --- |
+| Cellpose and Cellpose3 | [Cellpose GitHub repository](https://github.com/MouseLand/cellpose); [Cellpose3: one-click image restoration for improved cellular segmentation](https://www.nature.com/articles/s41592-025-02595-5); [Cellpose image restoration documentation](https://cellpose.readthedocs.io/en/latest/restore.html) |
+| Cellpose-SAM | [Cellpose-SAM: superhuman generalization for cellular segmentation](https://www.biorxiv.org/content/10.1101/2025.04.28.651001v1); [Cellpose documentation](https://cellpose.readthedocs.io/) |
+| SAM and SAM2 | [Segment Anything](https://segment-anything.com/); [Segment Anything paper](https://arxiv.org/abs/2304.02643); [SAM 2 paper](https://arxiv.org/abs/2408.00714); [SAM2 GitHub repository](https://github.com/facebookresearch/sam2); [SAM2 automatic mask generator example](https://github.com/facebookresearch/sam2/blob/main/notebooks/automatic_mask_generator_example.ipynb) |
+| Microscopy foundation models | [Revisiting foundation models for cell instance segmentation](https://openreview.net/forum?id=xFO3DFZN45); [Segment Anything for Microscopy](https://www.nature.com/articles/s41592-024-02580-4); [CellSAM: a foundation model for cell segmentation](https://www.nature.com/articles/s41592-025-02879-w) |
+| VLM segmentation | [Conversational image segmentation with Gemini 2.5](https://developers.googleblog.com/conversational-image-segmentation-gemini-2-5/); [Gemini image understanding documentation](https://ai.google.dev/gemini-api/docs/image-understanding) |
+| YOLO segmentation | [Ultralytics YOLO segmentation documentation](https://docs.ultralytics.com/tasks/segment/); [Ultralytics YOLO11 documentation](https://docs.ultralytics.com/models/yolo11/) |
+| Classical segmentation | [scikit-image watershed example](https://scikit-image.org/docs/stable/auto_examples/segmentation/plot_watershed.html); [CellProfiler IdentifyPrimaryObjects documentation](https://cellprofiler-manual.s3.amazonaws.com/CPmanual/IdentifyPrimaryObjects.html) |
 
 ## Limitations and Follow-up Work
 
