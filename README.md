@@ -12,7 +12,7 @@ track evaluates YOLO-seg fine-tuning with the same repository metrics.
 ## Contents
 
 - [Key Results](#key-results)
-- [Main Figures](#main-figures)
+- [Error Patterns](#error-patterns)
 - [Benchmark Design](#benchmark-design)
 - [Methods](#methods)
 - [Metrics](#metrics)
@@ -30,14 +30,30 @@ perturbations. Otsu + watershed remains useful as an interpretable classical low
 bound. SAM2 automatic mask generation is not reliable enough under the current
 no-prompt AMG protocol for the main robustness comparison.
 
-Full `stage1_train` zero-shot F1:
+### Zero-shot Robustness
+
+Full `stage1_train` object F1:
 
 | Method | Clean | Noise | Poisson | Blur | Down | Scale | Invert |
 | --- | ---: | ---: | ---: | ---: | ---: | ---: | ---: |
 | Cellpose-SAM | 0.9178 | 0.8740 | 0.8806 | 0.8898 | 0.9006 | 0.9155 | 0.9139 |
 | Otsu + watershed | 0.5736 | 0.4298 | 0.4606 | 0.5818 | 0.5825 | 0.5744 | 0.5653 |
 
-Same 134-image held-out validation split, including supervised YOLO-seg models:
+Cellpose-SAM remains stable across the tested perturbations; Otsu + watershed is
+most affected by Gaussian and Poisson noise.
+
+![Full-train robustness summary](figures/robustness_pow_full_train_summary.png)
+
+*Figure 1. Full-train robustness summary for Cellpose-SAM and Otsu + watershed across tested perturbations.*
+
+![Cellpose-SAM qualitative robustness example](figures/robustness_pow_full_train_overlay_examples.png)
+
+*Figure 2. One qualitative Cellpose-SAM example across clean and perturbed inputs; green contours are ground truth and red contours are predictions. This illustration complements, rather than estimates, the aggregate results above.*
+
+### Supervised Comparison
+
+On the same 134-image held-out validation split, supervised YOLO-seg improves over
+the classical baseline but does not close the gap to Cellpose-SAM:
 
 | Method | Protocol | Train | F1 | Count error |
 | --- | --- | ---: | ---: | ---: |
@@ -46,41 +62,23 @@ Same 134-image held-out validation split, including supervised YOLO-seg models:
 | YOLO11n | supervised | 536 | 0.8649 | 4.2090 |
 | Otsu + watershed | zero-shot | 0 | 0.6442 | 19.8806 |
 
-Interpretation:
-
-- Cellpose-SAM is the strongest zero-shot baseline in this benchmark.
-- Otsu + watershed provides a transparent lower bound and exposes noise-driven
-  count inflation.
-- SAM2 AMG mainly fails through automatic-mask-generation behavior on dense
-  microscopy images; this is not a language-prompt failure.
-- YOLO-seg substantially improves over Otsu + watershed, but the tested supervised
-  models do not match Cellpose-SAM under this evaluation protocol.
-
-## Main Figures
-
-### Protocol A/B Held-out Validation
-
 ![Protocol A/B held-out validation comparison](figures/protocol_ab_heldout_val_comparison.png)
 
-*Figure 1. Held-out validation comparison between zero-shot baselines and supervised YOLO-seg models.*
+*Figure 3. Held-out validation comparison between zero-shot baselines and supervised YOLO-seg models.*
 
-### Full-train Robustness
+## Error Patterns
 
-![Full-train robustness summary](figures/robustness_pow_full_train_summary.png)
-
-*Figure 2. Full-train robustness summary for Cellpose-SAM and Otsu + watershed across tested perturbations.*
-
-![Cellpose-SAM qualitative robustness example](figures/robustness_pow_full_train_overlay_examples.png)
-
-*Figure 3. One qualitative Cellpose-SAM example across clean and perturbed inputs; green contours are ground truth and red contours are predictions. This illustration complements, rather than estimates, the aggregate results above.*
-
-### Failure Diagnostics
+Otsu + watershed exposes noise-driven false positives and count inflation. Cellpose-SAM
+has a smaller set of missed-object and no-prediction cases. SAM2 AMG mainly fails
+through automatic-mask-generation behavior on dense microscopy images; this is not a
+language-prompt failure.
 
 ![Full-train failure diagnostics](figures/robustness_pow_full_train_failure_diagnostics.png)
 
 *Figure 4. Failure diagnostics for the full-train robustness run.*
 
-### Clean-subset Baseline Behavior
+Precision-recall behavior and count agreement make the same method differences
+visible at image level.
 
 ![Clean-subset precision recall](figures/baseline_clean_subset_precision_recall.png)
 
