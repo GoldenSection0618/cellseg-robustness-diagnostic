@@ -117,20 +117,13 @@ single undifferentiated ranking.
 | SAM2 AMG | General foundation-model screen | Automatic grid prompts only |
 
 Legacy Cellpose3 `cyto3` and one-click restoration are not included in the reported
-main comparison. The current `cell` environment uses `cellpose==4.1.1`, where the
-Cellpose-family baseline is `cpsam`.
+main comparison. Their cross-version evaluation is outside the current benchmark.
 
 ### Protocol B
 
-YOLO-seg is trained as a supervised real-time segmentation baseline. The current
-diagnostics include:
-
-- label-conversion smoke test;
-- tiny training and evaluation smoke tests;
-- fixed-budget 100-image baseline;
-- threshold diagnostic;
-- nested label-budget diagnostic at 100, 250, and 536 train-pool images;
-- YOLO11m full-train-pool capacity diagnostic.
+YOLO-seg provides the supervised adaptation reference. Its fixed validation split,
+label-budget comparison, threshold diagnostic, and capacity comparison are reported
+in [docs/supervised_protocol.md](docs/supervised_protocol.md).
 
 ### Perturbations
 
@@ -143,8 +136,7 @@ diagnostics include:
 | Intensity scaling | Underexposure or overexposure |
 | Contrast inversion | Intensity-convention change |
 
-Channel swap and object-scale perturbations are documented separately and are not
-part of the reported results.
+Only the listed perturbations are part of the reported results.
 
 ## Metrics
 
@@ -183,24 +175,10 @@ the reported results.
 
 ## Reproduce
 
-Environment setup is documented in [docs/environment.md](docs/environment.md);
-dataset source and local layout are documented in [docs/data.md](docs/data.md). The
-environment is a conda environment named `cell` with Cellpose-SAM, SAM2,
-Ultralytics YOLO, PyTorch, and the repository image-analysis stack installed.
-
-Representative entrypoints:
-
-```bash
-python scripts/audit_dataset.py
-python scripts/compare_baseline_subset.py
-python scripts/run_pow_robustness_smoke.py --output-tag full_train --methods otsu_watershed cellpose_cpsam
-python scripts/analyze_pow_robustness_full_train.py
-python scripts/summarize_yolo_capacity_diagnostic.py
-python scripts/redraw_publication_figures.py
-```
-
-The exact environment, data placement, model weights, and long-running experiment
-notes are in [docs/](docs/) rather than repeated in the README.
+Use the existing [environment setup](docs/environment.md), [data layout](docs/data.md),
+[output contract](docs/output_contract.md), and [historical execution record](docs/experiment_plan.md).
+They define the local prerequisites, output locations, and recorded experiment
+entrypoints without duplicating operational detail here.
 
 ## Documentation
 
