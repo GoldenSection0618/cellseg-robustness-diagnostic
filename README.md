@@ -63,19 +63,29 @@ Interpretation:
 
 ![Protocol A/B held-out validation comparison](figures/protocol_ab_heldout_val_comparison.png)
 
+*Figure 1. Held-out validation comparison between zero-shot baselines and supervised YOLO capacity probes.*
+
 ### Full-train Robustness
 
 ![Full-train robustness summary](figures/robustness_pow_full_train_summary.png)
+
+*Figure 2. Full-train robustness summary for Cellpose-SAM and Otsu + watershed across tested perturbations.*
 
 ### Failure Diagnostics
 
 ![Full-train failure diagnostics](figures/robustness_pow_full_train_failure_diagnostics.png)
 
+*Figure 3. Failure diagnostics for the full-train robustness run.*
+
 ### Clean-subset Baseline Behavior
 
 ![Clean-subset precision recall](figures/baseline_clean_subset_precision_recall.png)
 
+*Figure 4. Clean-subset precision-recall behavior across baseline methods.*
+
 ![Clean-subset count agreement](figures/baseline_clean_subset_count_agreement.png)
+
+*Figure 5. Clean-subset count agreement between true and predicted instance counts.*
 
 ## Benchmark Design
 
@@ -152,23 +162,23 @@ and count-bias diagnostics. A stricter split/merge graph metric is future work.
 
 | Path | Contents |
 | --- | --- |
-| `src/` | Shared loading, evaluation, perturbation, plotting, and visualization code |
-| `scripts/` | Reproducible experiment, evaluation, analysis, and redraw entrypoints |
-| `results/dataset/` | Dataset audit outputs |
-| `results/baselines/` | Clean-subset baseline metrics and comparisons |
-| `results/robustness/` | Robustness metrics, summaries, image deltas, and failure cases |
-| `results/supervised/` | YOLO label conversion, training metadata, evaluation, and comparisons |
-| `figures/` | Flat PNG figure outputs |
-| `docs/` | Protocol, environment, data, output, and findings documentation |
-| `model_assets/` | Local model weights, ignored by git |
-| `data/` | Local DSB2018 data, ignored by git |
+| [src/](src/) | Shared loading, evaluation, perturbation, plotting, and visualization code |
+| [scripts/](scripts/) | Reproducible experiment, evaluation, analysis, and redraw entrypoints |
+| [results/dataset/](results/dataset/) | Dataset audit outputs |
+| [results/baselines/](results/baselines/) | Clean-subset baseline metrics and comparisons |
+| [results/robustness/](results/robustness/) | Robustness metrics, summaries, image deltas, and failure cases |
+| [results/supervised/](results/supervised/) | YOLO label conversion, training metadata, evaluation, and comparisons |
+| [figures/](figures/) | Flat PNG figure outputs |
+| [docs/](docs/) | Protocol, environment, data, output, and findings documentation |
+| [model_assets/](model_assets/) | Local model weights, ignored by git |
+| [data/](data/) | Local DSB2018 data, ignored by git |
 
 ## Reproduce
 
-Environment setup is documented in `docs/environment.md`; dataset source and local
-layout are documented in `docs/data.md`. The environment is a conda environment
-named `cell` with Cellpose-SAM, SAM2, Ultralytics YOLO, PyTorch, and the
-repository image-analysis stack installed.
+Environment setup is documented in [docs/environment.md](docs/environment.md);
+dataset source and local layout are documented in [docs/data.md](docs/data.md). The
+environment is a conda environment named `cell` with Cellpose-SAM, SAM2,
+Ultralytics YOLO, PyTorch, and the repository image-analysis stack installed.
 
 Representative entrypoints:
 
@@ -182,21 +192,21 @@ python scripts/redraw_publication_figures.py
 ```
 
 The exact environment, data placement, model weights, and long-running experiment
-notes are in the docs rather than repeated in the README.
+notes are in [docs/](docs/) rather than repeated in the README.
 
 ## Documentation
 
 | Document | Purpose |
 | --- | --- |
-| `technical_memo.md` | Current result memo and interpretation |
-| `docs/pow_report.md` | Zero-shot PoW stage report |
-| `docs/pow_findings.md` | Method ranking, robustness, and failure-mode summary |
-| `docs/supervised_protocol.md` | YOLO supervised adaptation protocol and results |
-| `docs/failure_taxonomy.md` | Failure-case taxonomy |
-| `docs/output_contract.md` | Expected result and figure organization |
-| `docs/experiment_plan.md` | Historical protocol plan and execution record |
-| `docs/environment.md` | Environment setup |
-| `docs/data.md` | Dataset source and local structure |
+| [technical_memo.md](technical_memo.md) | Current result memo and interpretation |
+| [docs/pow_report.md](docs/pow_report.md) | Zero-shot PoW stage report |
+| [docs/pow_findings.md](docs/pow_findings.md) | Method ranking, robustness, and failure-mode summary |
+| [docs/supervised_protocol.md](docs/supervised_protocol.md) | YOLO supervised adaptation protocol and results |
+| [docs/failure_taxonomy.md](docs/failure_taxonomy.md) | Failure-case taxonomy |
+| [docs/output_contract.md](docs/output_contract.md) | Expected result and figure organization |
+| [docs/experiment_plan.md](docs/experiment_plan.md) | Historical protocol plan and execution record |
+| [docs/environment.md](docs/environment.md) | Environment setup |
+| [docs/data.md](docs/data.md) | Dataset source and local structure |
 
 ## Limitations and Follow-up Work
 
