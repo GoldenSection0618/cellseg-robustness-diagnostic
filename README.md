@@ -14,9 +14,55 @@ is not to claim a new state-of-the-art benchmark, but to build a reproducible
 diagnostic project that compares representative segmentation paradigms under
 controlled conditions.
 
+## Results Summary
+
+The main PoW finding is that **Cellpose-SAM / `cpsam` is the strongest current
+zero-shot baseline** for this DSB2018 instance-segmentation diagnostic. It is more
+accurate and more robust than Otsu + watershed, while SAM2 automatic mask generation
+is not reliable enough under the current no-prompt AMG protocol to justify a
+full-train robustness expansion.
+
+Full `stage1_train` zero-shot robustness:
+
+| Method | Clean F1 | Gaussian noise | Poisson noise | Blur | Downsample | Intensity scale | Inversion |
+| --- | ---: | ---: | ---: | ---: | ---: | ---: | ---: |
+| Cellpose-SAM | 0.9178 | 0.8740 | 0.8806 | 0.8898 | 0.9006 | 0.9155 | 0.9139 |
+| Otsu + watershed | 0.5736 | 0.4298 | 0.4606 | 0.5818 | 0.5825 | 0.5744 | 0.5653 |
+
+Same 134-image held-out validation split, including the supervised YOLO capacity
+probe:
+
+| Method | Protocol | Train images | Mean object F1 | Mean precision | Mean recall | Mean abs. count error |
+| --- | --- | ---: | ---: | ---: | ---: | ---: |
+| Cellpose-SAM | zero-shot | 0 | 0.9200 | 0.9456 | 0.9007 | 2.9328 |
+| YOLO11m full train pool | supervised | 536 | 0.8680 | 0.8525 | 0.8921 | 4.8582 |
+| YOLO11n full train pool | supervised | 536 | 0.8649 | 0.8440 | 0.8942 | 4.2090 |
+| Otsu + watershed | zero-shot | 0 | 0.6442 | 0.6103 | 0.7219 | 19.8806 |
+
+Key interpretation:
+
+* Cellpose-SAM remains stable across the tested full-train perturbations.
+* Otsu + watershed is a useful classical lower bound, but noise causes count
+  inflation and false-positive-heavy failures.
+* SAM2 AMG fails under the current automatic-grid protocol on clean20 robustness and
+  parameter sensitivity; this is an AMG protocol issue, not a text-prompt issue.
+* YOLO-seg supervised fine-tuning improves far beyond Otsu, but the completed
+  YOLO11m full-train-pool probe still does not close the gap to Cellpose-SAM.
+
+Primary figures:
+
+![Protocol A/B held-out validation comparison](figures/protocol_ab_heldout_val_comparison.png)
+
+![Full-train robustness summary](figures/robustness_pow_full_train_summary.png)
+
+![Full-train failure diagnostics](figures/robustness_pow_full_train_failure_diagnostics.png)
+
+Detailed stage reports are in `technical_memo.md`, `docs/pow_report.md`,
+`docs/pow_findings.md`, and `docs/supervised_protocol.md`.
+
 ## At a Glance
 
-| Protocol | Question | Methods / planned methods | Reported as |
+| Protocol | Question | Methods / status | Reported as |
 | --- | --- | --- | --- |
 | A. Zero-shot / out-of-the-box robustness | Which methods produce usable instance masks without target-domain labels or manual prompts? | Otsu + watershed; Cellpose-SAM / `cpsam`; SAM2 automatic mask generator | Main PoW diagnostic comparison |
 | B. Supervised adaptation | How much performance can small-label task-specific training buy? | YOLO-seg fine-tuned; optional Cellpose fine-tuned | Separate supervised protocol |
@@ -100,18 +146,18 @@ This protocol is intended to answer:
 
 This protocol is separate from the main zero-shot comparison.
 
-Planned supervised methods:
+Supervised method status:
 
 | Method              | Role                                       | Main Assumption                    |
 | ------------------- | ------------------------------------------ | ---------------------------------- |
-| YOLO-seg fine-tuned | Supervised real-time segmentation baseline | Uses the same training split masks |
+| YOLO-seg fine-tuned | Completed supervised real-time segmentation baseline | Uses the same held-out validation split |
 | Cellpose fine-tuned | Optional supervised specialist baseline    | Uses the same training split masks |
 
 This protocol is intended to answer:
 
 > If a small number of target-domain labels are available, how much performance can task-specific supervised training buy compared with zero-shot methods?
 
-Supervised results will be reported with training-budget metadata, including:
+Supervised results are reported with training-budget metadata, including:
 
 * number of training images;
 * annotation type;
@@ -222,7 +268,7 @@ $$
 
 Prompting is a key design issue for SAM-style and VLM-style models.
 
-The planned policy is:
+The current policy is:
 
 1. **SAM2 main result** uses automatic mask generation only. This relies on grid-based point prompts generated automatically by the algorithm.
 2. **No manual point, box, or mask prompts** are used in the main zero-shot benchmark.
@@ -298,7 +344,7 @@ Cellpose-SAM adapts a SAM-style foundation model backbone to cellular segmentati
 * [SAM2 GitHub repository](https://github.com/facebookresearch/sam2)
 * [SAM2 automatic mask generator example](https://github.com/facebookresearch/sam2/blob/main/notebooks/automatic_mask_generator_example.ipynb)
 
-SAM-style models rely on geometric prompts such as points, boxes, or masks. The SAM2 automatic mask generator operationalizes this by sampling grid-based point prompts and filtering candidate masks. For this project, SAM2 is planned to be evaluated only in automatic mask generation mode, without manual or ground-truth-derived prompts.
+SAM-style models rely on geometric prompts such as points, boxes, or masks. The SAM2 automatic mask generator operationalizes this by sampling grid-based point prompts and filtering candidate masks. In the current PoW, SAM2 is evaluated only in automatic mask generation mode, without manual or ground-truth-derived prompts.
 
 ### Foundation Models for Cell Segmentation
 
@@ -351,7 +397,7 @@ Implemented PoW artifacts:
 7. root-level `technical_memo.md` with current summaries and limitations;
 8. PoW support docs under `docs/`, including data, environment, supervised protocol, output contract, experiment plan, checklist, failure taxonomy, findings, and stage report.
 
-Near-term next steps:
+Post-PoW follow-ups:
 
 1. keep the current PoW mainline focused on the completed zero-shot robustness artifacts;
 2. keep SAM2 AMG full-train robustness deferred because clean20 parameter sensitivity did not repair the failure pattern;

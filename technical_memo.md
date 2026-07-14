@@ -177,7 +177,7 @@ Generated outputs:
 - `figures/baseline_clean_subset_latency_comparison.png`
 - `figures/baseline_clean_subset_score_distributions.png`
 - `figures/baseline_clean_subset_precision_recall.png`
-- `figures/baseline_clean_subset_image_method_f1_heatmap.png`
+- `figures/supplementary_baseline_clean_subset_image_method_f1_heatmap.png`
 
 Current comparison summary:
 
@@ -254,7 +254,6 @@ Generated outputs:
 - `results/robustness/pow_baseline_robustness_smoke_summary.csv`
 - `figures/robustness_pow_smoke_mean_f1.png`
 - `figures/robustness_pow_smoke_relative_f1_drop.png`
-- `figures/robustness_pow_smoke_method_condition_heatmap.png`
 - `figures/robustness_pow_smoke_overlay_examples.png`
 
 Current smoke-test summary:
@@ -305,8 +304,8 @@ with the known optional `_C` post-processing warning.
 The optimized diagnostic outputs add the missing per-image interpretation layer:
 `image_deltas.csv` records each image-method-condition drop from clean, while
 `failure_cases.csv` keeps the five largest drops for every method and perturbation.
-The per-method worst-drop figure avoids the global ranking being dominated only by
-SAM2 collapse cases.
+The consolidated failure-diagnostic figure separates per-method degradation patterns
+from the SAM2 collapse cases.
 
 ## Staged Full-Train Robustness
 

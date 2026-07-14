@@ -30,7 +30,7 @@ Initial smoke:
 - 80/20 train/val assignment by stable order within that subset;
 - no training.
 
-Future training:
+Full-split training policy:
 
 - fixed full `stage1_train` train/val split with a recorded seed or stable index
   rule;
@@ -102,9 +102,9 @@ reuse the repository's existing object-level metrics:
 - absolute count error;
 - latency.
 
-The first training run should be a tiny smoke run. The fixed-budget supervised
-baseline should only run after label conversion, prediction export, and metric
-conversion are all verified.
+The first training run was a tiny smoke run. The fixed-budget supervised baseline
+was run only after label conversion, prediction export, and metric conversion were
+verified.
 
 ## Tiny Training Smoke
 
@@ -279,7 +279,9 @@ Suggested output names:
 - `figures/supervised_yolo_threshold_diagnostic_count_error.png`
 - `results/supervised/yolo_label_budget_diagnostic_summary.csv`
 - `results/supervised/yolo_capacity_diagnostic_val_comparison_summary.csv`
-- `results/supervised/yolo_postprocessing_diagnostic_summary.csv`
+
+If the optional post-processing diagnostic is run later, it should use a distinct
+`results/supervised/yolo_postprocessing_diagnostic_*.csv` output family.
 
 Interpretation rules:
 

@@ -82,14 +82,14 @@ proof-of-work benchmark.
 - [x] Clean20 robustness metrics written to `results/robustness/`.
 - [x] Clean20 robustness figures written to `figures/`.
 - [x] Clean20 per-image robustness deltas and failure cases written to `results/robustness/`.
-- [x] Clean20 per-image drop and worst-drop diagnostic figures written to `figures/`.
+- [x] Clean20 consolidated summary and failure diagnostic figures written to `figures/`.
 - [x] Robustness runner supports staged `full_train` runs with method selection and resume/overwrite protection.
 - [x] Otsu + watershed full-train robustness run completed on all 670 `stage1_train` images.
 - [x] Cellpose-SAM full-train robustness run added with `--resume`.
 - [x] Cellpose-SAM input/diameter protocol locked and full-train results refreshed.
 - [x] SAM2 AMG full-train robustness deferred pending parameter-sensitivity or post-processing work.
 - [x] Full-train per-image deltas, failure cases, and no-prediction cases written to `results/robustness/`.
-- [x] Full-train F1-drop distribution, worst-drop, and failure-hint figures written to `figures/`.
+- [x] Full-train consolidated summary and failure diagnostic figures written to `figures/`.
 - [x] SAM2 AMG clean20 parameter-sensitivity clean-screen run completed.
 - [x] SAM2 AMG clean20 parameter-sensitivity validation run completed.
 - [x] SAM2 AMG sensitivity metrics, failed-config record, failure cases, and figures written.

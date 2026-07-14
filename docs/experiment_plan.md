@@ -77,7 +77,7 @@ Current completed comparison:
 - `figures/baseline_clean_subset_latency_comparison.png`
 - `figures/baseline_clean_subset_score_distributions.png`
 - `figures/baseline_clean_subset_precision_recall.png`
-- `figures/baseline_clean_subset_image_method_f1_heatmap.png`
+- `figures/supplementary_baseline_clean_subset_image_method_f1_heatmap.png`
 
 ## Phase 7: Failure Taxonomy
 
@@ -99,7 +99,6 @@ Current outputs:
 - `results/robustness/pow_baseline_robustness_smoke_summary.csv`
 - `figures/robustness_pow_smoke_mean_f1.png`
 - `figures/robustness_pow_smoke_relative_f1_drop.png`
-- `figures/robustness_pow_smoke_method_condition_heatmap.png`
 - `figures/robustness_pow_smoke_overlay_examples.png`
 
 ## Phase 9: PoW Robustness Clean20 Extension
@@ -138,9 +137,10 @@ Current Otsu + watershed and Cellpose-SAM outputs:
 
 The full-train output currently contains `otsu_watershed` and `cellpose_cpsam`.
 SAM2 AMG full-train execution is deferred because clean20 already shows near-total
-collapse under all tested perturbations. The next SAM2 step should be parameter
-sensitivity or post-processing repair, not a full-train run with the current AMG
-settings.
+collapse under all tested perturbations, and the completed clean20 parameter
+sensitivity run did not repair that pattern. The next SAM2 step should be a protocol
+change such as prompted SAM2 or post-processing repair, not a full-train run with
+the current AMG settings.
 
 ## Phase 11: SAM2 AMG Parameter Sensitivity
 
