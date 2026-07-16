@@ -96,7 +96,9 @@ visible at image level.
 | B. Supervised adaptation | Complete through YOLO11m |
 | C. Generative mask-output validity | Separate follow-up protocol |
 
-Protocol A asks which methods work without target labels or manual prompts.
+Protocol A asks which methods work without target-domain labels or per-image human
+prompts. A method may use a predeclared task-level input required by its native
+interface, provided that input is fixed before evaluation.
 Protocol B asks how much YOLO fine-tuning helps. Protocol C asks whether a
 prompt-conditioned generative vision model can produce parseable cell-instance masks.
 Vision Banana is the primary optional candidate for this protocol; its reported

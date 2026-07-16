@@ -8,9 +8,10 @@
 
 The benchmark was built in small increments. Each stage was intended to leave
 verifiable outputs and a commit before the next stage. Phases 1--11 and the completed
-YOLO entries below describe finished work. Unchecked cross-version, prompted-SAM2,
-and VLM entries are deliberately separate follow-up protocols, not missing
-requirements for the reported results.
+YOLO entries below describe finished work. Phase 12 records the pre-registered SAM3
+Protocol A extension. Unchecked cross-version, prompted-SAM2, and VLM entries are
+deliberately separate follow-up protocols, not missing requirements for the reported
+results.
 
 ## Phase 1: Data Audit
 
@@ -176,6 +177,60 @@ Result: the sensitivity run does not justify expanding SAM2 AMG to full_train.
 remain near collapse and Gaussian noise remains weak. The future SAM2 path should
 change protocol, not scale the current AMG settings.
 
+## Phase 12: SAM3 Fixed-Concept Protocol A Extension
+
+Goal: evaluate SAM3 as a zero-shot nucleus instance-segmentation method under the
+same label-free Protocol A track as the existing baselines. The method receives a
+single fixed task-level text concept, not target-domain labels or per-image human
+prompts.
+
+Primary configuration, fixed before evaluation:
+
+- model asset: `data/checkpoints/sam3.pt` from `facebook/sam3`;
+- source package: `sam3` commit `46957e47805eaa273f4aa7bbbd25a88bca9108ce`;
+- text prompt: `"nucleus"`;
+- no point, box, mask, or exemplar prompts;
+- processor resolution: `1008`;
+- confidence threshold: `0.5`;
+- mask threshold: `0.5`;
+- batch size: `1`, BF16 inference, no compilation;
+- grayscale inputs are replicated to RGB, RGB inputs are retained, and alpha is
+  discarded.
+
+The primary mask conversion treats each retained SAM3 query as one instance.
+Overlapping pixels are assigned to the query with the highest mask probability;
+empty queries after overlap resolution are dropped. No area filtering, connected
+component splitting, or morphology-based repair is permitted in the primary result.
+
+Execution order and outputs:
+
+1. Run a predetermined single-image technical smoke. It checks checkpoint loading,
+   GPU memory, RGB conversion, output conversion, and overlay alignment. It does
+   not select parameters.
+2. Run the fixed configuration on the deterministic clean20 subset and write
+   `results/baselines/sam3_prompted_concept_clean_subset_metrics.csv` plus
+   `figures/sam3_prompted_concept_clean_subset_overlay_examples.png`. Regenerate
+   the centralized clean-subset comparison from CSV inputs.
+3. Expand to all 670 clean images unless the screen is technically unusable
+   (fewer than 20 completed images, at least 50% zero-prediction images, or the
+   upper bound of the paired 95% bootstrap F1 difference against Otsu is below
+   zero).
+4. Add the 670-image clean result to the shared Protocol A metrics and derive the
+   same 134 held-out validation rows used by Protocol B.
+5. Run the existing six perturbations on all 670 images only if full clean SAM3
+   completes at least 99% of images, has under 10% no-prediction images, and
+   exceeds Otsu in mean object F1. The shared full-train robustness tables and
+   centralized figures are then regenerated with the SAM3 rows.
+
+Primary endpoint: object F1 at instance IoU 0.5. Secondary metrics are precision,
+recall, matched IoU/Dice, count error, missed-object rate, FP per true instance,
+count bias, zero-prediction rate, latency, and paired bootstrap confidence
+intervals. Robustness uses paired clean-to-perturbation F1 deltas.
+
+Prompt and confidence sensitivity are explicitly outside the primary result. Any
+later sweep must report every predeclared configuration and cannot replace the
+fixed `"nucleus"` / `0.5` result in the Protocol A ranking.
+
 ## Archived Optional Cross-Version Cellpose Work
 
 Legacy Cellpose3 `cyto3` and one-click restoration are not required for the current
@@ -196,7 +251,6 @@ These protocols should stay separate from the clean zero-shot baseline track:
 - optional Cellpose3 default cross-version protocol;
 - optional Cellpose3 restoration cross-version protocol;
 - optional prompted SAM2 or SAM2 post-processing repair protocol;
-- optional SAM3 prompted-concept screening with predeclared text or exemplar prompts;
 - YOLO-seg small-label supervised adaptation;
 - Vision Banana generative mask-output validity checks; other generative vision
   models may be assessed under the same separate protocol.

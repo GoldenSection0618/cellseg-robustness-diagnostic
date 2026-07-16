@@ -1,6 +1,8 @@
 # Environment Setup
 
-This project uses one conda environment named `cell`.
+This project uses a primary conda environment named `cell`. The optional SAM3
+direction uses a separate `sam3` environment so its Python and CUDA stack does
+not change the established Cellpose, SAM2, and YOLO setup.
 
 Create the environment:
 
@@ -31,6 +33,46 @@ conda run -n cell python -m pip install --retries 10 --timeout 120 \
   cellpose==4.1.1 sam2==1.1.0 ultralytics ultralytics-thop \
   pi-heif google-genai transformers
 ```
+
+## Optional SAM3 Environment
+
+Create the separate environment required by the current SAM3 release:
+
+```bash
+conda create -n sam3 python=3.12 pip -y
+```
+
+Install the GPU runtime and all declared or required inference dependencies
+from conda-forge:
+
+```bash
+mamba install -n sam3 -y -c conda-forge \
+  pytorch=2.12.1 pytorch-gpu=2.12.1 torchvision \
+  numpy=1.26.4 timm tqdm ftfy=6.1.1 regex iopath typing_extensions \
+  huggingface_hub pillow einops pycocotools psutil \
+  imageio pandas scipy scikit-image
+```
+
+Install the upstream SAM3 package. This is the only required pip command,
+because SAM3 is distributed as an upstream source repository rather than a
+Conda package:
+
+```bash
+conda run -n sam3 python -m pip install --no-deps \
+  git+https://github.com/facebookresearch/sam3.git@46957e47805eaa273f4aa7bbbd25a88bca9108ce
+```
+
+Verify the package and CUDA path:
+
+```bash
+conda run -n sam3 python -m pip check
+conda run -n sam3 python -c "import sam3, torch; x=torch.ones((1024, 1024), device='cuda'); print('sam3', sam3.__version__); print('torch', torch.__version__, 'cuda', torch.version.cuda); print(torch.cuda.get_device_name(0), x.sum().item())"
+```
+
+SAM3 checkpoints require approved Hugging Face access and authentication; they
+are model assets, not environment dependencies. This setup uses CUDA libraries
+inside the conda environment and does not require or modify a system-level CUDA
+toolkit.
 
 ## Verification
 
