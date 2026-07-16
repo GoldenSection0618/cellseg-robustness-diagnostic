@@ -109,7 +109,7 @@ conda run -n cell python -c "from pathlib import Path; import imageio.v3 as iio;
 ## Notes
 
 - SAM2 model checkpoints are local binary assets, not environment packages. The
-  current SAM2 baseline expects `data/checkpoints/sam2.1_hiera_large.pt`.
+  current SAM2 baseline expects `model_assets/sam2/sam2.1_hiera_large.pt`.
 - The current SAM2 install can run AMG inference, but its optional compiled `_C`
   extension is not importable, so SAM2 skips the optional post-processing step.
 - Gemini requires an API key at runtime, for example `GOOGLE_API_KEY`.

@@ -32,7 +32,7 @@ METHOD = "sam2_amg"
 IOU_THRESHOLD = 0.5
 DEFAULT_LIMIT = 20
 SAM2_CONFIG = "configs/sam2.1/sam2.1_hiera_l.yaml"
-SAM2_CHECKPOINT = REPO_ROOT / "data" / "checkpoints" / "sam2.1_hiera_large.pt"
+SAM2_CHECKPOINT = REPO_ROOT / "model_assets" / "sam2" / "sam2.1_hiera_large.pt"
 
 
 def selected_image_dirs(limit: int) -> list[Path]:

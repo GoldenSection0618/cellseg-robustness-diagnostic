@@ -30,9 +30,9 @@ data/raw/dsb2018/
     stage1_train_labels.csv
     stage1_sample_submission.csv
     stage2_sample_submission_final.csv
-data/checkpoints/
-  sam2.1_hiera_large.pt
 model_assets/
+  sam2/
+    sam2.1_hiera_large.pt
   sam3/
     sam3.pt
 ```
@@ -51,14 +51,12 @@ format and can be used to cross-check the PNG mask directories.
 
 ## Local Model Assets
 
-All local model assets are ignored by git. The existing SAM2 AMG checkpoint remains
-under `data/checkpoints/` because completed SAM2 result tables record that path.
-New model assets use `model_assets/<model>/`.
+All local model assets are ignored by git and use `model_assets/<model>/`.
 
 The current SAM2 baseline expects:
 
 ```text
-data/checkpoints/sam2.1_hiera_large.pt
+model_assets/sam2/sam2.1_hiera_large.pt
 ```
 
 This checkpoint is intended for SAM2 automatic mask generation only, without manual

@@ -64,7 +64,7 @@ Goal: run SAM2 automatic mask generation on the same deterministic 20-image subs
 
 Local model asset:
 
-- `data/checkpoints/sam2.1_hiera_large.pt`
+- `model_assets/sam2/sam2.1_hiera_large.pt`
 
 Completed outputs:
 
