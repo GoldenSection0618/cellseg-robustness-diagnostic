@@ -206,7 +206,9 @@ Execution order and outputs:
 
 1. Run a predetermined single-image technical smoke. It checks checkpoint loading,
    GPU memory, RGB conversion, output conversion, and overlay alignment. It does
-   not select parameters.
+   not select parameters. Its auditable outputs are
+   `results/baselines/sam3_prompted_concept_smoke_metrics.csv` and
+   `figures/sam3_prompted_concept_smoke_overlay_examples.png`.
 2. Run the fixed configuration on the deterministic clean20 subset and write
    `results/baselines/sam3_prompted_concept_clean_subset_metrics.csv` plus
    `figures/sam3_prompted_concept_clean_subset_overlay_examples.png`. Regenerate
