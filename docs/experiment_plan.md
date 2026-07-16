@@ -186,7 +186,7 @@ prompts.
 
 Primary configuration, fixed before evaluation:
 
-- model asset: `data/checkpoints/sam3.pt` from `facebook/sam3`;
+- model asset: `model_assets/sam3/sam3.pt` from `facebook/sam3`;
 - source package: `sam3` commit `46957e47805eaa273f4aa7bbbd25a88bca9108ce`;
 - text prompt: `"nucleus"`;
 - no point, box, mask, or exemplar prompts;
@@ -212,7 +212,8 @@ Execution order and outputs:
 2. Run the fixed configuration on the deterministic clean20 subset and write
    `results/baselines/sam3_prompted_concept_clean_subset_metrics.csv` plus
    `figures/sam3_prompted_concept_clean_subset_overlay_examples.png`. Regenerate
-   the centralized clean-subset comparison from CSV inputs.
+   the centralized clean-subset comparison from CSV inputs only after the expansion
+   gate passes.
 3. Expand to all 670 clean images unless the screen is technically unusable
    (fewer than 20 completed images, at least 50% zero-prediction images, or the
    upper bound of the paired 95% bootstrap F1 difference against Otsu is below
@@ -223,6 +224,13 @@ Execution order and outputs:
    completes at least 99% of images, has under 10% no-prediction images, and
    exceeds Otsu in mean object F1. The shared full-train robustness tables and
    centralized figures are then regenerated with the SAM3 rows.
+
+Execution record: the fixed configuration completed the clean20 screen, but all 20
+images produced zero retained masks (mean object F1 `0.0000`). Its paired mean F1
+difference from Otsu was `-0.4685` with a 95% bootstrap CI of `[-0.5992, -0.3368]`.
+The predeclared clean20 gate therefore stopped this protocol before full_train and
+robustness; the auditable decision is recorded in
+`results/baselines/sam3_prompted_concept_clean_subset_screen_summary.csv`.
 
 Primary endpoint: object F1 at instance IoU 0.5. Secondary metrics are precision,
 recall, matched IoU/Dice, count error, missed-object rate, FP per true instance,

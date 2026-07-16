@@ -1,0 +1,2 @@
+stage,method,images_expected,images_completed,zero_prediction_images,zero_prediction_rate,mean_object_f1,median_object_f1,mean_otsu_object_f1,mean_paired_f1_delta_vs_otsu,paired_bootstrap_reps,paired_bootstrap_seed,paired_f1_delta_ci95_lower,paired_f1_delta_ci95_upper,expansion_gate_passed,decision,failed_gate_reasons
+clean20,sam3_prompted_concept,20,20,20,1.0,0.0,0.0,0.4685,-0.4685,10000,20260716,-0.5992,-0.3368,False,stop_before_full_train,zero_prediction_rate_at_least_0.5;paired_otsu_f1_ci_upper_below_zero

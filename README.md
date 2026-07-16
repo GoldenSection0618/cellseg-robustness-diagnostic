@@ -29,6 +29,10 @@ repository.** It keeps high object-level F1 across the tested full-train
 perturbations. Otsu + watershed remains useful as an interpretable classical lower
 bound. SAM2 automatic mask generation is not reliable enough under the current
 no-prompt AMG protocol for the main robustness comparison.
+A fixed-concept SAM3 screen was stopped after its predeclared clean20 gate: it
+returned no retained masks on all 20 images, so it is not included in the full-train
+ranking. Its auditable gate record is in
+[the SAM3 clean20 summary](results/baselines/sam3_prompted_concept_clean_subset_screen_summary.csv).
 
 ### Zero-shot Robustness
 
@@ -117,6 +121,7 @@ rather than a single undifferentiated ranking.
 | Otsu + watershed | Classical lower bound | Fixed image-processing pipeline |
 | Cellpose-SAM / `cpsam` | Bio-adapted baseline | Cellpose 4.x Cellpose-SAM workflow |
 | SAM2 AMG | General foundation-model screen | Automatic grid prompts only |
+| SAM3 fixed concept | Screen stopped at clean20 | Fixed `"nucleus"` text concept only |
 
 Legacy Cellpose3 `cyto3` and one-click restoration are not included in the reported
 main comparison. Their cross-version evaluation is outside the current benchmark.
@@ -170,9 +175,9 @@ the reported results.
 - [results/supervised/](results/supervised/): YOLO conversion, metadata, evaluation, and comparisons.
 - [figures/](figures/): flat PNG figure outputs.
 - [docs/](docs/): protocol, environment, data, output, and findings documentation.
-- [model_assets/](model_assets/): local YOLO weights, ignored by git; the SAM2
-  checkpoint is kept under ignored `data/checkpoints/` as described in
-  [docs/data.md](docs/data.md).
+- [model_assets/](model_assets/): local YOLO and SAM3 weights, ignored by git. The
+  historical SAM2 checkpoint remains under ignored `data/checkpoints/` because its
+  completed result tables record that path; see [docs/data.md](docs/data.md).
 - [data/](data/): local DSB2018 data, ignored by git.
 
 ## Reproduce

@@ -37,7 +37,7 @@ CONFIDENCE_THRESHOLD = 0.5
 MASK_THRESHOLD = 0.5
 RESOLUTION = 1008
 CODE_COMMIT = "46957e47805eaa273f4aa7bbbd25a88bca9108ce"
-CHECKPOINT = REPO_ROOT / "data" / "checkpoints" / "sam3.pt"
+CHECKPOINT = REPO_ROOT / "model_assets" / "sam3" / "sam3.pt"
 
 
 def parse_args() -> argparse.Namespace:

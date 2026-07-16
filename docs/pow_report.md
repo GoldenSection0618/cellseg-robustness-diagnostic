@@ -4,9 +4,9 @@
 
 This report is the auditable record for the completed zero-shot comparison on the
 Kaggle 2018 Data Science Bowl dataset. It covers Otsu + watershed and Cellpose-SAM
-on all 670 `stage1_train` images, plus SAM2 automatic mask generation (AMG) on the
-fixed 20-image screening subset. Supervised YOLO-seg results are reported separately
-in [supervised_protocol.md](supervised_protocol.md).
+on all 670 `stage1_train` images, plus SAM2 automatic mask generation (AMG) and a
+fixed-concept SAM3 screen on the fixed 20-image subset. Supervised YOLO-seg results
+are reported separately in [supervised_protocol.md](supervised_protocol.md).
 
 The reported perturbations are Gaussian noise, Poisson noise, Gaussian blur,
 downsample/upsample, intensity scaling, and contrast inversion. This report does not
@@ -22,6 +22,7 @@ output.
 | [Full-train failure cases](../results/robustness/pow_baseline_robustness_full_train_failure_cases.csv) | Largest observed degradations |
 | [No-prediction cases](../results/robustness/pow_baseline_robustness_full_train_no_prediction_cases.csv) | Cellpose-SAM empty-prediction events |
 | [SAM2 sensitivity validation](../results/robustness/sam2_amg_sensitivity_clean20_validation_summary.csv) | AMG configuration comparison on 20 images |
+| [SAM3 clean20 gate summary](../results/baselines/sam3_prompted_concept_clean_subset_screen_summary.csv) | Fixed-concept expansion decision |
 
 The accompanying figures are the [full-train summary](../figures/robustness_pow_full_train_summary.png),
 [failure diagnostics](../figures/robustness_pow_full_train_failure_diagnostics.png),
@@ -62,6 +63,20 @@ language prompting.
 
 *SAM2 AMG object F1 on the fixed 20-image sensitivity evaluation. The matrix makes
 the shared blur and downsampling failure pattern visible across the tested settings.*
+
+## SAM3 Fixed-Concept Screen
+
+SAM3 received the fixed task-level text concept `"nucleus"`, with no image-specific
+point, box, mask, or exemplar prompt. The locked configuration completed clean20 but
+returned zero retained masks on every image (mean object F1 `0.0000`). Its paired
+mean F1 difference from Otsu was `-0.4685` with a 95% bootstrap CI of
+`[-0.5992, -0.3368]`.
+
+This crossed two predeclared stop conditions: at least 50% zero-prediction images
+and an Otsu-comparison CI whose upper bound is below zero. The protocol therefore
+did not proceed to full_train or robustness, and this screen is not part of the
+full-train ranking. It is evidence about this fixed SAM3 concept configuration, not
+about all possible SAM3 prompts or adaptations.
 
 ## Failure Evidence
 

@@ -107,7 +107,8 @@ for auditability rather than as an active task board.
 - [ ] Optional Cellpose3 default cross-version protocol.
 - [ ] Optional Cellpose3 restoration cross-version protocol.
 - [ ] Optional prompted SAM2 or SAM2 post-processing repair protocol.
-- [ ] Optional SAM3 prompted-concept screening protocol.
+- [x] Optional SAM3 prompted-concept screening protocol completed; its predeclared
+  clean20 gate stopped expansion before full_train.
 - [ ] Vision Banana generative mask-output validity protocol.
 
 ## Protocol B: YOLO Supervised Adaptation
