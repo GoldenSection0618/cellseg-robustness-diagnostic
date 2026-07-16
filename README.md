@@ -218,8 +218,7 @@ Supervised, generative vision, and classical references:
 - [Ultralytics YOLO segmentation documentation](https://docs.ultralytics.com/tasks/segment/)
 - [Ultralytics YOLO11 documentation](https://docs.ultralytics.com/models/yolo11/)
 - [Vision Banana: Image Generators are Generalist Vision Learners](https://vision-banana.github.io/)
-- [Conversational image segmentation with Gemini 2.5](https://developers.googleblog.com/conversational-image-segmentation-gemini-2-5/)
-- [Gemini image understanding documentation](https://ai.google.dev/gemini-api/docs/image-understanding)
+- [Vision Banana technical report](https://arxiv.org/abs/2604.20329)
 - [scikit-image watershed example](https://scikit-image.org/docs/stable/auto_examples/segmentation/plot_watershed.html)
 - [CellProfiler IdentifyPrimaryObjects documentation](https://cellprofiler-manual.s3.amazonaws.com/CPmanual/IdentifyPrimaryObjects.html)
 
