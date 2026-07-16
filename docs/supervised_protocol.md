@@ -14,7 +14,7 @@ zero-shot methods rather than relying only on the trainer's native metrics.
 
 This document covers the fixed-budget baseline and three completed diagnostic axes:
 confidence threshold, label budget, and model capacity. It does not cover Cellpose
-fine-tuning, post-processing experiments, or VLM mask output.
+fine-tuning, post-processing experiments, or generative mask output.
 
 ## Data Split and Label Conversion
 

@@ -198,7 +198,8 @@ These protocols should stay separate from the clean zero-shot baseline track:
 - optional prompted SAM2 or SAM2 post-processing repair protocol;
 - optional SAM3 prompted-concept screening with predeclared text or exemplar prompts;
 - YOLO-seg small-label supervised adaptation;
-- Gemini segmentation output-validity checks.
+- Vision Banana generative mask-output validity checks; other generative vision
+  models may be assessed under the same separate protocol.
 
 ## Protocol B: YOLO Supervised Adaptation
 

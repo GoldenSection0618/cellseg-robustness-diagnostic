@@ -94,15 +94,17 @@ visible at image level.
 | --- | --- |
 | A. Zero-shot robustness | Completed |
 | B. Supervised adaptation | Complete through YOLO11m |
-| C. VLM output validity | Separate follow-up protocol |
+| C. Generative mask-output validity | Separate follow-up protocol |
 
 Protocol A asks which methods work without target labels or manual prompts.
-Protocol B asks how much YOLO fine-tuning helps. Protocol C covers a separate
-mask-output VLM validity study.
+Protocol B asks how much YOLO fine-tuning helps. Protocol C asks whether a
+prompt-conditioned generative vision model can produce parseable cell-instance masks.
+Vision Banana is the primary optional candidate for this protocol; its reported
+zero-shot general-vision results do not constitute a cell-segmentation claim.
 
-The project keeps zero-shot, supervised, and VLM-style segmentation separate. Their
-assumptions differ, so the README reports them as related protocols rather than a
-single undifferentiated ranking.
+The project keeps zero-shot, supervised, and generative mask-output protocols
+separate. Their assumptions differ, so the README reports them as related protocols
+rather than a single undifferentiated ranking.
 
 ## Methods
 
@@ -211,10 +213,11 @@ SAM, SAM2, and microscopy foundation models:
 - [Segment Anything for Microscopy](https://www.nature.com/articles/s41592-024-02580-4)
 - [CellSAM: a foundation model for cell segmentation](https://www.nature.com/articles/s41592-025-02879-w)
 
-Supervised, VLM, and classical references:
+Supervised, generative vision, and classical references:
 
 - [Ultralytics YOLO segmentation documentation](https://docs.ultralytics.com/tasks/segment/)
 - [Ultralytics YOLO11 documentation](https://docs.ultralytics.com/models/yolo11/)
+- [Vision Banana: Image Generators are Generalist Vision Learners](https://vision-banana.github.io/)
 - [Conversational image segmentation with Gemini 2.5](https://developers.googleblog.com/conversational-image-segmentation-gemini-2-5/)
 - [Gemini image understanding documentation](https://ai.google.dev/gemini-api/docs/image-understanding)
 - [scikit-image watershed example](https://scikit-image.org/docs/stable/auto_examples/segmentation/plot_watershed.html)
@@ -230,7 +233,8 @@ Supervised, VLM, and classical references:
   baselines, not part of the reported main comparison.
 - The completed YOLO diagnostics do not close the gap to Cellpose-SAM. Additional
   YOLO work belongs in post-processing or architecture analysis.
-- VLM mask-output validity remains a separate exploratory protocol.
+- Generative mask-output validity, beginning with an optional Vision Banana screen,
+  remains a separate exploratory protocol.
 
 ## Disclaimer
 

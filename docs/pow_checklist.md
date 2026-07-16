@@ -108,7 +108,7 @@ for auditability rather than as an active task board.
 - [ ] Optional Cellpose3 restoration cross-version protocol.
 - [ ] Optional prompted SAM2 or SAM2 post-processing repair protocol.
 - [ ] Optional SAM3 prompted-concept screening protocol.
-- [ ] Gemini output-validity protocol.
+- [ ] Vision Banana generative mask-output validity protocol.
 
 ## Protocol B: YOLO Supervised Adaptation
 

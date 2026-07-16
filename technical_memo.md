@@ -92,5 +92,5 @@ of observed metrics and overlays, not ground-truth annotations of every error ty
   SAM2 or repaired post-processing.
 - The YOLO comparison is supervised and should not be interpreted as another
   zero-shot baseline.
-- VLM mask-output validity, legacy Cellpose3, and restoration are separate protocols
-  rather than missing rows in the present ranking.
+- Generative mask-output validity, legacy Cellpose3, and restoration are separate
+  protocols rather than missing rows in the present ranking.

@@ -10,7 +10,8 @@ in [supervised_protocol.md](supervised_protocol.md).
 
 The reported perturbations are Gaussian noise, Poisson noise, Gaussian blur,
 downsample/upsample, intensity scaling, and contrast inversion. This report does not
-evaluate prompted SAM2, legacy Cellpose3, Cellpose restoration, or VLM mask output.
+evaluate prompted SAM2, legacy Cellpose3, Cellpose restoration, or generative mask
+output.
 
 ## Primary Evidence
 
